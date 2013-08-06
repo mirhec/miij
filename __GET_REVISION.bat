@@ -1,0 +1,1 @@
+SubWCRev . _tpl_version.properties src/de/miij/version.properties
