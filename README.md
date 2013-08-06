@@ -1,4 +1,4 @@
-miij
+Miij-Framework
 ====
 
 Miij is a Java framework with an intuitive and straight forward layout manager (FlexLayout)
