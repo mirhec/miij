@@ -192,9 +192,9 @@ public class MButton extends JButton implements ILanguageSupport
 
 			public void keyPressed( KeyEvent e )
 			{
-				if(e.getKeyCode() == KeyEvent.VK_ENTER)
+				if(e.getKeyCode() == KeyEvent.VK_ENTER && enterPressed != null)
 					enterPressed.action( e );
-				else if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
+				else if(e.getKeyCode() == KeyEvent.VK_ESCAPE && escapePressed != null)
 					escapePressed.action( e );
 			}
 		});

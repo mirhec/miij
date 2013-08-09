@@ -96,6 +96,7 @@ public class MSplitPane extends JSplitPane
 	public void setDividerLocationFromBottom(int requested)
 	{
 		fixedRightBottom = requested;
+		System.out.println("fixedRightBottom 1: " + fixedRightBottom);
 		if(getDividerLocation() != getHeight() - requested)
 			setDividerLocation(getHeight() - requested);
 	}
@@ -108,18 +109,6 @@ public class MSplitPane extends JSplitPane
 	@Override
 	public void setDividerLocation(int requested)
 	{
-		if(fixedRightBottom > 0)
-		{
-			if(orientation == HORIZONTAL_SPLIT)
-			{
-				fixedRightBottom = getWidth() - requested;
-			}
-			else
-			{
-				fixedRightBottom = getHeight() - requested;
-			}
-		}
-		
 		if(requested <= 0)
 		{
 			// Nach Preferred Size setzen
@@ -134,8 +123,7 @@ public class MSplitPane extends JSplitPane
 		
 		int currentLoc = getDividerLocation();
 		boolean growing = requested > currentLoc;
-		Component maxComp = growing ? getLeftComponent()
-				: getRightComponent();
+		Component maxComp = growing ? getLeftComponent() : getRightComponent();
 		if (maxComp == null)
 		{
 			super.setDividerLocation(requested);
