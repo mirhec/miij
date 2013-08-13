@@ -130,9 +130,9 @@ public class MTextField extends JTextField implements ILanguageSupport
 				if( keyPressed != null )
 					keyPressed.action( e );
 				
-				if(e.getKeyCode() == KeyEvent.VK_ENTER)
+				if(e.getKeyCode() == KeyEvent.VK_ENTER && enterPressed != null)
 					enterPressed.action( e );
-				else if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
+				else if(e.getKeyCode() == KeyEvent.VK_ESCAPE && escapePressed != null)
 					escapePressed.action( e );
 			}
 
