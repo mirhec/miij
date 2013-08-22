@@ -15,13 +15,13 @@ import java.util.zip.ZipOutputStream;
 
 public class ZipUtil
 {
-
 	/**
-	 * Diese Methode packt alle in dem Array filenames enthaltenen Dateien
-	 * in das Verzeichnis zipFilename.
-	 *
+	 * Diese Methode packt alle in dem Array filenames enthaltenen Dateien in
+	 * das Verzeichnis zipFilename.
+	 * <p/>
 	 * @param zipFilename
 	 * @param filenames
+	 * <p/>
 	 * @throws IOException
 	 */
 	public static void zip(String baseDir, String zipFilename, String[] filenames) throws IOException
@@ -30,15 +30,15 @@ public class ZipUtil
 	}
 
 	/**
-	 * Diese Methode packt alle in dem Array filenames enthaltenen Dateien
-	 * in das ZIP-Archiv zipFilename, und vergibt den Dateien dann den Namen,
-	 * welcher in dem Array archFilenames gespeichert ist:
-	 * z.B. filenames[ 0 ] 		 		 => "C:\Programme\programm.exe"
-	 * 		   archFilenames[ 0 ] => "Programm.exe"
-	 *
+	 * Diese Methode packt alle in dem Array filenames enthaltenen Dateien in
+	 * das ZIP-Archiv zipFilename, und vergibt den Dateien dann den Namen,
+	 * welcher in dem Array archFilenames gespeichert ist: z.B. filenames[ 0 ]
+	 * => "C:\Programme\programm.exe" archFilenames[ 0 ] => "Programm.exe"
+	 * <p/>
 	 * @param zipFilename
 	 * @param filenames
 	 * @param archFilenames
+	 * <p/>
 	 * @throws IOException
 	 */
 	public static void zip(String baseDir, String zipFilename, String[] filenames, String[] archFilenames) throws IOException
@@ -49,7 +49,6 @@ public class ZipUtil
 		byte[] data = new byte[512];
 		int bc;
 		for (int i = 0; i < filenames.length; i++)
-		{
 			try
 			{
 				InputStream fin = new BufferedInputStream(new FileInputStream(filenames[i]));
@@ -60,9 +59,7 @@ public class ZipUtil
 				zout.putNextEntry(entry);
 
 				while ((bc = fin.read(data, 0, 512)) != -1)
-				{
 					zout.write(data, 0, bc);
-				}
 				zout.flush();
 			}
 			catch (Exception ex)
@@ -70,18 +67,18 @@ public class ZipUtil
 				ex.printStackTrace();
 				// Weitermachen
 			}
-		}
 
 		zout.close();
 	}
 
 	/**
-	 * Diese Methode entpackt alle Dateien eines Archivs, welche in der Collection
-	 * filenames vorkommen.
-	 *
+	 * Diese Methode entpackt alle Dateien eines Archivs, welche in der
+	 * Collection filenames vorkommen.
+	 * <p/>
 	 * @param zipFilename - ZIP-File
 	 * @param filenames
-	 * @param outdir - Ausgabeverzeichnis
+	 * @param outdir      - Ausgabeverzeichnis
+	 * <p/>
 	 * @throws IOException
 	 */
 	public static void unzip(String zipFilename, Collection filenames, String outdir) throws IOException
@@ -92,10 +89,11 @@ public class ZipUtil
 	/**
 	 * Diese Methode entpackt alle Dateien eines Archivs, welche in dem Array
 	 * filenames vorkommen.
-	 *
+	 * <p/>
 	 * @param zipFilename - ZIP-File
 	 * @param filenames
-	 * @param outdir - Ausgabeverzeichnis
+	 * @param outdir      - Ausgabeverzeichnis
+	 * <p/>
 	 * @throws IOException
 	 */
 	public static void unzip(String zipFilename, String[] filenames, String outdir) throws IOException
@@ -110,7 +108,6 @@ public class ZipUtil
 			ZipEntry entry = (ZipEntry) entries.nextElement();
 
 			for (int i = 0; i < filenames.length; i++)
-			{
 				if (entry.getName().equals(filenames[i]))
 				{
 					byte[] buffer = new byte[1024];
@@ -120,9 +117,7 @@ public class ZipUtil
 					BufferedOutputStream fileout = new BufferedOutputStream(new FileOutputStream(outdir + "\\" + filenames[i]));
 
 					while ((len = zipin.read(buffer)) >= 0)
-					{
 						fileout.write(buffer, 0, len);
-					}
 
 					zipin.close();
 					fileout.flush();
@@ -131,17 +126,16 @@ public class ZipUtil
 					continue L1;
 
 				}
-			}
 		}
 	}
 
 	/**
-	 * Diese Methode entpackt alle in dem Archiv zipFilename
-	 * vorhandenen Dateien, und speichert diese im Ordner
-	 * outdir.
-	 *
+	 * Diese Methode entpackt alle in dem Archiv zipFilename vorhandenen
+	 * Dateien, und speichert diese im Ordner outdir.
+	 * <p/>
 	 * @param zipFilename
 	 * @param outdir
+	 * <p/>
 	 * @throws IOException
 	 */
 	public static void unzip(String zipFilename, String outdir) throws IOException
@@ -163,9 +157,7 @@ public class ZipUtil
 			BufferedOutputStream fileout = new BufferedOutputStream(new FileOutputStream(outdir + "\\" + entry.getName()));
 
 			while ((len = zipin.read(buffer)) >= 0)
-			{
 				fileout.write(buffer, 0, len);
-			}
 
 			zipin.close();
 			fileout.flush();
@@ -176,13 +168,9 @@ public class ZipUtil
 	public static void main(String[] args)
 	{
 		for (int i = 0; i < args.length; i++)
-		{
 			if (args[i] != null && !args[i].equals(""))
-			{
 				if (new File(args[i]).exists())
-				{
 					if (args[i].substring(args[i].length() - 3).equals("zip"))
-					{
 						try
 						{
 							ZipUtil.unzip(args[i], args[i].substring(0, args[i].length() - 3));
@@ -191,9 +179,7 @@ public class ZipUtil
 						{
 							ex.printStackTrace();
 						}
-					}
 					else
-					{
 						try
 						{
 							ZipUtil.zip(args[i], args[i] + ".zip", FileUtil.getAllFiles(new File(args[i])));
@@ -202,16 +188,11 @@ public class ZipUtil
 						{
 							ex.printStackTrace();
 						}
-					}
-				}
-			}
-		}
 	}
 }
 
 class TestZIPUtil
 {
-
 	public static void main(String[] args)
 	{
 		File f = new File("H:/Daten/Eclipse/Suffi/org");
@@ -231,9 +212,7 @@ class TestZIPUtil
 				ZipUtil.zip(f.getAbsolutePath(), "Modules.zip", FileUtil.getAllFiles(f), FileUtil.getAllFiles(f));
 			}
 			else
-			{
 				System.out.println(f.getAbsolutePath().substring(0, f.getAbsolutePath().lastIndexOf("/")) + " existiert nicht!");
-			}
 		}
 		catch (Exception ex)
 		{

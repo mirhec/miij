@@ -14,18 +14,16 @@ import de.miij.util.ArrayUtil;
 
 public class MList extends JList
 {
-
-	public ArrayList< Connector >	Actions			= new ArrayList< Connector >();
-
-	public Connector					focusGained		= null;
-	public Connector					focusLost		= null;
-	public Connector					mousePressed	= null;
-	public Connector					mouseReleased	= null;
-	public Connector					mouseEntered	= null;
-	public Connector					mouseClicked	= null;
-	public Connector					mouseExited		= null;
-	public Connector					mouseDragged	= null;
-	public Connector					mouseMoved		= null;
+	public ArrayList< Connector> Actions = new ArrayList< Connector>();
+	public Connector focusGained = null;
+	public Connector focusLost = null;
+	public Connector mousePressed = null;
+	public Connector mouseReleased = null;
+	public Connector mouseEntered = null;
+	public Connector mouseClicked = null;
+	public Connector mouseExited = null;
+	public Connector mouseDragged = null;
+	public Connector mouseMoved = null;
 
 	public MList()
 	{
@@ -91,76 +89,69 @@ public class MList extends JList
 	{
 		addFocusListener(new FocusListener()
 		{
-
 			public void focusGained(FocusEvent e)
 			{
-				if(focusGained != null)
+				if (focusGained != null)
 					focusGained.action(e);
 			}
 
 			public void focusLost(FocusEvent e)
 			{
-				if(focusLost != null)
+				if (focusLost != null)
 					focusLost.action(e);
 			}
-
 		});
 		addMouseListener(new MouseListener()
 		{
-
 			public void mouseClicked(MouseEvent e)
 			{
-				if(MList.this.getSelectedIndex() != -1 && e.getButton() == MouseEvent.BUTTON3) // Rechte
-																															// Maustaste
-																															// =>
+				if (MList.this.getSelectedIndex() != -1 && e.getButton() == MouseEvent.BUTTON3) // Rechte
+				// Maustaste
+				// =>
 				// Menü anzeigen
-				{
-					Connector.popup(e,Actions);
-				}
-				else if(mouseClicked != null)
+				
+					Connector.popup(e, Actions);
+				else if (mouseClicked != null)
 					mouseClicked.action(e);
 			}
 
 			public void mouseEntered(MouseEvent e)
 			{
-				if(mouseEntered != null)
+				if (mouseEntered != null)
 					mouseEntered.action(e);
 			}
 
 			public void mouseExited(MouseEvent e)
 			{
-				if(mouseExited != null)
+				if (mouseExited != null)
 					mouseExited.action(e);
 			}
 
 			public void mousePressed(MouseEvent e)
 			{
-				if(mousePressed != null)
+				if (mousePressed != null)
 					mousePressed.action(e);
 			}
 
 			public void mouseReleased(MouseEvent e)
 			{
-				if(mouseReleased != null)
+				if (mouseReleased != null)
 					mouseReleased.action(e);
 			}
-
 		});
 		addMouseMotionListener(new MouseMotionListener()
 		{
-
 			public void mouseDragged(MouseEvent e)
 			{
-				if(mouseDragged != null)
+				if (mouseDragged != null)
 					mouseDragged.action(e);
 			}
 
 			public void mouseMoved(MouseEvent e)
 			{
-				if(mouseMoved != null)
+				if (mouseMoved != null)
 					mouseMoved.action(e);
 			}
-
 		});
 	}
 
@@ -168,10 +159,8 @@ public class MList extends JList
 	{
 		Object[] elements = new Object[this.getModel().getSize()];
 
-		for(int i = 0 ; i < elements.length ; i++)
-		{
+		for (int i = 0; i < elements.length; i++)
 			elements[i] = this.getModel().getElementAt(i);
-		}
 
 		return elements;
 	}
@@ -182,13 +171,13 @@ public class MList extends JList
 		return this;
 	}
 
-	public MList insertItemAt(Object item , int pos)
+	public MList insertItemAt(Object item, int pos)
 	{
 		try
 		{
-			((DefaultListModel) this.getModel()).insertElementAt(item,pos);
+			((DefaultListModel) this.getModel()).insertElementAt(item, pos);
 		}
-		catch(Exception ex)
+		catch (Exception ex)
 		{
 			return insertItem(item);
 		}
@@ -205,7 +194,7 @@ public class MList extends JList
 	{
 		((DefaultListModel) this.getModel()).remove(index);
 	}
-	
+
 	/**
 	 * Sortiert die Liste alphabetisch
 	 */
@@ -214,13 +203,7 @@ public class MList extends JList
 		Object[] obj = getListData();
 		obj = ArrayUtil.bubbleSort(obj);
 		removeAll();
-		for(Object o : obj)
+		for (Object o : obj)
 			insertItem(o);
 	}
-
 }
-
-
-
-
-

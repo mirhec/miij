@@ -12,7 +12,6 @@ import java.util.ArrayList;
 
 public class FileUtil
 {
-
 	// /**
 	// * Diese Methode l&ouml;scht alle Dateien des &uuml;bergebenen
 	// * Ordners bzw. die &uuml;bergebene Datei.
@@ -49,7 +48,7 @@ public class FileUtil
 	// }
 	/**
 	 * Diese Methode kopiert die Datei src nach dest.
-	 * 
+	 * <p/>
 	 * @param src
 	 * @param dest
 	 */
@@ -77,7 +76,7 @@ public class FileUtil
 	/**
 	 * Diese Methode kopiert die Datei im InputStream fis in den OutputStream
 	 * fos.
-	 * 
+	 * <p/>
 	 * @param fis
 	 * @param fos
 	 */
@@ -89,9 +88,7 @@ public class FileUtil
 			int nbytes;
 
 			while ((nbytes = fis.read(buffer)) != -1)
-			{
 				fos.write(buffer, 0, nbytes);
-			}
 		}
 		catch (IOException e)
 		{
@@ -100,7 +97,6 @@ public class FileUtil
 		finally
 		{
 			if (fis != null)
-			{
 				try
 				{
 					fis.close();
@@ -108,14 +104,11 @@ public class FileUtil
 				catch (IOException e)
 				{
 				}
-			}
 
 			try
 			{
 				if (fos != null)
-				{
 					fos.close();
-				}
 			}
 			catch (IOException e)
 			{
@@ -145,39 +138,32 @@ public class FileUtil
 
 	/**
 	 * Places an extension on a filename if it does not already exist.
-	 * 
-	 * @param filename
-	 *           Path to the file.
-	 * @param ext
-	 *           Extension of the file.
+	 * <p/>
+	 * @param filename Path to the file.
+	 * @param ext Extension of the file.
 	 */
 	public static String addExtIfNecessary(String filename, String ext)
 	{
 		if (hasExtension(filename, ext))
-		{
 			return (filename);
-		}
 		return (setExtension(filename, ext));
 	}
 
 	/**
 	 * Setzt die Endung des Dateinamens
-	 * 
+	 * <p/>
 	 * @param filename
 	 * @param ext
+	 * <p/>
 	 * @return
 	 */
 	public static String setExtension(String filename, String ext)
 	{
 		if (hasExtension(filename, ext))
-		{
 			return (filename);
-		}
 		int index = filename.lastIndexOf(".");
 		if (index == -1)
-		{
 			return (filename + "." + ext);
-		}
 		return (filename.substring(0, index + 1) + ext);
 
 	}
@@ -185,34 +171,33 @@ public class FileUtil
 	/**
 	 * @param filename
 	 * @param ext
+	 * <p/>
 	 * @return Ob der Dateiname die Extension hat
 	 */
 	public static boolean hasExtension(String filename, String ext)
 	{
 		int index = filename.lastIndexOf(".");
 		if (index == -1)
-		{
 			return (false);
-		}
 		return (filename.substring(index + 1).compareTo(ext) == 0);
 	}
 
 	/**
 	 * @param filename
+	 * <p/>
 	 * @return Dateiname ohne Pfad (dasselbe wie File.this.getName())
 	 */
 	public static String stripPath(String filename)
 	{
 		int index = filename.lastIndexOf("\\");
 		if (index == -1)
-		{
 			return (filename);
-		}
 		return (filename.substring(index + 1));
 	}
 
 	/**
 	 * @param filename
+	 * <p/>
 	 * @return Den Pfad ohne die Dateiendung
 	 */
 	public static String stripExtension(String filename)
@@ -225,7 +210,7 @@ public class FileUtil
 	{
 		int index = filename.lastIndexOf(".");
 		return (index != -1 && index < filename.length() - 1) ? filename.substring(index + 1)
-			: "";
+			   : "";
 	}
 
 	public static String[] getAllFiles(File dir)
@@ -267,31 +252,20 @@ public class FileUtil
 
 		File[] list = dir.listFiles();
 		if (list != null)
-		{
 			for (int i = 0; i < list.length; i++)
-			{
 				if (list[i].isDirectory())
-				{
 					// System.out.println( i + " :: dir :: " + list[ i
 					// ].getAbsolutePath() );
 					// tab.add( list[ i ].getAbsolutePath() );
 					getAllFiles(tab, list[i]);
-				}
 				else
-				{
 					// System.out.println( i + " :: fil :: " + list[ i
 					// ].getAbsolutePath() );
 					tab.add(list[i].getAbsolutePath());
-				}
-			}
 
-		}
-		
 		String[] retVal = new String[tab.size()];
 		for (int i = 0; i < retVal.length; i++)
-		{
 			retVal[i] = tab.get(i).toString();
-		}
 
 		return retVal;
 	}
@@ -301,24 +275,16 @@ public class FileUtil
 		try
 		{
 			if (dir.isFile())
-			{
 				return new RandomAccessFile(dir, "r").length();
-			}
 			else
 			{
 				File[] files = dir.listFiles();
 				long size = 0;
 				for (int i = 0; i < files.length; i++)
-				{
 					if (files[i].isFile())
-					{
 						size += new RandomAccessFile(files[i], "r").length();
-					}
 					else if (files[i].isDirectory())
-					{
 						size += getSizeOfDirectory(files[i]);
-					}
-				}
 
 				return size;
 			}
@@ -335,8 +301,6 @@ public class FileUtil
 		String[] files = getAllFiles(folder);
 
 		for (int i = 0; i < files.length; i++)
-		{
 			new File(files[i]).delete();
-		}
 	}
 }

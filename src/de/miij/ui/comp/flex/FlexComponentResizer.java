@@ -2,12 +2,11 @@ package de.miij.ui.comp.flex;
 
 /**
  * Diese Klasse managed das Resizen der FlexibleComponent-Objekte
- * 
+ * <p/>
  * @author Mirhec
  */
 public class FlexComponentResizer
 {
-
 //	private ArrayList FlexedComps = null;	// Damit
 //	// Endlosschleifen
 //	// verhindert werden

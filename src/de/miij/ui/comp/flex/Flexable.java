@@ -11,15 +11,16 @@ package de.miij.ui.comp.flex;
 public interface Flexable
 {
 	/**
-	 * Diese Methode f&uuml;gt der ContentPane des FFrames eine neue flexible Komponente hinzu.
-	 *
+	 * Diese Methode f&uuml;gt der ContentPane des FFrames eine neue flexible
+	 * Komponente hinzu.
+	 * <p/>
 	 * @param comp
 	 * @param left
 	 * @param top
 	 * @param right
 	 * @param bottom
 	 */
-	public void addFlexibleComponent( FlexComponent flexComp );
+	public void addFlexibleComponent(FlexComponent flexComp);
 
 	public String getName();
 }

@@ -16,7 +16,6 @@ import java.awt.event.KeyEvent;
 
 public class MButton extends JButton implements ILanguageSupport
 {
-
 	public Connector clicked = null;
 	public Connector focusGained = null;
 	public Connector focusLost = null;
@@ -29,241 +28,183 @@ public class MButton extends JButton implements ILanguageSupport
 	public Connector mouseMoved = null;
 	public Connector enterPressed = null;
 	public Connector escapePressed = null;
-	
+
 	public MButton()
 	{
 		super();
 		init();
 	}
-	
-	public MButton( String text )
+
+	public MButton(String text)
 	{
-		super( text );
+		super(text);
 		init();
 	}
-	
-	public MButton clicked( Connector c )
+
+	public MButton clicked(Connector c)
 	{
 		clicked = c;
 		return this;
 	}
-	
-	public MButton focusGained( Connector c )
+
+	public MButton focusGained(Connector c)
 	{
 		focusGained = c;
 		return this;
 	}
-	
-	public MButton focusLost( Connector c )
+
+	public MButton focusLost(Connector c)
 	{
 		focusLost = c;
 		return this;
 	}
-	
-	public MButton mousePressed( Connector c )
+
+	public MButton mousePressed(Connector c)
 	{
 		mousePressed = c;
 		return this;
 	}
-	
-	public MButton mouseEntered( Connector c )
+
+	public MButton mouseEntered(Connector c)
 	{
 		mouseEntered = c;
 		return this;
 	}
-	
-	public MButton mouseClicked( Connector c )
+
+	public MButton mouseClicked(Connector c)
 	{
 		mouseClicked = c;
 		return this;
 	}
-	
-	public MButton mouseExited( Connector c )
+
+	public MButton mouseExited(Connector c)
 	{
 		mouseExited = c;
 		return this;
 	}
-	
-	public MButton mouseDragged( Connector c )
+
+	public MButton mouseDragged(Connector c)
 	{
 		mouseDragged = c;
 		return this;
 	}
-	
-	public MButton mouseMoved( Connector c )
+
+	public MButton mouseMoved(Connector c)
 	{
 		mouseMoved = c;
 		return this;
 	}
-	
-	public MButton mouseReleased( Connector c )
+
+	public MButton mouseReleased(Connector c)
 	{
 		mouseReleased = c;
 		return this;
 	}
-	
-	public MButton enterPressed( Connector c )
+
+	public MButton enterPressed(Connector c)
 	{
 		enterPressed = c;
 		return this;
 	}
-	
-	public MButton escapePressed( Connector c )
+
+	public MButton escapePressed(Connector c)
 	{
 		escapePressed = c;
 		return this;
 	}
-	
+
 	private void init()
 	{
-		addActionListener( new ActionListener() {
-			public void actionPerformed( ActionEvent e )
+		addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
 			{
 				// Hier die in clicked gespeicherte Methode aufrufen
-				if( clicked != null )
-					clicked.action( e );
+				if (clicked != null)
+					clicked.action(e);
 			}
 		});
-		addFocusListener( new FocusListener() {
-
-			public void focusGained( FocusEvent e )
+		addFocusListener(new FocusListener()
+		{
+			public void focusGained(FocusEvent e)
 			{
-				if( focusGained != null )
-					focusGained.action( e );
+				if (focusGained != null)
+					focusGained.action(e);
 			}
 
-			public void focusLost( FocusEvent e )
+			public void focusLost(FocusEvent e)
 			{
-				if( focusLost != null )
-					focusLost.action( e );
+				if (focusLost != null)
+					focusLost.action(e);
 			}
-			
 		});
-		addMouseListener( new MouseListener() {
-
-			public void mouseClicked( MouseEvent e )
+		addMouseListener(new MouseListener()
+		{
+			public void mouseClicked(MouseEvent e)
 			{
-				if( mouseClicked != null )
-					mouseClicked.action( e );
+				if (mouseClicked != null)
+					mouseClicked.action(e);
 			}
 
-			public void mouseEntered( MouseEvent e )
+			public void mouseEntered(MouseEvent e)
 			{
-				if( mouseEntered != null )
-					mouseEntered.action( e );
+				if (mouseEntered != null)
+					mouseEntered.action(e);
 			}
 
-			public void mouseExited( MouseEvent e )
+			public void mouseExited(MouseEvent e)
 			{
-				if( mouseExited != null )
-					mouseExited.action( e );
+				if (mouseExited != null)
+					mouseExited.action(e);
 			}
 
-			public void mousePressed( MouseEvent e )
+			public void mousePressed(MouseEvent e)
 			{
-				if( mousePressed != null )
-					mousePressed.action( e );
+				if (mousePressed != null)
+					mousePressed.action(e);
 			}
 
-			public void mouseReleased( MouseEvent e )
+			public void mouseReleased(MouseEvent e)
 			{
-				if( mouseReleased != null )
-					mouseReleased.action( e );
+				if (mouseReleased != null)
+					mouseReleased.action(e);
 			}
-			
 		});
-		addMouseMotionListener( new MouseMotionListener() {
-
-			public void mouseDragged( MouseEvent e )
+		addMouseMotionListener(new MouseMotionListener()
+		{
+			public void mouseDragged(MouseEvent e)
 			{
-				if( mouseDragged != null )
-					mouseDragged.action( e );
+				if (mouseDragged != null)
+					mouseDragged.action(e);
 			}
 
-			public void mouseMoved( MouseEvent e )
+			public void mouseMoved(MouseEvent e)
 			{
-				if( mouseMoved != null )
-					mouseMoved.action( e );
+				if (mouseMoved != null)
+					mouseMoved.action(e);
 			}
-			
 		});
-		
-		addKeyListener(new KeyAdapter() {
 
-			public void keyPressed( KeyEvent e )
+		addKeyListener(new KeyAdapter()
+		{
+			public void keyPressed(KeyEvent e)
 			{
-				if(e.getKeyCode() == KeyEvent.VK_ENTER && enterPressed != null)
-					enterPressed.action( e );
-				else if(e.getKeyCode() == KeyEvent.VK_ESCAPE && escapePressed != null)
-					escapePressed.action( e );
+				if (e.getKeyCode() == KeyEvent.VK_ENTER && enterPressed != null)
+					enterPressed.action(e);
+				else if (e.getKeyCode() == KeyEvent.VK_ESCAPE && escapePressed != null)
+					escapePressed.action(e);
 			}
 		});
 	}
-	
+
 	public String text()
 	{
 		return getText();
 	}
-	
-	public MButton text( String text )
+
+	public MButton text(String text)
 	{
-		setText( text );
+		setText(text);
 		return this;
 	}
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

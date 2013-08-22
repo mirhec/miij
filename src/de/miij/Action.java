@@ -20,8 +20,9 @@ public abstract class Action
 	/**
 	 * This creates a new action and registers it as a Miij-Action so you can
 	 * use it everywhere with the call to <b>Miij.action(...)</b>.
-	 *
-	 * @param actionID - This you have to use to get the action out of Miij it can only be used once
+	 * <p/>
+	 * @param actionID - This you have to use to get the action out of Miij it
+	 *                 can only be used once
 	 */
 	public Action(String actionID)
 	{
@@ -32,7 +33,7 @@ public abstract class Action
 	/**
 	 * This creates a new action and registers it as a Miij-Action so you can
 	 * use it everywhere with the call to <b>Miij.action(...)</b>.
-	 *
+	 * <p/>
 	 * The Action can be accessed throu the class name.
 	 */
 	public Action()
@@ -77,5 +78,4 @@ public abstract class Action
 	{
 		this.keyStroke = keyStroke;
 	}
-
 }

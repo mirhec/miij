@@ -13,21 +13,23 @@ import static javax.swing.JSplitPane.VERTICAL_SPLIT;
 
 /**
  * Dieses SplitPane erweitert die Komponente JSplitPane um einige Funktionen.
- * Standardmäßig kann mit der Methode setResizeWeight() eingestellt werden, in welchem
- * Verhältnis die Panels vergrößert/verkleinert werden sollen.
- * Um das Setzen einer festen Größe für das rechte/untere Panel zu ermöglichen, gibt es
+ * Standardmäßig kann mit der Methode setResizeWeight() eingestellt werden, in
+ * welchem Verhältnis die Panels vergrößert/verkleinert werden sollen. Um das
+ * Setzen einer festen Größe für das rechte/untere Panel zu ermöglichen, gibt es
  * die Möglichkeit über die beiden Methoden setDividerLocationFromRight() und
- * setDividerLocationFromBottom() eine feste Größe zu vergeben. Bei Veränderung der
- * Fenstergröße wird der restliche Platz vollständig an das linke/obere Panel vergeben.
- * Das funktioniert dann auch, wenn das Fenster noch nicht sichtbar ist, aber schon
- * vergrößert wurde.
- *
- * Des weiteren nimmt diese Implementierung der JScrollPane Rücksicht auf die MaximumSize
- * der beiden Komponenten und lässt es nicht zu, dass die Komponenten über ihre maximale
- * Größe vergrößert werden. Sinnvollerweise sollte diese MaximumSize nur für eines der
- * beiden Panels gesetzt werden. Je nachdem welches der beiden Panels vergrößert werden soll,
- * wird die entsprechende MaximumSize des linken/oberen oder rechten/unteren Panels abgefragt.
- * 
+ * setDividerLocationFromBottom() eine feste Größe zu vergeben. Bei Veränderung
+ * der Fenstergröße wird der restliche Platz vollständig an das linke/obere
+ * Panel vergeben. Das funktioniert dann auch, wenn das Fenster noch nicht
+ * sichtbar ist, aber schon vergrößert wurde.
+ * <p/>
+ * Des weiteren nimmt diese Implementierung der JScrollPane Rücksicht auf die
+ * MaximumSize der beiden Komponenten und lässt es nicht zu, dass die
+ * Komponenten über ihre maximale Größe vergrößert werden. Sinnvollerweise
+ * sollte diese MaximumSize nur für eines der beiden Panels gesetzt werden. Je
+ * nachdem welches der beiden Panels vergrößert werden soll, wird die
+ * entsprechende MaximumSize des linken/oberen oder rechten/unteren Panels
+ * abgefragt.
+ * <p/>
  * @author Mirko Hecky
  */
 public class MSplitPane extends JSplitPane
@@ -40,7 +42,7 @@ public class MSplitPane extends JSplitPane
 		super();
 		init();
 	}
-	
+
 	public MSplitPane(int newOrientation)
 	{
 		super(newOrientation);
@@ -64,42 +66,40 @@ public class MSplitPane extends JSplitPane
 		super(newOrientation, newLeftComponent, newRightComponent);
 		init();
 	}
-	
+
 	@Override
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
-		
+
 		int x = getWidth();
-		if(orientation == VERTICAL_SPLIT)
-		{
+		if (orientation == VERTICAL_SPLIT)
 			x = getHeight();
-		}
-		
-		if(x != oldSplitPaneSize)
+
+		if (x != oldSplitPaneSize)
 		{
 			oldSplitPaneSize = x;
-			if(fixedRightBottom > 0)
+			if (fixedRightBottom > 0)
 				setDividerLocation(oldSplitPaneSize - fixedRightBottom);
 			else
 				setDividerLocation(getDividerLocation());
 		}
 	}
-	
+
 	public void setDividerLocationFromRight(int requested)
 	{
 		fixedRightBottom = requested;
-		if(getDividerLocation() != getWidth() - requested)
+		if (getDividerLocation() != getWidth() - requested)
 			setDividerLocation(getWidth() - requested);
 	}
-	
+
 	public void setDividerLocationFromBottom(int requested)
 	{
 		fixedRightBottom = requested;
-		if(getDividerLocation() != getHeight() - requested)
+		if (getDividerLocation() != getHeight() - requested)
 			super.setDividerLocation(getHeight() - requested);
 	}
-	
+
 	/**
 	 * Override this method to prevent setting a location that violates the
 	 * maximum size of either component in the splitter, if setMaximumSize() has
@@ -108,21 +108,20 @@ public class MSplitPane extends JSplitPane
 	@Override
 	public void setDividerLocation(int requested)
 	{
-		if(requested <= 0)
+		if (requested <= 0)
 		{
 			// Nach Preferred Size setzen
 			Dimension pref1 = getLeftComponent().getPreferredSize();
 			Dimension pref2 = getRightComponent().getPreferredSize();
-			if((fixedRightBottom > 0 && pref2 == null) || fixedRightBottom <= 0)
+			if ((fixedRightBottom > 0 && pref2 == null) || fixedRightBottom <= 0)
 				super.setDividerLocation(getSizeForPrimaryAxis(pref1));
+			else if (orientation == HORIZONTAL_SPLIT)
+				super.setDividerLocation(getWidth() - getSizeForPrimaryAxis(pref2));
 			else
-				if(orientation == HORIZONTAL_SPLIT)
-					super.setDividerLocation(getWidth() - getSizeForPrimaryAxis(pref2));
-				else
-					super.setDividerLocation(getHeight() - getSizeForPrimaryAxis(pref2));
+				super.setDividerLocation(getHeight() - getSizeForPrimaryAxis(pref2));
 			return;
 		}
-		
+
 		int currentLoc = getDividerLocation();
 		boolean growing = requested > currentLoc;
 		Component maxComp = growing ? getLeftComponent() : getRightComponent();
@@ -156,7 +155,7 @@ public class MSplitPane extends JSplitPane
 	private int getSizeForPrimaryAxis(Dimension size)
 	{
 		return (getOrientation() == HORIZONTAL_SPLIT) ? size.width
-				: size.height;
+			   : size.height;
 	}
 
 	private void init()

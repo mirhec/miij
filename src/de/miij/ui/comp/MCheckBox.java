@@ -16,31 +16,31 @@ import javax.swing.JCheckBox;
 public class MCheckBox extends JCheckBox
 {
 	public Connector selectionChanged = null;
-	
+
 	public MCheckBox()
 	{
 		super();
 		init();
 	}
-	
+
 	public MCheckBox(String text)
 	{
 		super(text);
 		init();
 	}
-	
+
 	public MCheckBox(String text, Icon icon)
 	{
 		super(text, icon);
 		init();
 	}
-	
+
 	public MCheckBox(String text, boolean selected)
 	{
 		super(text, selected);
 		init();
 	}
-	
+
 	public MCheckBox(String text, Icon icon, boolean selected)
 	{
 		super(text, icon, selected);
@@ -49,12 +49,12 @@ public class MCheckBox extends JCheckBox
 
 	private void init()
 	{
-		addActionListener(new ActionListener() {
-
+		addActionListener(new ActionListener()
+		{
 			@Override
 			public void actionPerformed(ActionEvent ae)
 			{
-				if(selectionChanged != null)
+				if (selectionChanged != null)
 					selectionChanged.action(ae);
 			}
 		});

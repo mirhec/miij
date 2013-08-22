@@ -44,8 +44,8 @@ public class MColorBox extends MComboBox
 	private int selectedColorIndex = 0;
 	private int cols = 3;
 	/**
-	 * Called, if the user changes the selected color. The colorChanged.event.getSource()-
-	 * Method returns the selected color object.
+	 * Called, if the user changes the selected color. The
+	 * colorChanged.event.getSource()- Method returns the selected color object.
 	 */
 	public Connector colorChanged = null;
 
@@ -54,7 +54,7 @@ public class MColorBox extends MComboBox
 		super();
 		init();
 	}
-	
+
 	public MColorBox(int columns)
 	{
 		super();
@@ -79,12 +79,13 @@ public class MColorBox extends MComboBox
 		catch (NoSuchFieldException e)
 		{
 			Miij.handleSilent(e);
-		} catch (IllegalAccessException e)
+		}
+		catch (IllegalAccessException e)
 		{
 			Miij.handleSilent(e);
 		}
 	}
-	
+
 	private void addPopupMouseMotionListener(MouseMotionListener m)
 	{
 		try
@@ -102,7 +103,8 @@ public class MColorBox extends MComboBox
 		catch (NoSuchFieldException e)
 		{
 			Miij.handleSilent(e);
-		} catch (IllegalAccessException e)
+		}
+		catch (IllegalAccessException e)
 		{
 			Miij.handleSilent(e);
 		}
@@ -111,7 +113,7 @@ public class MColorBox extends MComboBox
 	@Override
 	public void addItem(Object c)
 	{
-		if(c instanceof Color)
+		if (c instanceof Color)
 			colors.add((Color) c);
 		updateColorPanel();
 	}
@@ -121,9 +123,7 @@ public class MColorBox extends MComboBox
 		colorPanel.removeAll();
 		colorPanel.setLayout(new GridLayout(0, cols, 0, 0));
 		for (Color c : colors)
-		{
 			colorPanel.add(getLabel(c));
-		}
 	}
 
 	private JLabel getLabel(final Color c)
@@ -148,10 +148,10 @@ public class MColorBox extends MComboBox
 				int idxX = e.getPoint().x / (getWidth() / cols);
 				int idxY = e.getPoint().y / 35;
 				int idx = idxY * cols + idxX;
-				if(idx >= 0 && idx < colors.size())
+				if (idx >= 0 && idx < colors.size())
 				{
 					selectedColorIndex = idx;
-					if(colorChanged != null)
+					if (colorChanged != null)
 					{
 						e.setSource(colors.get(idx));
 						colorChanged.action(e);
@@ -159,30 +159,31 @@ public class MColorBox extends MComboBox
 				}
 			}
 		});
-		addPopupMouseMotionListener(new MouseMotionAdapter() {
+		addPopupMouseMotionListener(new MouseMotionAdapter()
+		{
 			@Override
 			public void mouseMoved(MouseEvent e)
 			{
 				int idxX = e.getPoint().x / (getWidth() / cols);
 				int idxY = e.getPoint().y / 35;
 				int idx = idxY * cols + idxX;
-				if(idx >= 0 && idx < colors.size())
+				if (idx >= 0 && idx < colors.size())
 				{
 					updateColorPanel();
 					Component c = colorPanel.getComponent(idx);
-					if(c instanceof JLabel)
+					if (c instanceof JLabel)
 					{
-						for(Component cc : colorPanel.getComponents())
-							if(cc instanceof JLabel)
-								((JLabel)cc).setBorder(null);
-						
-						JLabel lbl = ((JLabel)c);
+						for (Component cc : colorPanel.getComponents())
+							if (cc instanceof JLabel)
+								((JLabel) cc).setBorder(null);
+
+						JLabel lbl = ((JLabel) c);
 						Color col = lbl.getBackground();
 						int gray = 255 - (col.getRed() + col.getGreen() + col.getBlue()) / 3;
 						gray = 255 - gray > gray ? 0 : 255;
 						Color inverted = new Color(gray, gray, gray);
 						lbl.setBorder(new LineBorder(inverted, 2));
-						
+
 						try
 						{
 							Field popupInBasicComboBoxUI = BasicComboBoxUI.class.getDeclaredField("popup");
@@ -204,18 +205,18 @@ public class MColorBox extends MComboBox
 			}
 		});
 	}
-	
+
 	public Color getSelectedColor()
 	{
 		return selectedColorIndex > 0 && selectedColorIndex < colors.size() ? colors.get(selectedColorIndex) : null;
 	}
-	
+
 	@Override
 	public int getSelectedIndex()
 	{
 		return selectedColorIndex > 0 && selectedColorIndex < colors.size() ? selectedColorIndex : -1;
 	}
-	
+
 	public void setSelectedColorIndex(int idx)
 	{
 		selectedColorIndex = idx;
@@ -223,7 +224,6 @@ public class MColorBox extends MComboBox
 
 	class MColorBoxModel implements ComboBoxModel
 	{
-
 		@Override
 		public void setSelectedItem(Object o)
 		{
@@ -272,16 +272,12 @@ public class MColorBox extends MComboBox
 
 	class MColorBoxRenderer implements ListCellRenderer
 	{
-
 		@Override
 		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
 		{
 			if (value instanceof Color)
-			{
 				return colorPanel;
-			}
 			else
-			{
 				if (colors.size() > selectedColorIndex && selectedColorIndex >= 0)
 				{
 					JLabel lbl = new JLabel();
@@ -293,7 +289,6 @@ public class MColorBox extends MComboBox
 					lbl.setIcon(new ImageIcon(img));
 					return lbl;
 				}
-			}
 			return null;
 		}
 	}

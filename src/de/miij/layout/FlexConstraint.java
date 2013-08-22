@@ -74,7 +74,7 @@ public class FlexConstraint
 		this.FlexY = copyFrom.FlexY;
 		this.FlexYListener = copyFrom.FlexYListener;
 	}
-	
+
 	public FlexConstraint(FlexComponent copyFrom)
 	{
 		this.FlexBottom = copyFrom.FlexBottom;
@@ -103,7 +103,7 @@ public class FlexConstraint
 		this.FlexY = copyFrom.FlexY;
 		this.FlexYListener = copyFrom.FlexYListener;
 	}
-	
+
 	public FlexConstraint left(int offset)
 	{
 		FlexLeft = 0;
@@ -201,10 +201,11 @@ public class FlexConstraint
 	}
 
 	/**
-	 * If offset is a negative number, after centering the component,
-	 * it will be moved offset pixels to the left side, else to the right side.
-	 *
+	 * If offset is a negative number, after centering the component, it will be
+	 * moved offset pixels to the left side, else to the right side.
+	 * <p/>
 	 * @param offset
+	 * <p/>
 	 * @return
 	 */
 	public FlexConstraint center_h(int offset)
@@ -215,10 +216,11 @@ public class FlexConstraint
 	}
 
 	/**
-	 * If offset is a negative number, after centering the component,
-	 * it will be moved offset pixels to the top corner, else to the bottom corner.
-	 *
+	 * If offset is a negative number, after centering the component, it will be
+	 * moved offset pixels to the top corner, else to the bottom corner.
+	 * <p/>
 	 * @param offset
+	 * <p/>
 	 * @return
 	 */
 	public FlexConstraint center_v(int offset)

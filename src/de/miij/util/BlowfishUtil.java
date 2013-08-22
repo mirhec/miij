@@ -17,7 +17,6 @@ package de.miij.util;
  * 02111-1307 USA -- Copyright (C) 2001 Auriga Logic Pvt. Ltd.
  * <http://www.aurigalogic.com> Author: Nikhil Gupte <ngupte@aurigalogic.com>
  */
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.security.Provider;
@@ -35,80 +34,78 @@ import javax.crypto.spec.SecretKeySpec;
  * <p>
  * <b>Example:</b> <br />
  * <code>
-* &nbsp;&nbsp;String ciphertext = Blowfish.encrypt("encryptme", "my key");
-* &nbsp;&nbsp;String cleartext = Blowfish.encrypt(ciphertext, "my key");
-* </code>
+ * &nbsp;&nbsp;String ciphertext = Blowfish.encrypt("encryptme", "my key");
+ * &nbsp;&nbsp;String cleartext = Blowfish.encrypt(ciphertext, "my key");
+ * </code>
  * </p>
- * 
+ * <p/>
  * @author <a href="mailto:ngupte@aurigalogic.com">Nikhil Gupte</a>
  * @version $Revision: 1.4 $ $Date: 2001/06/28 10:45:43 $
  */
 public class BlowfishUtil
 {
-
-   /**
+	/**
 	 * Encrypts a string using the passed key.
-	 * 
-	 * @param cleartext
-	 *           The clear text string to encrypt.
-	 * @param key
-	 *           The key to use for the encryption.
+	 * <p/>
+	 * @param cleartext The clear text string to encrypt.
+	 * @param key The key to use for the encryption.
+	 * <p/>
 	 * @return a string representing the resulting ciphertext.
 	 */
+	public static String encrypt(String cleartext, String key)
+			throws Exception
+	{
+		return crypt(cleartext, key, Cipher.ENCRYPT_MODE);
+	}
 
-   public static String encrypt(String cleartext, String key)
-           throws Exception {
-       return crypt(cleartext, key, Cipher.ENCRYPT_MODE);    
-   }
-
-   /**
+	/**
 	 * Decrypts a string using the passed key.
-	 * 
-	 * @param ciphertext
-	 *           The encrypted string.
-	 * @param key
-	 *           The key to use for the decryption.
+	 * <p/>
+	 * @param ciphertext The encrypted string.
+	 * @param key The key to use for the decryption.
+	 * <p/>
 	 * @return a string representing the resulting cleartext.
 	 */
-   public static String decrypt(String ciphertext, String key)
-           throws Exception {
-       return crypt(ciphertext, key, Cipher.DECRYPT_MODE);    
-   }
+	public static String decrypt(String ciphertext, String key)
+			throws Exception
+	{
+		return crypt(ciphertext, key, Cipher.DECRYPT_MODE);
+	}
 
-   /*
+	/*
 	 * This actuall does the encryption/decryption.
 	 */
-   private static String crypt(String input, String key, int mode) 
-           throws Exception {
+	private static String crypt(String input, String key, int mode)
+			throws Exception
+	{
 
-       // Install SunJCE provider
-       Provider sunJce = new com.sun.crypto.provider.SunJCE();
-       Security.addProvider(sunJce);
-        
-       KeyGenerator kgen = KeyGenerator.getInstance("Blowfish");
-       kgen.init(448);
+		// Install SunJCE provider
+		Provider sunJce = new com.sun.crypto.provider.SunJCE();
+		Security.addProvider(sunJce);
+
+		KeyGenerator kgen = KeyGenerator.getInstance("Blowfish");
+		kgen.init(448);
 //       SecretKey skey = kgen.generateKey();
 
-       byte[] raw = key.getBytes();
-       SecretKeySpec skeySpec = new SecretKeySpec(raw, "Blowfish");
-           
-       Cipher cipher = Cipher.getInstance("Blowfish/ECB/PKCS5Padding");
-       cipher.init(mode, skeySpec);
+		byte[] raw = key.getBytes();
+		SecretKeySpec skeySpec = new SecretKeySpec(raw, "Blowfish");
 
-       ByteArrayOutputStream bos = new ByteArrayOutputStream();
-       ByteArrayInputStream bis = new ByteArrayInputStream(input.getBytes());
-       CipherOutputStream cos = new CipherOutputStream(bos, cipher);
+		Cipher cipher = Cipher.getInstance("Blowfish/ECB/PKCS5Padding");
+		cipher.init(mode, skeySpec);
 
-       int length = 0;
-       byte[] buffer =  new byte[8192];
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		ByteArrayInputStream bis = new ByteArrayInputStream(input.getBytes());
+		CipherOutputStream cos = new CipherOutputStream(bos, cipher);
 
-       while ((length = bis.read(buffer)) != -1) {
-          cos.write(buffer, 0, length);
-       }
+		int length = 0;
+		byte[] buffer = new byte[8192];
 
-       bis.close();
-       cos.close();
+		while ((length = bis.read(buffer)) != -1)
+			cos.write(buffer, 0, length);
 
-       return bos.toString();
-   }
+		bis.close();
+		cos.close();
+
+		return bos.toString();
+	}
 }

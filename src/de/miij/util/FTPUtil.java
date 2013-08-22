@@ -8,34 +8,32 @@ import sun.net.ftp.FtpClient;
 
 public class FTPUtil
 {
+	public static int BUFFER_SIZE = 10240;
 
-	public static int	BUFFER_SIZE	= 10240;
-
-	public static void putFile( String filename , FtpClient m_client )
+	public static void putFile(String filename, FtpClient m_client)
 	{
 		byte[] buffer = new byte[BUFFER_SIZE];
 		try
 		{
-			FileInputStream in = new FileInputStream( filename );
-			OutputStream out = m_client.put( new File( filename ).getName() );
+			FileInputStream in = new FileInputStream(filename);
+			OutputStream out = m_client.put(new File(filename).getName());
 
 			int counter = 0;
-			while( true )
+			while (true)
 			{
-				int bytes = in.read( buffer );
-				if( bytes < 0 )
+				int bytes = in.read(buffer);
+				if (bytes < 0)
 					break;
-				out.write( buffer , 0 , bytes );
+				out.write(buffer, 0, bytes);
 				counter += bytes;
 			}
 
 			out.close();
 			in.close();
 		}
-		catch( Exception ex )
+		catch (Exception ex)
 		{
 			ex.printStackTrace();
 		}
 	}
-
 }

@@ -7,16 +7,14 @@ import java.awt.Component;
 import javax.swing.JButton;
 import javax.swing.JTextArea;
 
-
 /**
  * In dieser Klasse wird eine flexible Komponente beschrieben, so wie sie in der
  * Klasse MFrame verwendet wird.
- *
+ * <p/>
  * @author Mirhec
  */
 public class FlexComponent
 {
-
 	public Component FlexComponent = null;
 	public int FlexX = -1;	// Pixel
 	public int FlexLeft = -1;	// Prozent
@@ -78,7 +76,7 @@ public class FlexComponent
 		this.FlexY = copyFrom.FlexY;
 		this.FlexYListener = copyFrom.FlexYListener;
 	}
-	
+
 	public static FlexComponent flex(Component c)
 	{
 		return new FlexComponent(c);
@@ -180,7 +178,7 @@ public class FlexComponent
 		return this;
 	}
 
-	public FlexComponent addAt( Flexable f )
+	public FlexComponent addAt(Flexable f)
 	{
 		Miij.comp(f.getName() + "/" + FlexComponent.getName(), FlexComponent);
 		f.addFlexibleComponent(this);
@@ -193,12 +191,12 @@ public class FlexComponent
 //		p.addFlexibleComponent(this);
 //		return this;
 //	}
-
 	/**
-	 * If offset is a negative number, after centering the component,
-	 * it will be moved offset pixels to the left side, else to the right side.
-	 *
+	 * If offset is a negative number, after centering the component, it will be
+	 * moved offset pixels to the left side, else to the right side.
+	 * <p/>
 	 * @param offset
+	 * <p/>
 	 * @return
 	 */
 	public FlexComponent center_h(int offset)
@@ -209,10 +207,11 @@ public class FlexComponent
 	}
 
 	/**
-	 * If offset is a negative number, after centering the component,
-	 * it will be moved offset pixels to the top corner, else to the bottom corner.
-	 *
+	 * If offset is a negative number, after centering the component, it will be
+	 * moved offset pixels to the top corner, else to the bottom corner.
+	 * <p/>
 	 * @param offset
+	 * <p/>
 	 * @return
 	 */
 	public FlexComponent center_v(int offset)
@@ -257,8 +256,8 @@ public class FlexComponent
 	{
 		boolean ret = false;
 
-		if(o instanceof FlexComponent)
-			ret = this.FlexComponent.equals(((FlexComponent)o).FlexComponent);
+		if (o instanceof FlexComponent)
+			ret = this.FlexComponent.equals(((FlexComponent) o).FlexComponent);
 
 		return ret;
 	}
@@ -266,7 +265,6 @@ public class FlexComponent
 
 class FlexComponentExample
 {
-
 	public static void main(String[] args)
 	{
 		FFrame frm = new FFrame();
@@ -314,40 +312,3 @@ class FlexComponentExample
 		frm.setVisible(true);
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

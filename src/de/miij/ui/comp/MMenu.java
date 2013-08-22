@@ -6,19 +6,15 @@ import de.miij.language.ILanguageSupport;
 
 public class MMenu extends JMenu implements ILanguageSupport
 {
+	private static final long serialVersionUID = -2230379501387693068L;
 
-	private static final long	serialVersionUID	= -2230379501387693068L;
-
-	public MMenu( String item )
+	public MMenu(String item)
 	{
-		super( item.replaceAll( "&" , "" ) );
-		
-		int index			= -1;
-		
-		if( ( index = item.indexOf( "&" ) ) > -1 )
-		{
-			this.setMnemonic( item.charAt( index + 1 ) );
-		}
-	}
+		super(item.replaceAll("&", ""));
 
+		int index = -1;
+
+		if ((index = item.indexOf("&")) > -1)
+			this.setMnemonic(item.charAt(index + 1));
+	}
 }

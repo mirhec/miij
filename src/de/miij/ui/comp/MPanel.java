@@ -6,67 +6,11 @@ public class MPanel extends FPanel
 {
 	public MPanel()
 	{
-		super( true );
+		super(true);
 	}
-	
-	public MPanel( boolean resizeOnAdd )
+
+	public MPanel(boolean resizeOnAdd)
 	{
-		super( resizeOnAdd );
+		super(resizeOnAdd);
 	}
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

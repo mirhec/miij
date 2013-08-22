@@ -1,7 +1,5 @@
 package de.miij.db;
 
-
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -12,39 +10,35 @@ import java.util.Hashtable;
 
 public class Database extends Hashtable
 {
+	private static final long serialVersionUID = 6618164787931637636L;
 
-	private static final long	serialVersionUID	= 6618164787931637636L;
-
-	public void insert( Table t )
+	public void insert(Table t)
 	{
-		this.put( t.getTableName() , t );
+		this.put(t.getTableName(), t);
 	}
 
-	public void delete( String tableName )
+	public void delete(String tableName)
 	{
-		this.remove( tableName );
+		this.remove(tableName);
 	}
-	
+
 	/**
 	 * Liefert eine Tabelle zur&uuml;ck. Existiert f&uuml;r den &uuml;bergebenen
-	 * Tabellennamen keine Tabelle, so wird eine neue leere Tabelle
-	 * mit dem entsprechenden Namen &uuml;bergeben.
-	 * 
+	 * Tabellennamen keine Tabelle, so wird eine neue leere Tabelle mit dem
+	 * entsprechenden Namen &uuml;bergeben.
+	 * <p/>
 	 * @param tableName
+	 * <p/>
 	 * @return
 	 */
-	public Table getTable( String tableName )
+	public Table getTable(String tableName)
 	{
-		Object o					= this.get( tableName );
-		
-		if( o == null )
-		{
-			return new Table( tableName );
-		}
+		Object o = this.get(tableName);
+
+		if (o == null)
+			return new Table(tableName);
 		else
-		{
-			return ( Table ) o;
-		}
+			return (Table) o;
 	}
 
 	/*
@@ -55,15 +49,15 @@ public class Database extends Hashtable
 	 */
 	/**
 	 * Diese Methode speichert sich in die &uuml;bergebene Datei.
-	 * 
+	 * <p/>
 	 * @param f
 	 */
-	public void save( File f ) throws IOException
+	public void save(File f) throws IOException
 	{
-		FileOutputStream fos = new FileOutputStream( f );
-		ObjectOutputStream oos = new ObjectOutputStream( fos );
+		FileOutputStream fos = new FileOutputStream(f);
+		ObjectOutputStream oos = new ObjectOutputStream(fos);
 
-		oos.writeObject( this );
+		oos.writeObject(this);
 
 		oos.close();
 		fos.close();
@@ -72,22 +66,24 @@ public class Database extends Hashtable
 	/**
 	 * Diese Methode liest aus der &uuml;bergebenen Datei die DataBase aus, und
 	 * liefert diese zur&uuml;ck.
-	 * 
+	 * <p/>
 	 * @param f
+	 * <p/>
 	 * @return
+	 * <p/>
 	 * @throws IOException
 	 */
-	public static Database load( File f ) throws Exception
+	public static Database load(File f) throws Exception
 	{
-		FileInputStream fis = new FileInputStream( f );
-		ObjectInputStream ois = new ObjectInputStream( fis );
+		FileInputStream fis = new FileInputStream(f);
+		ObjectInputStream ois = new ObjectInputStream(fis);
 		Database db = null;
 
 		try
 		{
-			db = ( Database ) ois.readObject();
+			db = (Database) ois.readObject();
 		}
-		catch( Exception ex )
+		catch (Exception ex)
 		{
 			throw new WrongClassException();
 		}
@@ -97,5 +93,4 @@ public class Database extends Hashtable
 
 		return db;
 	}
-
 }

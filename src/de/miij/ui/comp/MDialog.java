@@ -20,55 +20,55 @@ import javax.swing.JToolBar;
  */
 public class MDialog extends JDialog implements Flexable
 {
-	private FPanel					ComponentPanel		= null;
+	private FPanel ComponentPanel = null;
 
 	public MDialog(Window owner)
 	{
 		super(owner);
 
-		JPanel pnl			= new JPanel();
-		pnl.setLayout( new BorderLayout() );
-		this.setContentPane( pnl );
-		setDefaultCloseOperation( DISPOSE_ON_CLOSE );
+		JPanel pnl = new JPanel();
+		pnl.setLayout(new BorderLayout());
+		this.setContentPane(pnl);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
-		ComponentPanel		= new FPanel( false );
-		this.getContentPane().add( ComponentPanel , BorderLayout.CENTER );
+		ComponentPanel = new FPanel(false);
+		this.getContentPane().add(ComponentPanel, BorderLayout.CENTER);
 	}
-
 
 	public FPanel getComponentPanel()
 	{
 		return ComponentPanel;
 	}
 
-	public void setComponentPanel( FPanel panel )
+	public void setComponentPanel(FPanel panel)
 	{
-		this.ComponentPanel				= panel;
-		setContentPane( ComponentPanel );
+		this.ComponentPanel = panel;
+		setContentPane(ComponentPanel);
 	}
 
-	public void setJToolBar( JToolBar tb , String position )
+	public void setJToolBar(JToolBar tb, String position)
 	{
-		this.getContentPane().add( tb , position );
+		this.getContentPane().add(tb, position);
 	}
 
 	/**
-	 * Diese Methode f&uuml;gt der ContentPane des MFrames eine neue flexible Komponente hinzu.
-	 *
+	 * Diese Methode f&uuml;gt der ContentPane des MFrames eine neue flexible
+	 * Komponente hinzu.
+	 * <p/>
 	 * @param comp
 	 * @param left
 	 * @param top
 	 * @param right
 	 * @param bottom
 	 */
-	public void addFlexibleComponent( FlexComponent flexComp )
+	public void addFlexibleComponent(FlexComponent flexComp)
 	{
 		// this.FlexComponents.add( flexComp );
-		this.getComponentPanel().addFlexibleComponent( flexComp );
+		this.getComponentPanel().addFlexibleComponent(flexComp);
 	}
 
-	public FlexComponent flex( Component c )
+	public FlexComponent flex(Component c)
 	{
-		return new FlexComponent( c );
+		return new FlexComponent(c);
 	}
 }

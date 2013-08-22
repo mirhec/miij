@@ -16,7 +16,6 @@ import de.miij.ui.comp.flex.FlexComponent;
 
 public class MFrame extends FFrame
 {
-
 	private MMenu akt_menu = null;
 	private Stack<Object> menus = new Stack<Object>();
 	private MMenuItem akt_menu_item = null;
@@ -25,8 +24,9 @@ public class MFrame extends FFrame
 
 	/**
 	 * Creates a new MFrame. The name must be unique.
-	 *
+	 * <p/>
 	 * @param name
+	 * <p/>
 	 * @throws NoUniqueArgumentException if the name is already in use
 	 */
 	public MFrame(String name)
@@ -46,9 +46,10 @@ public class MFrame extends FFrame
 
 	/**
 	 * Creates a new MFrame. The name must be unique.
-	 *
+	 * <p/>
 	 * @param name
 	 * @param title
+	 * <p/>
 	 * @throws NoUniqueArgumentException if the name is already in use
 	 */
 	public MFrame(String name, String title)
@@ -61,16 +62,15 @@ public class MFrame extends FFrame
 
 	/**
 	 * F&uuml;gt ein Men&uuml; an oberster Stelle ein.
-	 * 
+	 * <p/>
 	 * @param text
+	 * <p/>
 	 * @return
 	 */
 	public MFrame menuTop(String text)
 	{
 		if (getJMenuBar() == null)
-		{
 			setJMenuBar(new JMenuBar());
-		}
 
 		akt_menu = new MMenu(text);
 		getJMenuBar().add(akt_menu);
@@ -81,23 +81,20 @@ public class MFrame extends FFrame
 
 	/**
 	 * F&uuml;gt ein Men&uuml; unter dem aktuellen Men&uuml; ein.
-	 * 
+	 * <p/>
 	 * @param text
+	 * <p/>
 	 * @return
 	 */
 	public MFrame menu(String text)
 	{
 		if (getJMenuBar() == null)
-		{
 			setJMenuBar(new JMenuBar());
-		}
 
 		MMenu m = new MMenu(text);
 
 		if (akt_menu == null)
-		{
 			return menuTop(text);
-		}
 
 		akt_menu.add(m);
 
@@ -109,13 +106,13 @@ public class MFrame extends FFrame
 
 	/**
 	 * Geht einen Men&uuml;punkt h&ouml;her.
-	 * 
+	 * <p/>
 	 * @return
 	 */
 	public MFrame menuUp()
 	{
 		menus.pop();
-		if(menus.size() == 0)
+		if (menus.size() == 0)
 			akt_menu = null;
 		else
 			akt_menu = (MMenu) menus.peek();
@@ -124,18 +121,17 @@ public class MFrame extends FFrame
 
 	/**
 	 * F&uuml;gt ein MenuItem unter dem aktuellen Men&uuml; ein.
-	 * 
+	 * <p/>
 	 * @param text
 	 * @param object
 	 * @param method
+	 * <p/>
 	 * @return
 	 */
 	public MFrame menuItem(String text, Object object, String method)
 	{
 		if (getJMenuBar() == null)
-		{
 			setJMenuBar(new JMenuBar());
-		}
 
 		if (akt_menu == null)
 		{
@@ -153,21 +149,20 @@ public class MFrame extends FFrame
 
 	/**
 	 * F&uuml;gt ein MenuItem unter dem aktuellen Men&uuml; ein.
-	 * 
+	 * <p/>
 	 * @param text
 	 * @param object
 	 * @param method
+	 * <p/>
 	 * @return
 	 */
 	public MFrame menuItem(Connector c)
 	{
 		// Check connector ...
-		if(c.text != null)
+		if (c.text != null)
 		{
 			if (getJMenuBar() == null)
-			{
 				setJMenuBar(new JMenuBar());
-			}
 
 			if (akt_menu == null)
 			{
@@ -186,14 +181,10 @@ public class MFrame extends FFrame
 	public MFrame separator()
 	{
 		if (getJMenuBar() == null)
-		{
 			setJMenuBar(new JMenuBar());
-		}
 
 		if (akt_menu != null)
-		{
 			akt_menu.addSeparator();
-		}
 
 		return this;
 	}
@@ -245,9 +236,7 @@ public class MFrame extends FFrame
 		super.setSize(width, height);
 
 		if (centered)
-		{
 			setLocationRelativeTo(null);
-		}
 	}
 
 	public void setCentered(boolean centered)
@@ -282,9 +271,7 @@ public class MFrame extends FFrame
 		JFileChooser fc = new JFileChooser();
 		int ret = fc.showOpenDialog(this);
 		if (ret == JFileChooser.APPROVE_OPTION)
-		{
 			return fc.getSelectedFile().getAbsolutePath();
-		}
 
 		return "";
 	}
@@ -294,9 +281,7 @@ public class MFrame extends FFrame
 		JFileChooser fc = new JFileChooser();
 		int ret = fc.showSaveDialog(this);
 		if (ret == JFileChooser.APPROVE_OPTION)
-		{
 			return fc.getSelectedFile().getAbsolutePath();
-		}
 
 		return "";
 	}
@@ -347,7 +332,6 @@ public class MFrame extends FFrame
 		{
 			SwingUtilities.invokeAndWait(new Runnable()
 			{
-
 				public void run()
 				{
 					try
@@ -380,8 +364,9 @@ public class MFrame extends FFrame
 	/**
 	 * Creates a FlexibleComponent out of the given component, so that the given
 	 * component can be formatted.
-	 *
+	 * <p/>
 	 * @param c
+	 * <p/>
 	 * @return
 	 */
 	public static FlexComponent flex(String name, Component c)
@@ -393,7 +378,6 @@ public class MFrame extends FFrame
 
 class MFrameTest extends MFrame
 {
-
 	public MFrameTest() throws NoUniqueArgumentException
 	{
 		super("MFrameTest", "ui");

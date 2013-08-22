@@ -10,116 +10,61 @@ import de.miij.ui.comp.flex.FPanel;
 
 public class MFarbverlaufPanel extends FPanel
 {
-	
-	private Color FROM			= new Color( 100 , 100 , 255 );
-	private Color TO				= Color.WHITE;
-	private boolean Horizontal	= true;
-	
-	public MFarbverlaufPanel( boolean resizeOnAdd )
+	private Color FROM = new Color(100, 100, 255);
+	private Color TO = Color.WHITE;
+	private boolean Horizontal = true;
+
+	public MFarbverlaufPanel(boolean resizeOnAdd)
 	{
-		super( resizeOnAdd );
+		super(resizeOnAdd);
 	}
-	
-	public MFarbverlaufPanel( Color from , Color to )
+
+	public MFarbverlaufPanel(Color from, Color to)
 	{
-		super( true );
+		super(true);
 		FROM = from;
 		TO = to;
 	}
-	
-	public MFarbverlaufPanel( boolean resizeOnAdd , Color from , Color to )
+
+	public MFarbverlaufPanel(boolean resizeOnAdd, Color from, Color to)
 	{
-		super( resizeOnAdd );
+		super(resizeOnAdd);
 		FROM = from;
 		TO = to;
 	}
-	
-	public MFarbverlaufPanel( boolean resizeOnAdd , boolean horizontal )
+
+	public MFarbverlaufPanel(boolean resizeOnAdd, boolean horizontal)
 	{
-		super( resizeOnAdd );
+		super(resizeOnAdd);
 		Horizontal = horizontal;
 	}
-	
-	public MFarbverlaufPanel( Color from , Color to , boolean horizontal )
+
+	public MFarbverlaufPanel(Color from, Color to, boolean horizontal)
 	{
-		super( true );
-		FROM = from;
-		TO = to;
-		Horizontal = horizontal;
-	}
-	
-	public MFarbverlaufPanel( boolean resizeOnAdd , Color from , Color to , boolean horizontal )
-	{
-		super( resizeOnAdd );
+		super(true);
 		FROM = from;
 		TO = to;
 		Horizontal = horizontal;
 	}
-	
-	public void paintComponent( Graphics g )
+
+	public MFarbverlaufPanel(boolean resizeOnAdd, Color from, Color to, boolean horizontal)
 	{
-		super.paintComponent( g );
-		
-		Graphics2D g2d = ( Graphics2D ) g;
-		
-		if( Horizontal )
-		{
-			g2d.setPaint( new GradientPaint( new Point( 0 , 0 ) , FROM , new Point( getWidth() , 0 ) , TO ) );
-		}
+		super(resizeOnAdd);
+		FROM = from;
+		TO = to;
+		Horizontal = horizontal;
+	}
+
+	public void paintComponent(Graphics g)
+	{
+		super.paintComponent(g);
+
+		Graphics2D g2d = (Graphics2D) g;
+
+		if (Horizontal)
+			g2d.setPaint(new GradientPaint(new Point(0, 0), FROM, new Point(getWidth(), 0), TO));
 		else
-		{
-			g2d.setPaint( new GradientPaint( new Point( 0 , 0 ) , FROM , new Point( 0 , getHeight() ) , TO ) );
-		}
-		g2d.fillRect( 0 , 0 , getWidth() , getHeight() );
+			g2d.setPaint(new GradientPaint(new Point(0, 0), FROM, new Point(0, getHeight()), TO));
+		g2d.fillRect(0, 0, getWidth(), getHeight());
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

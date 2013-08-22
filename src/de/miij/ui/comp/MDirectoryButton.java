@@ -9,90 +9,38 @@ import javax.swing.JFileChooser;
 
 public class MDirectoryButton extends JButton
 {
+	private static final long serialVersionUID = 1L;
 
-	private static final long	serialVersionUID	= 1L;
-
-	public MDirectoryButton( String text , Frame parent )
+	public MDirectoryButton(String text, Frame parent)
 	{
-		super( text );
-		init( parent );
+		super(text);
+		init(parent);
 	}
-	
+
 	/**
-	 * &Uuml;berschreiben Sie diese Methode, um den gew&auml;hlten Pfad zu handlen.
-	 * 
+	 * &Uuml;berschreiben Sie diese Methode, um den gew&auml;hlten Pfad zu
+	 * handlen.
+	 * <p/>
 	 * @param path
 	 */
-	public void handle( String path )
+	public void handle(String path)
 	{
 		// do nothing ...
 	}
-	
-	private void init( final Frame parent )
+
+	private void init(final Frame parent)
 	{
-		addActionListener( new ActionListener() {
-			public void actionPerformed( ActionEvent e )
+		addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
 			{
-				JFileChooser fc		= new JFileChooser();
-				fc.setFileSelectionMode( JFileChooser.DIRECTORIES_ONLY );
-				fc.setVisible( true );
-				int retVal				= fc.showOpenDialog( parent );
-				if( retVal == JFileChooser.APPROVE_OPTION )
-				{
-					handle( fc.getSelectedFile().getAbsolutePath() );
-				}
+				JFileChooser fc = new JFileChooser();
+				fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				fc.setVisible(true);
+				int retVal = fc.showOpenDialog(parent);
+				if (retVal == JFileChooser.APPROVE_OPTION)
+					handle(fc.getSelectedFile().getAbsolutePath());
 			}
 		});
 	}
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

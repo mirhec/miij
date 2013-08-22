@@ -13,16 +13,14 @@ import javax.swing.JTextArea;
 import de.miij.language.ILanguageSupport;
 
 /**
- * In der Klassenvariable Actions sind Connector-Objekte zu hinterlegen,
- * welche bei einem Rechtsklick auf diese Komponente ein Popup-Men&uuml; &ouml;ffnen.
- * 
+ * In der Klassenvariable Actions sind Connector-Objekte zu hinterlegen, welche
+ * bei einem Rechtsklick auf diese Komponente ein Popup-Men&uuml; &ouml;ffnen.
+ * <p/>
  * @author Mirhec
  */
 public class MTextArea extends JTextArea implements ILanguageSupport
 {
-
 	public boolean highlight = true;
-	
 	public Connector focusGained = null;
 	public Connector focusLost = null;
 	public Connector mousePressed = null;
@@ -32,243 +30,185 @@ public class MTextArea extends JTextArea implements ILanguageSupport
 	public Connector mouseExited = null;
 	public Connector mouseDragged = null;
 	public Connector mouseMoved = null;
-	
 	public ArrayList Actions = new ArrayList();
-	
 
 	/**
 	 * @param arg0
 	 */
-	public MTextArea( String arg0 )
+	public MTextArea(String arg0)
 	{
-		super( arg0 );
+		super(arg0);
 		init();
 	}
 
-	public MTextArea( boolean highlight )
+	public MTextArea(boolean highlight)
 	{
 		this.highlight = highlight;
 		init();
 	}
-	
+
 	public MTextArea()
 	{
 		this.highlight = true;
 		init();
 	}
-	
-	public MTextArea setHighlighted( boolean highlight )
+
+	public MTextArea setHighlighted(boolean highlight)
 	{
 		this.highlight = highlight;
 		return this;
 	}
-	
+
 	private void init()
 	{
-		addFocusListener( new FocusAdapter() {
-			public void focusGained( FocusEvent e )
+		addFocusListener(new FocusAdapter()
+		{
+			public void focusGained(FocusEvent e)
 			{
-				if( highlight )
-					MTextArea.this.setBackground( new Color( 255 , 255 , 160 ) );
-				
-				if( focusGained != null )
-					focusGained.action( e );
-			}
-			
-			public void focusLost( FocusEvent e )
-			{
-				if( highlight )
-					MTextArea.this.setBackground( Color.WHITE );
+				if (highlight)
+					MTextArea.this.setBackground(new Color(255, 255, 160));
 
-				if( focusLost != null )
-					focusLost.action( e );
+				if (focusGained != null)
+					focusGained.action(e);
+			}
+
+			public void focusLost(FocusEvent e)
+			{
+				if (highlight)
+					MTextArea.this.setBackground(Color.WHITE);
+
+				if (focusLost != null)
+					focusLost.action(e);
 			}
 		});
-		addMouseListener( new MouseListener() {
-
-			public void mouseClicked( MouseEvent e )
+		addMouseListener(new MouseListener()
+		{
+			public void mouseClicked(MouseEvent e)
 			{
-				if( e.getButton() == MouseEvent.BUTTON3 )	// Rechte Maustaste => Menü anzeigen
-				{
-					Connector.popup( e , Actions );
-				}
+				if (e.getButton() == MouseEvent.BUTTON3) // Rechte Maustaste => Menü anzeigen
 				
-				if( mouseClicked != null )
-					mouseClicked.action( e );
+					Connector.popup(e, Actions);
+
+				if (mouseClicked != null)
+					mouseClicked.action(e);
 			}
 
-			public void mouseEntered( MouseEvent e )
+			public void mouseEntered(MouseEvent e)
 			{
-				if( mouseEntered != null )
-					mouseEntered.action( e );
+				if (mouseEntered != null)
+					mouseEntered.action(e);
 			}
 
-			public void mouseExited( MouseEvent e )
+			public void mouseExited(MouseEvent e)
 			{
-				if( mouseExited != null )
-					mouseExited.action( e );
+				if (mouseExited != null)
+					mouseExited.action(e);
 			}
 
-			public void mousePressed( MouseEvent e )
+			public void mousePressed(MouseEvent e)
 			{
-				if( mousePressed != null )
-					mousePressed.action( e );
+				if (mousePressed != null)
+					mousePressed.action(e);
 			}
 
-			public void mouseReleased( MouseEvent e )
+			public void mouseReleased(MouseEvent e)
 			{
-				if( mouseReleased != null )
-					mouseReleased.action( e );
+				if (mouseReleased != null)
+					mouseReleased.action(e);
 			}
-			
 		});
-		addMouseMotionListener( new MouseMotionListener() {
-
-			public void mouseDragged( MouseEvent e )
+		addMouseMotionListener(new MouseMotionListener()
+		{
+			public void mouseDragged(MouseEvent e)
 			{
-				if( mouseDragged != null )
-					mouseDragged.action( e );
+				if (mouseDragged != null)
+					mouseDragged.action(e);
 			}
 
-			public void mouseMoved( MouseEvent e )
+			public void mouseMoved(MouseEvent e)
 			{
-				if( mouseMoved != null )
-					mouseMoved.action( e );
+				if (mouseMoved != null)
+					mouseMoved.action(e);
 			}
-			
 		});
 	}
-	
-	public MTextArea focusGained( Connector c )
+
+	public MTextArea focusGained(Connector c)
 	{
 		focusGained = c;
 		return this;
 	}
-	
-	public MTextArea focusLost( Connector c )
+
+	public MTextArea focusLost(Connector c)
 	{
 		focusLost = c;
 		return this;
 	}
-	
-	public MTextArea mousePressed( Connector c )
+
+	public MTextArea mousePressed(Connector c)
 	{
 		mousePressed = c;
 		return this;
 	}
-	
-	public MTextArea mouseEntered( Connector c )
+
+	public MTextArea mouseEntered(Connector c)
 	{
 		mouseEntered = c;
 		return this;
 	}
-	
-	public MTextArea mouseClicked( Connector c )
+
+	public MTextArea mouseClicked(Connector c)
 	{
 		mouseClicked = c;
 		return this;
 	}
-	
-	public MTextArea mouseExited( Connector c )
+
+	public MTextArea mouseExited(Connector c)
 	{
 		mouseExited = c;
 		return this;
 	}
-	
-	public MTextArea mouseDragged( Connector c )
+
+	public MTextArea mouseDragged(Connector c)
 	{
 		mouseDragged = c;
 		return this;
 	}
-	
-	public MTextArea mouseMoved( Connector c )
+
+	public MTextArea mouseMoved(Connector c)
 	{
 		mouseMoved = c;
 		return this;
 	}
-	
-	public MTextArea mouseReleased( Connector c )
+
+	public MTextArea mouseReleased(Connector c)
 	{
 		mouseReleased = c;
 		return this;
 	}
-	
+
 	public String text()
 	{
 		return getText();
 	}
-	
-	public MTextArea text( String text )
+
+	public MTextArea text(String text)
 	{
-		setText( text );
+		setText(text);
 		return this;
 	}
-	
+
 	/**
-	 * F&uuml;gt der Action-Liste einen neuen neuen Eintrag hinzu
-	 * (also einen neuen Popup-Men&uuml;-Eintrag).
-	 * 
+	 * F&uuml;gt der Action-Liste einen neuen neuen Eintrag hinzu (also einen
+	 * neuen Popup-Men&uuml;-Eintrag).
+	 * <p/>
 	 * @param c
+	 * <p/>
 	 * @return
 	 */
-	public MTextArea popupItem( Connector c )
+	public MTextArea popupItem(Connector c)
 	{
-		Actions.add( c );
+		Actions.add(c);
 		return this;
 	}
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

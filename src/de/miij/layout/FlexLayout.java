@@ -22,19 +22,19 @@ import javax.swing.JTextField;
 public class FlexLayout implements LayoutManager2
 {
 	private Hashtable<Component, FlexConstraint> comps;
-	
+
 	public FlexLayout()
 	{
 		comps = new Hashtable<Component, FlexConstraint>();
 	}
-	
+
 	public void addLayoutComponent(String name, Component comp)
 	{
 	}
 
 	public void removeLayoutComponent(Component comp)
 	{
-		if(comps.containsKey(comp))
+		if (comps.containsKey(comp))
 			comps.remove(comp);
 	}
 
@@ -47,21 +47,21 @@ public class FlexLayout implements LayoutManager2
 			// Maximales x + width sowie y + height holen
 			int maxh = 0;
 			int maxv = 0;
-			for(Component c : parent.getComponents())
+			for (Component c : parent.getComponents())
 			{
 				int h = c.getBounds().width + c.getBounds().x;
 				int v = c.getBounds().height + c.getBounds().y;
 
-				if(h == 0 && v == 0 && comps.containsKey(c))
+				if (h == 0 && v == 0 && comps.containsKey(c))
 				{
 					c.setBounds(calcBounds(parent, comps.get(c)));
 					h = c.getBounds().width + c.getBounds().x;
 					v = c.getBounds().height + c.getBounds().y;
 				}
 
-				if(h > maxh)
+				if (h > maxh)
 					maxh = h;
-				if(v > maxv)
+				if (v > maxv)
 					maxv = v;
 			}
 
@@ -71,36 +71,30 @@ public class FlexLayout implements LayoutManager2
 
 			d.height = maxv;
 			d.width = maxh;
-		
+
 			return d;
 		}
 	}
 
 	public Dimension minimumLayoutSize(Container parent)
 	{
-		return new Dimension(0,0);
+		return new Dimension(0, 0);
 	}
 
 	public void layoutContainer(Container parent)
 	{
 		synchronized (parent.getTreeLock())
 		{
-			for(Component c : parent.getComponents())
-			{
-				if(c.isVisible())
-				{
-					if(comps.containsKey(c))
-					{
+			for (Component c : parent.getComponents())
+				if (c.isVisible())
+					if (comps.containsKey(c))
 						c.setBounds(calcBounds(parent, comps.get(c)));
-					}
-				}
-			}
 		}
 	}
 
 	public void addLayoutComponent(Component comp, Object constraints)
 	{
-		if(constraints instanceof FlexConstraint)
+		if (constraints instanceof FlexConstraint)
 			comps.put(comp, (FlexConstraint) constraints);
 	}
 
@@ -122,7 +116,7 @@ public class FlexLayout implements LayoutManager2
 	public void invalidateLayout(Container target)
 	{
 	}
-	
+
 	private int resizeX(Container parent, FlexConstraint flex)
 	{
 		if (flex.FlexCenterHorizontal && flex.FlexWidth > -1)
@@ -140,17 +134,13 @@ public class FlexLayout implements LayoutManager2
 			int rightPoint = 0;
 
 			// Größe der abhängigen Komponente setzen
-			if(comps.containsKey(flex.FlexRightComponent.getDockComponent()))
+			if (comps.containsKey(flex.FlexRightComponent.getDockComponent()))
 				flex.FlexRightComponent.getDockComponent().setBounds(calcBounds(parent, comps.get(flex.FlexRightComponent.getDockComponent())));
 
 			if (flex.FlexRightComponent.getOrientation() == M.LEFT)
-			{
 				rightPoint = flex.FlexRightComponent.getDockComponent().getX() + flex.FlexRightOffset;
-			}
 			else if (flex.FlexRightComponent.getOrientation() == M.RIGHT)
-			{
 				rightPoint = flex.FlexRightComponent.getDockComponent().getX() + flex.FlexRightComponent.getDockComponent().getHeight() + flex.FlexRightOffset;
-			}
 
 			return rightPoint - flex.FlexWidth;
 		}
@@ -164,46 +154,32 @@ public class FlexLayout implements LayoutManager2
 			int rightPoint = 0;
 
 			// Größe der abhängigen Komponente setzen
-			if(comps.containsKey(flex.FlexRightComponent.getDockComponent()))
+			if (comps.containsKey(flex.FlexRightComponent.getDockComponent()))
 				flex.FlexRightComponent.getDockComponent().setBounds(calcBounds(parent, comps.get(flex.FlexRightComponent.getDockComponent())));
 
 			if (flex.FlexRightComponent.getOrientation() == M.LEFT)
-			{
 				rightPoint = flex.FlexRightComponent.getDockComponent().getX() + flex.FlexRightOffset;
-			}
 			else if (flex.FlexRightComponent.getOrientation() == M.RIGHT)
-			{
 				rightPoint = flex.FlexRightComponent.getDockComponent().getX() + flex.FlexRightComponent.getDockComponent().getHeight() + flex.FlexRightOffset;
-			}
 
 			return rightPoint - flex.FlexWidthListener.recalculate();
 		}
 		else if (flex.FlexX > -1)
-		{
 			return flex.FlexX;
-		}
 		else if (flex.FlexXListener != null)
-		{
 			return flex.FlexXListener.recalculate();
-		}
 		else if (flex.FlexLeft > -1)
-		{
 			return new Double(parent.getWidth() / 100.0 * flex.FlexLeft + flex.FlexLeftOffset).intValue();
-		}
 		else if (flex.FlexLeftComponent != null)
 		{
 			// Größe der abhängigen Komponente setzen
-			if(comps.containsKey(flex.FlexLeftComponent.getDockComponent()))
+			if (comps.containsKey(flex.FlexLeftComponent.getDockComponent()))
 				flex.FlexLeftComponent.getDockComponent().setBounds(calcBounds(parent, comps.get(flex.FlexLeftComponent.getDockComponent())));
 
 			if (flex.FlexLeftComponent.getOrientation() == M.LEFT)
-			{
 				return flex.FlexLeftComponent.getDockComponent().getX() + flex.FlexLeftOffset;
-			}
 			else if (flex.FlexLeftComponent.getOrientation() == M.RIGHT)
-			{
 				return flex.FlexLeftComponent.getDockComponent().getX() + flex.FlexLeftComponent.getDockComponent().getWidth() + flex.FlexLeftOffset;
-			}
 		}
 
 		return -1;
@@ -226,17 +202,13 @@ public class FlexLayout implements LayoutManager2
 			int topPoint = 0;
 
 			// Größe der abhängigen Komponente setzen
-			if(comps.containsKey(flex.FlexBottomComponent.getDockComponent()))
+			if (comps.containsKey(flex.FlexBottomComponent.getDockComponent()))
 				flex.FlexBottomComponent.getDockComponent().setBounds(calcBounds(parent, comps.get(flex.FlexBottomComponent.getDockComponent())));
 
 			if (flex.FlexBottomComponent.getOrientation() == M.TOP)
-			{
 				topPoint = flex.FlexBottomComponent.getDockComponent().getY() + flex.FlexBottomOffset;
-			}
 			else if (flex.FlexBottomComponent.getOrientation() == M.BOTTOM)
-			{
 				topPoint = flex.FlexBottomComponent.getDockComponent().getY() + flex.FlexBottomComponent.getDockComponent().getHeight() + flex.FlexBottomOffset;
-			}
 
 			return topPoint - flex.FlexHeight;
 		}
@@ -250,46 +222,32 @@ public class FlexLayout implements LayoutManager2
 			int topPoint = 0;
 
 			// Größe der abhängigen Komponente setzen
-			if(comps.containsKey(flex.FlexBottomComponent.getDockComponent()))
+			if (comps.containsKey(flex.FlexBottomComponent.getDockComponent()))
 				flex.FlexBottomComponent.getDockComponent().setBounds(calcBounds(parent, comps.get(flex.FlexBottomComponent.getDockComponent())));
 
 			if (flex.FlexBottomComponent.getOrientation() == M.TOP)
-			{
 				topPoint = flex.FlexBottomComponent.getDockComponent().getY() + flex.FlexBottomOffset;
-			}
 			else if (flex.FlexBottomComponent.getOrientation() == M.BOTTOM)
-			{
 				topPoint = flex.FlexBottomComponent.getDockComponent().getY() + flex.FlexBottomComponent.getDockComponent().getHeight() + flex.FlexBottomOffset;
-			}
 
 			return topPoint - flex.FlexHeightListener.recalculate();
 		}
 		else if (flex.FlexY > -1)
-		{
 			return flex.FlexY;
-		}
 		else if (flex.FlexYListener != null)
-		{
 			return flex.FlexYListener.recalculate();
-		}
 		else if (flex.FlexTop > -1)
-		{
 			return new Double(parent.getHeight() / 100.0 * flex.FlexTop + flex.FlexTopOffset).intValue();
-		}
 		else if (flex.FlexTopComponent != null)
 		{
 			// Größe der abhängigen Komponente setzen
-			if(comps.containsKey(flex.FlexTopComponent.getDockComponent()))
+			if (comps.containsKey(flex.FlexTopComponent.getDockComponent()))
 				flex.FlexTopComponent.getDockComponent().setBounds(calcBounds(parent, comps.get(flex.FlexTopComponent.getDockComponent())));
 
 			if (flex.FlexTopComponent.getOrientation() == M.TOP)
-			{
 				return flex.FlexTopComponent.getDockComponent().getY() + flex.FlexTopOffset;
-			}
 			else if (flex.FlexTopComponent.getOrientation() == M.BOTTOM)
-			{
 				return flex.FlexTopComponent.getDockComponent().getY() + flex.FlexTopComponent.getDockComponent().getHeight() + flex.FlexTopOffset;
-			}
 		}
 
 		return -1;
@@ -298,31 +256,21 @@ public class FlexLayout implements LayoutManager2
 	private int resizeWidth(Container parent, FlexConstraint flex, int x, int y)
 	{
 		if (flex.FlexWidth > -1)
-		{
 			return flex.FlexWidth;
-		}
 		else if (flex.FlexWidthListener != null)
-		{
 			return flex.FlexWidthListener.recalculate();
-		}
 		else if (flex.FlexRight > -1)
-		{
 			return new Double(parent.getWidth() / 100.0 * flex.FlexRight + flex.FlexRightOffset - x).intValue();
-		}
 		else if (flex.FlexRightComponent != null)
 		{
 			// Größe der abhängigen Komponente setzen
-			if(comps.containsKey(flex.FlexRightComponent.getDockComponent()))
+			if (comps.containsKey(flex.FlexRightComponent.getDockComponent()))
 				flex.FlexRightComponent.getDockComponent().setBounds(calcBounds(parent, comps.get(flex.FlexRightComponent.getDockComponent())));
 
 			if (flex.FlexRightComponent.getOrientation() == M.LEFT)
-			{
 				return flex.FlexRightComponent.getDockComponent().getX() + flex.FlexRightOffset - x;
-			}
 			else if (flex.FlexRightComponent.getOrientation() == M.RIGHT)
-			{
 				return flex.FlexRightComponent.getDockComponent().getX() + flex.FlexRightComponent.getDockComponent().getWidth() + flex.FlexRightOffset - x;
-			}
 		}
 
 		return -1;
@@ -331,75 +279,61 @@ public class FlexLayout implements LayoutManager2
 	private int resizeHeight(Container parent, FlexConstraint flex, int x, int y)
 	{
 		if (flex.FlexHeight > -1)
-		{
 			return flex.FlexHeight;
-		}
 		else if (flex.FlexHeightListener != null)
-		{
 			return flex.FlexHeightListener.recalculate();
-		}
 		else if (flex.FlexBottom > -1)
-		{
 			return new Double(parent.getHeight() / 100.0 * flex.FlexBottom - y + flex.FlexBottomOffset).intValue();
-		}
 		else if (flex.FlexBottomComponent != null)
 		{
 			// Größe der abhängigen Komponente setzen
-			if(comps.containsKey(flex.FlexBottomComponent.getDockComponent()))
+			if (comps.containsKey(flex.FlexBottomComponent.getDockComponent()))
 				flex.FlexBottomComponent.getDockComponent().setBounds(calcBounds(parent, comps.get(flex.FlexBottomComponent.getDockComponent())));
 
 			if (flex.FlexBottomComponent.getOrientation() == M.TOP)
-			{
 				return flex.FlexBottomComponent.getDockComponent().getY() - y + flex.FlexRightOffset;
-			}
 			else if (flex.FlexBottomComponent.getOrientation() == M.BOTTOM)
-			{
 				return flex.FlexBottomComponent.getDockComponent().getY() + flex.FlexBottomComponent.getDockComponent().getHeight() - y + flex.FlexBottomOffset;
-			}
 		}
 
 		return -1;
 	}
-	
+
 	public Rectangle calcBounds(Container parent, FlexConstraint flex)
 	{
-		Rectangle ret = new Rectangle(0,0,0,0);
-		if(flex != null)
+		Rectangle ret = new Rectangle(0, 0, 0, 0);
+		if (flex != null)
 		{
 			ret.x = resizeX(parent, flex);
 			ret.y = resizeY(parent, flex);
 			ret.width = resizeWidth(parent, flex, ret.x, ret.y);
 			ret.height = resizeHeight(parent, flex, ret.x, ret.y);
-			
+
 			// Listener ausführen, falls gesetzt
 			if (flex.FlexNotifyResizeListener != null)
-			{
 				flex.FlexNotifyResizeListener.notifyResize(ret.x, ret.y, ret.width, ret.height);
-			}
 		}
-		
+
 		return ret;
 	}
-	
+
 	////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////
-	
 	public static void main(String[] args)
 	{
 		JFrame jf = new JFrame();
 		JLabel lbl = new JLabel("Test: ");
 		JTextField txt = new JTextField();
-		
+
 		jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+
 		jf.getContentPane().setLayout(new FlexLayout());
 		jf.getContentPane().add(lbl, new FlexConstraint().left(10).top(10).width(50).height(25));
 		jf.getContentPane().add(txt, new FlexConstraint().left(lbl, M.RIGHT, 5).top(10).right(10).height(25));
-		
+
 		jf.pack();
 		jf.setVisible(true);
 	}
-	
 }

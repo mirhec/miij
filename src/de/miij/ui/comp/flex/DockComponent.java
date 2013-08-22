@@ -5,24 +5,22 @@ import java.awt.Component;
 /**
  * Diese Klasse kann verwendet werden, um Komponenten von anderen Komponenten
  * abh&auml;ngig zu machen.
- * 
+ * <p/>
  * @author Mirhec
  */
 public class DockComponent
 {
+	private Component DockComponent = null;
+	private int Orientation = -1;
 
-	private Component			DockComponent		= null;
-	private int					Orientation			= -1;
-	
 //	public final static int	TOP					= 0;
 //	public final static int BOTTOM				= 1;
 //	public final static int LEFT					= 2;
 //	public final static int RIGHT					= 3;
-	
-	public DockComponent( Component dockComponent , int orientation )
+	public DockComponent(Component dockComponent, int orientation)
 	{
-		DockComponent			= dockComponent;
-		Orientation				= orientation;
+		DockComponent = dockComponent;
+		Orientation = orientation;
 	}
 
 	public Component getDockComponent()
@@ -35,14 +33,13 @@ public class DockComponent
 		return Orientation;
 	}
 
-	public void setDockComponent( Component dockComponent )
+	public void setDockComponent(Component dockComponent)
 	{
 		DockComponent = dockComponent;
 	}
 
-	public void setOrientation( int orientation )
+	public void setOrientation(int orientation)
 	{
 		Orientation = orientation;
 	}
-
 }

@@ -15,7 +15,7 @@ import javax.swing.event.TreeSelectionListener;
 public class MTree extends JTree
 {
 	public Connector selectionChanged = null;
-	
+
 	public MTree()
 	{
 		super();
@@ -24,11 +24,11 @@ public class MTree extends JTree
 
 	private void init()
 	{
-		getSelectionModel().addTreeSelectionListener(new TreeSelectionListener() {
-
+		getSelectionModel().addTreeSelectionListener(new TreeSelectionListener()
+		{
 			public void valueChanged(TreeSelectionEvent e)
 			{
-				if(selectionChanged != null)
+				if (selectionChanged != null)
 					selectionChanged.action(e);
 			}
 		});

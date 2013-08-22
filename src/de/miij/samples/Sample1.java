@@ -34,7 +34,10 @@ public class Sample1 extends MFrame
 
 		//** Create connectors
 		Connector close = new Connector(this, "dispose", "Close");
-		Connector clear = new Connector(txt, "setText", new Object[]{""}, "Clear text");
+		Connector clear = new Connector(txt, "setText", new Object[]
+		{
+			""
+		}, "Clear text");
 
 		//** Add context menu for text field
 		txt.popupItem(clear);
@@ -51,7 +54,7 @@ public class Sample1 extends MFrame
 		cancel.clicked = close;
 
 		//** Set frame size
-		setSize(300,200);
+		setSize(300, 200);
 	}
 
 	public static void main(String[] args) throws Exception
