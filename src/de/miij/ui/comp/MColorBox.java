@@ -6,28 +6,25 @@ package de.miij.ui.comp;
 
 import de.miij.Miij;
 import de.miij.layout.FlexConstraint;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Graphics2D;
+import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseMotionListener;
-import java.awt.image.BufferedImage;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import javax.swing.ComboBoxModel;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListCellRenderer;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ListDataListener;
 import javax.swing.plaf.basic.BasicComboBoxUI;
@@ -277,18 +274,20 @@ public class MColorBox extends MComboBox
 		{
 			if (value instanceof Color)
 				return colorPanel;
-			else
-				if (colors.size() > selectedColorIndex && selectedColorIndex >= 0)
+			else if (colors.size() > selectedColorIndex && selectedColorIndex >= 0)
+			{
+				JLabel lbl = new JLabel()
 				{
-					JLabel lbl = new JLabel();
-					BufferedImage img = new BufferedImage(40, 32, BufferedImage.TYPE_INT_RGB);
-					Graphics2D g = img.createGraphics();
-					g.setColor(colors.get(selectedColorIndex));
-					g.fillRect(0, 0, 40, 32);
-					g.dispose();
-					lbl.setIcon(new ImageIcon(img));
-					return lbl;
-				}
+					@Override
+					protected void paintComponent(Graphics grphcs)
+					{
+						super.paintComponent(grphcs);
+						grphcs.setColor(colors.get(selectedColorIndex));
+						grphcs.fillRect(0, 0, getWidth(), getHeight());
+					}
+				};
+				return lbl;
+			}
 			return null;
 		}
 	}

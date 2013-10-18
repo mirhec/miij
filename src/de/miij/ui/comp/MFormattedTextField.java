@@ -308,7 +308,8 @@ class MFormattedTextFieldTest extends MMainFrame
 
 //		MFormattedTextField txt = new MFormattedTextField( "dd. aaa yyyy" );
 //		MFormattedTextField txt = new MFormattedTextField( "yyyy-mm-dd" );
-		MFormattedTextField txt = new MFormattedTextField("dd.mm.yyyy");
+//		MFormattedTextField txt = new MFormattedTextField("dd.mm.yyyy");
+		MFormattedTextField txt = new MFormattedTextField("##");
 		flex(txt).top(10).left(10).width(200).height(20).addAt(this);
 	}
 

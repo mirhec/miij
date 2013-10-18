@@ -614,7 +614,8 @@ class MFormattedTextTest
 	{
 		Miij.create("Test");
 		MFrame frm = new MMainFrame();
-		MFormattedText txt = new MFormattedText("dd.mm.yyyy");
+//		MFormattedText txt = new MFormattedText("dd.mm.yyyy");
+		MFormattedText txt = new MFormattedText("##");
 		// txt.text( "25.06.2007" );
 		frm.flex(txt).left(10).top(10).width(200).height(20).addAt(frm);
 		frm.setSize(500, 350);

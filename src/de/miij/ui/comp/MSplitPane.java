@@ -10,6 +10,7 @@ import java.awt.Graphics;
 import javax.swing.JSplitPane;
 import static javax.swing.JSplitPane.HORIZONTAL_SPLIT;
 import static javax.swing.JSplitPane.VERTICAL_SPLIT;
+import javax.swing.plaf.basic.BasicSplitPaneUI;
 
 /**
  * Dieses SplitPane erweitert die Komponente JSplitPane um einige Funktionen.
@@ -36,6 +37,7 @@ public class MSplitPane extends JSplitPane
 {
 	private int oldSplitPaneSize = 0;
 	private int fixedRightBottom = 0;
+	private boolean isDraggable = true;
 
 	public MSplitPane()
 	{
@@ -65,6 +67,20 @@ public class MSplitPane extends JSplitPane
 	{
 		super(newOrientation, newLeftComponent, newRightComponent);
 		init();
+	}
+	
+	public void setDraggable(boolean b)
+	{
+		isDraggable = b;
+		if(!isDraggable)
+		{
+//			((MSplitPaneUI)getUI()).getDivider().removeMouseListener(null);
+		}
+	}
+	
+	public boolean isDraggable()
+	{
+		return isDraggable;
 	}
 
 	@Override
@@ -108,7 +124,7 @@ public class MSplitPane extends JSplitPane
 	@Override
 	public void setDividerLocation(int requested)
 	{
-		if (requested <= 0)
+		if (requested < 0)
 		{
 			// Nach Preferred Size setzen
 			Dimension pref1 = getLeftComponent().getPreferredSize();
@@ -125,24 +141,36 @@ public class MSplitPane extends JSplitPane
 		int currentLoc = getDividerLocation();
 		boolean growing = requested > currentLoc;
 		Component maxComp = growing ? getLeftComponent() : getRightComponent();
+		Component minComp = !growing ? getLeftComponent() : getRightComponent();
 		if (maxComp == null)
 		{
 			super.setDividerLocation(requested);
 			return;
 		}
+		
 		Dimension maxDim = maxComp.getMaximumSize();
-		if (maxDim == null)
+		Dimension minDim = minComp.getMinimumSize();
+		
+		if (maxDim != null)
 		{
-			super.setDividerLocation(requested);
-			return;
+			int maxCompSize = getSizeForPrimaryAxis(maxDim);
+
+			if ((growing && requested > maxCompSize) || (!growing && getSizeForPrimaryAxis(getSize()) - requested > maxCompSize))
+			{
+				super.setDividerLocation(growing ? maxCompSize : getSizeForPrimaryAxis(getSize()) - maxCompSize);
+				return;
+			}
 		}
-
-		int maxCompSize = getSizeForPrimaryAxis(maxDim);
-
-		if ((growing && requested > maxCompSize) || (!growing && getWidth() - requested > maxCompSize))
+		
+		if(minDim != null)
 		{
-			super.setDividerLocation(growing ? maxCompSize : getWidth() - maxCompSize);
-			return;
+			int minCompSize = getSizeForPrimaryAxis(minDim);
+			
+			if((!growing && requested < minCompSize) || (growing && getSizeForPrimaryAxis(getSize()) - requested < minCompSize))
+			{
+				super.setDividerLocation(!growing ? minCompSize : getSizeForPrimaryAxis(getSize()) - minCompSize);
+				return;
+			}
 		}
 
 		super.setDividerLocation(requested);
@@ -160,6 +188,7 @@ public class MSplitPane extends JSplitPane
 
 	private void init()
 	{
+		setUI(new MSplitPaneUI());
 		setContinuousLayout(true);
 	}
 }

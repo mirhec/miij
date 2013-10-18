@@ -207,9 +207,9 @@ public class MTabbedPane extends JTabbedPane
 		{
 			public void keyPressed(KeyEvent e)
 			{
-				if (e.getKeyCode() == KeyEvent.VK_ENTER)
+				if (enterPressed != null && e.getKeyCode() == KeyEvent.VK_ENTER)
 					enterPressed.action(e);
-				else if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
+				else if (escapePressed != null && e.getKeyCode() == KeyEvent.VK_ESCAPE)
 					escapePressed.action(e);
 			}
 		});

@@ -16,7 +16,7 @@ public class FTPUtil
 		try
 		{
 			FileInputStream in = new FileInputStream(filename);
-			OutputStream out = m_client.put(new File(filename).getName());
+			OutputStream out = m_client.putFileStream(new File(filename).getName());
 
 			int counter = 0;
 			while (true)
