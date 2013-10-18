@@ -38,6 +38,7 @@ public class MSplitPane extends JSplitPane
 	private int oldSplitPaneSize = 0;
 	private int fixedRightBottom = 0;
 	private boolean isDraggable = true;
+	private int oneTouchButtonSize = 10;
 
 	public MSplitPane()
 	{
@@ -67,6 +68,16 @@ public class MSplitPane extends JSplitPane
 	{
 		super(newOrientation, newLeftComponent, newRightComponent);
 		init();
+	}
+	
+	public void setOneTouchButtonSize(int size)
+	{
+		oneTouchButtonSize = size;
+	}
+	
+	public int getOneTouchButtonSize()
+	{
+		return oneTouchButtonSize;
 	}
 	
 	public void setDraggable(boolean b)

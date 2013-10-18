@@ -63,7 +63,7 @@ public class MSplitPaneDivider extends BasicSplitPaneDivider
 				{
 					int[] xs = new int[3];
 					int[] ys = new int[3];
-					int blockSize = 10;
+					int blockSize = ((MSplitPane)splitPane).getOneTouchButtonSize();
 
 					// Fill the background first ...
 					g.setColor(this.getBackground());
@@ -102,7 +102,7 @@ public class MSplitPaneDivider extends BasicSplitPaneDivider
 				return false;
 			}
 		};
-		b.setMinimumSize(new Dimension(10, 10));
+		b.setMinimumSize(new Dimension(((MSplitPane)splitPane).getOneTouchButtonSize() * orientation == JSplitPane.VERTICAL_SPLIT ? 2 : 1, ((MSplitPane)splitPane).getOneTouchButtonSize() * orientation == JSplitPane.VERTICAL_SPLIT ? 1 : 2));
 		b.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		b.setFocusPainted(false);
 		b.setBorderPainted(false);
@@ -130,7 +130,7 @@ public class MSplitPaneDivider extends BasicSplitPaneDivider
 				{
 					int[] xs = new int[3];
 					int[] ys = new int[3];
-					int blockSize = 10;
+					int blockSize = ((MSplitPane)splitPane).getOneTouchButtonSize();
 
 					// Fill the background first ...
 					g.setColor(this.getBackground());
@@ -167,7 +167,7 @@ public class MSplitPaneDivider extends BasicSplitPaneDivider
 				return false;
 			}
 		};
-		b.setMinimumSize(new Dimension(10, 10));
+		b.setMinimumSize(new Dimension(((MSplitPane)splitPane).getOneTouchButtonSize() * orientation == JSplitPane.VERTICAL_SPLIT ? 2 : 1, ((MSplitPane)splitPane).getOneTouchButtonSize() * orientation == JSplitPane.VERTICAL_SPLIT ? 1 : 2));
 		b.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		b.setFocusPainted(false);
 		b.setBorderPainted(false);
@@ -223,7 +223,7 @@ public class MSplitPaneDivider extends BasicSplitPaneDivider
     /**
      * Sets the SplitPaneUI that is using the receiver.
      */
-    public void setBasicSplitPaneUI(BasicSplitPaneUI newUI) {
+    public void setBasicSplitPaneUI(MSplitPaneUI newUI) {
         if (splitPane != null) {
             splitPane.removePropertyChangeListener(this);
            if (mouseHandler != null) {
@@ -236,7 +236,7 @@ public class MSplitPaneDivider extends BasicSplitPaneDivider
         }
         splitPaneUI = newUI;
         if (newUI != null) {
-            splitPane = newUI.getSplitPane();
+            splitPane = (MSplitPane) newUI.getSplitPane();
             if (splitPane != null) {
                 if (mouseHandler == null) mouseHandler = new MouseHandler2();
                 splitPane.addMouseListener(mouseHandler);
