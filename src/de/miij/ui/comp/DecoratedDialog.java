@@ -12,6 +12,7 @@ import de.miij.layout.FlexLayout;
 import de.miij.ui.comp.flex.FlexRecalculateListener;
 import de.miij.util.M;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Cursor;
@@ -35,6 +36,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.border.LineBorder;
 
 /**
  *
@@ -50,22 +52,38 @@ public class DecoratedDialog extends MDialog
 	protected MPanel toolbarPanel = new MPanel();
     private JLabel left, right, top, bottom, topleft, topright, bottomleft, bottomright;
 	private ArrayList<JButton> toolbarButtons = new ArrayList<JButton>();
+	private boolean helpVisible = true;
 	
 	public DecoratedDialog(Window owner)
 	{
 		super(owner);
 		initDecoratedFrame();
 	}
-	
+	public DecoratedDialog(Window owner, boolean helpVisible)
+	{
+		super(owner);
+		this.helpVisible = helpVisible;
+		initDecoratedFrame();
+	}
 	
 	public void addToolbarButton(Icon i, final Connector c)
 	{
 		addToolbarButton(toolbarButtons.size(), i, c);
 	}
 	
+	public void addToolbarButton(Icon i, Icon iHover, final Connector c)
+	{
+		addToolbarButton(toolbarButtons.size(), i, iHover, c);
+	}
+	
 	public void addToolbarButton(int index, Icon i, final Connector c)
 	{
-		addToolbarButton(i, new ActionListener() {
+		addToolbarButton(index, i, i, c);
+	}
+	
+	public void addToolbarButton(int index, Icon i, Icon iHover, final Connector c)
+	{
+		addToolbarButton(index, i, iHover, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
@@ -80,12 +98,22 @@ public class DecoratedDialog extends MDialog
 		addToolbarButton(toolbarButtons.size(), i, l);
 	}
 	
+	public void addToolbarButton(Icon i, Icon iHover, ActionListener l)
+	{
+		addToolbarButton(toolbarButtons.size(), i, iHover, l);
+	}
+	
 	public void addToolbarButton(int index, Icon i, ActionListener l)
 	{
-		JButton btn = makeButton(i, i, false);
+		addToolbarButton(index, i, i, l);
+	}
+	
+	public void addToolbarButton(int index, Icon i, Icon iHover, ActionListener l)
+	{
+		JButton btn = makeButton(i, iHover, false);
 		btn.addActionListener(l);
 		toolbarButtons.add(index, btn);
-		toolbarPanel.add(btn, new FlexConstraint().right(TITLE_BAR_HEIGHT * 4 + TITLE_BAR_HEIGHT * index).top(0).bottom(0).width(TITLE_BAR_HEIGHT));
+		toolbarPanel.add(btn, new FlexConstraint().right(TITLE_BAR_HEIGHT + TITLE_BAR_HEIGHT * index).top(0).bottom(0).width(TITLE_BAR_HEIGHT));
 	}
 	
 	public JButton getToolbarButton(int index)
@@ -149,12 +177,14 @@ public class DecoratedDialog extends MDialog
 		lblTitle.setIcon(new ImageIcon(DecoratedDialog.class.getResource("/gfx/icon.png")));
         title.add(lblTitle, new FlexConstraint().left(0).right(toolbarPanel, M.LEFT, 0).height(TITLE_BAR_HEIGHT));
         toolbarPanel.add(btnClose, new FlexConstraint().right(0).top(0).width(TITLE_BAR_HEIGHT).height(TITLE_BAR_HEIGHT));
+		if(helpVisible)
+			addToolbarButton(WindowIcons.getQuestionIcon(false), WindowIcons.getQuestionIcon(true), new Connector(this, "help"));
 		title.add(toolbarPanel, new FlexConstraint().right(0).top(0).height(TITLE_BAR_HEIGHT).width(new FlexRecalculateListener() {
 
 			@Override
 			public int recalculate()
 			{
-				return TITLE_BAR_HEIGHT * 2 + TITLE_BAR_HEIGHT * toolbarButtons.size();
+				return TITLE_BAR_HEIGHT + TITLE_BAR_HEIGHT * toolbarButtons.size();
 			}
 		}));
         //title.add(iconify, BorderLayout.WEST);
@@ -220,6 +250,7 @@ public class DecoratedDialog extends MDialog
         northPanel.setOpaque(false);
         southPanel.setOpaque(false);
 
+		resizePanel.setBorder(new LineBorder(Color.GRAY));
         setContentPane(resizePanel);
 	}
 

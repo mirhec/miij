@@ -50,21 +50,37 @@ public class DecoratedFrame extends MFrame
 	protected MPanel toolbarPanel = new MPanel();
     private JLabel left, right, top, bottom, topleft, topright, bottomleft, bottomright;
 	private ArrayList<JButton> toolbarButtons = new ArrayList<JButton>();
+	private boolean helpVisible = true;
 	
 	public DecoratedFrame()
 	{
 		initDecoratedFrame();
 	}
 	
+	public DecoratedFrame(boolean helpVisible)
+	{
+		this.helpVisible = helpVisible;
+		initDecoratedFrame();
+	}
 	
 	public void addToolbarButton(Icon i, final Connector c)
 	{
 		addToolbarButton(toolbarButtons.size(), i, c);
 	}
 	
+	public void addToolbarButton(Icon i, Icon iHover, final Connector c)
+	{
+		addToolbarButton(toolbarButtons.size(), i, iHover, c);
+	}
+	
 	public void addToolbarButton(int index, Icon i, final Connector c)
 	{
-		addToolbarButton(i, new ActionListener() {
+		addToolbarButton(index, i, i, c);
+	}
+	
+	public void addToolbarButton(int index, Icon i, Icon iHover, final Connector c)
+	{
+		addToolbarButton(index, i, iHover, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
@@ -79,12 +95,25 @@ public class DecoratedFrame extends MFrame
 		addToolbarButton(toolbarButtons.size(), i, l);
 	}
 	
+	public void addToolbarButton(Icon i, Icon iHover, ActionListener l)
+	{
+		addToolbarButton(toolbarButtons.size(), i, iHover, l);
+	}
+	
 	public void addToolbarButton(int index, Icon i, ActionListener l)
 	{
-		JButton btn = makeButton(i, i, false, false, false);
+		addToolbarButton(index, i, i, l);
+	}
+	
+	public void addToolbarButton(int index, Icon i, Icon iHover, ActionListener l)
+	{
+		JButton btn = makeButton(i, iHover, false, false, false);
 		btn.addActionListener(l);
+		while(index > toolbarButtons.size())
+			toolbarButtons.add(null);
+		
 		toolbarButtons.add(index, btn);
-		toolbarPanel.add(btn, new FlexConstraint().right(TITLE_BAR_HEIGHT * 4 + TITLE_BAR_HEIGHT * index).top(0).bottom(0).width(TITLE_BAR_HEIGHT));
+		toolbarPanel.add(btn, new FlexConstraint().right(TITLE_BAR_HEIGHT * 3 + TITLE_BAR_HEIGHT * index).top(0).bottom(0).width(TITLE_BAR_HEIGHT));
 	}
 	
 	public JButton getToolbarButton(int index)
@@ -151,9 +180,6 @@ public class DecoratedFrame extends MFrame
 	{
 		setUndecorated(true);
 		
-		
-		//**************************************
-		
 		JButton btnClose = makeCloseButton();
 		JButton btnMaximize = makeMaximizeButton();
 		JButton btnMinimize = makeMinimizeButton();
@@ -163,7 +189,6 @@ public class DecoratedFrame extends MFrame
         title.addMouseListener(dwl);
         title.addMouseMotionListener(dwl);
         title.setOpaque(false);
-        //title.setBackground(Color.ORANGE);
         title.setBorder(BorderFactory.createEmptyBorder(0,W,W,0));
 
 		lblTitle = new JLabel(Miij.getAppName(), JLabel.LEFT);
@@ -172,13 +197,15 @@ public class DecoratedFrame extends MFrame
         title.add(lblTitle, new FlexConstraint().left(0).right(toolbarPanel, M.LEFT, 0).height(TITLE_BAR_HEIGHT));
         toolbarPanel.add(btnClose, new FlexConstraint().right(0).top(0).width(TITLE_BAR_HEIGHT).height(TITLE_BAR_HEIGHT));
         toolbarPanel.add(btnMaximize, new FlexConstraint().right(TITLE_BAR_HEIGHT).top(0).width(TITLE_BAR_HEIGHT).height(TITLE_BAR_HEIGHT));
+		if(helpVisible)
+			addToolbarButton(WindowIcons.getQuestionIcon(false), WindowIcons.getQuestionIcon(true), new Connector(this, "help"));
         toolbarPanel.add(btnMinimize, new FlexConstraint().right(TITLE_BAR_HEIGHT * 2).top(0).width(TITLE_BAR_HEIGHT).height(TITLE_BAR_HEIGHT));
 		title.add(toolbarPanel, new FlexConstraint().right(0).top(0).height(TITLE_BAR_HEIGHT).width(new FlexRecalculateListener() {
 
 			@Override
 			public int recalculate()
 			{
-				return TITLE_BAR_HEIGHT * 4 + TITLE_BAR_HEIGHT * toolbarButtons.size();
+				return TITLE_BAR_HEIGHT * 3 + TITLE_BAR_HEIGHT * toolbarButtons.size();
 			}
 		}));
         //title.add(iconify, BorderLayout.WEST);

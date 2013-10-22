@@ -8,6 +8,7 @@ package de.miij.ui.comp;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.Graphics;
 import javax.swing.Icon;
 
@@ -64,8 +65,26 @@ public class WindowIcons
 			@Override public void paintIcon(Component c, Graphics g, int x, int y) {
 				g.translate(x, y);
 				g.setColor(mouseOver ? new Color(23, 117, 165) : Color.WHITE);
-				g.drawLine(2, 10, 13, 10);
-				g.drawLine(2, 11, 13, 11);
+				g.drawLine(2, 12, 13, 12);
+				g.drawLine(2, 13, 13, 13);
+				g.translate(-x, -y);
+			}
+			@Override public int getIconWidth() {
+				return 16;
+			}
+			@Override public int getIconHeight() {
+				return 16;
+			}
+		};
+	}
+	public static Icon getQuestionIcon(final boolean mouseOver)
+	{
+		return new Icon() {
+			@Override public void paintIcon(Component c, Graphics g, int x, int y) {
+				g.translate(x, y);
+				g.setColor(mouseOver ? new Color(204, 123, 23) : Color.WHITE);
+				g.setFont(new Font("Tahoma", Font.BOLD, 17));
+				g.drawString("?", 6, 14);
 				g.translate(-x, -y);
 			}
 			@Override public int getIconWidth() {
