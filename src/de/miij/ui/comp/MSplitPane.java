@@ -4,13 +4,13 @@
  */
 package de.miij.ui.comp;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import javax.swing.JSplitPane;
 import static javax.swing.JSplitPane.HORIZONTAL_SPLIT;
 import static javax.swing.JSplitPane.VERTICAL_SPLIT;
-import javax.swing.plaf.basic.BasicSplitPaneUI;
 
 /**
  * Dieses SplitPane erweitert die Komponente JSplitPane um einige Funktionen.
@@ -39,6 +39,9 @@ public class MSplitPane extends JSplitPane
 	private int fixedRightBottom = 0;
 	private boolean isDraggable = true;
 	private int oneTouchButtonSize = 10;
+	private Color oneTouchButtonColor = Color.BLACK;
+	private Color dividerBorderColor = Color.BLACK;
+	private Color gripperColor = Color.BLACK;
 
 	public MSplitPane()
 	{
@@ -68,6 +71,36 @@ public class MSplitPane extends JSplitPane
 	{
 		super(newOrientation, newLeftComponent, newRightComponent);
 		init();
+	}
+	
+	public Color getDividerBorderColor()
+	{
+		return dividerBorderColor;
+	}
+	
+	public Color getOneTouchButtonColor()
+	{
+		return oneTouchButtonColor;
+	}
+	
+	public void setDividerBorderColor(Color c)
+	{
+		dividerBorderColor = c;
+	}
+	
+	public void setOneTouchButtonColor(Color c)
+	{
+		oneTouchButtonColor = c;
+	}
+	
+	public Color getGripperColor()
+	{
+		return gripperColor;
+	}
+	
+	public void setGripperColor(Color c)
+	{
+		gripperColor = c;
 	}
 	
 	public void setOneTouchButtonSize(int size)

@@ -4,6 +4,8 @@
  */
 package de.miij.ui.comp;
 
+import de.miij.layout.FlexConstraint;
+import de.miij.layout.FlexLayout;
 import de.miij.ui.comp.flex.FPanel;
 import de.miij.ui.comp.flex.FlexComponent;
 import de.miij.ui.comp.flex.Flexable;
@@ -20,7 +22,7 @@ import javax.swing.JToolBar;
  */
 public class MDialog extends JDialog implements Flexable
 {
-	private FPanel ComponentPanel = null;
+//	private FPanel ComponentPanel = null;
 
 	public MDialog(Window owner)
 	{
@@ -31,20 +33,21 @@ public class MDialog extends JDialog implements Flexable
 		this.setContentPane(pnl);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
-		ComponentPanel = new FPanel(false);
-		this.getContentPane().add(ComponentPanel, BorderLayout.CENTER);
+//		ComponentPanel = new FPanel(false);
+//		this.getContentPane().add(ComponentPanel, BorderLayout.CENTER);
+		getContentPane().setLayout(new FlexLayout());
 	}
 
-	public FPanel getComponentPanel()
-	{
-		return ComponentPanel;
-	}
+//	public FPanel getComponentPanel()
+//	{
+//		return ComponentPanel;
+//	}
 
-	public void setComponentPanel(FPanel panel)
-	{
-		this.ComponentPanel = panel;
-		setContentPane(ComponentPanel);
-	}
+//	public void setComponentPanel(FPanel panel)
+//	{
+//		this.ComponentPanel = panel;
+//		setContentPane(ComponentPanel);
+//	}
 
 	public void setJToolBar(JToolBar tb, String position)
 	{
@@ -64,7 +67,8 @@ public class MDialog extends JDialog implements Flexable
 	public void addFlexibleComponent(FlexComponent flexComp)
 	{
 		// this.FlexComponents.add( flexComp );
-		this.getComponentPanel().addFlexibleComponent(flexComp);
+//		this.getComponentPanel().addFlexibleComponent(flexComp);
+		getContentPane().add(flexComp.FlexComponent, new FlexConstraint(flexComp));
 	}
 
 	public FlexComponent flex(Component c)

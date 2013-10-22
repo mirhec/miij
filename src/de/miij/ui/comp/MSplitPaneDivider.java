@@ -10,8 +10,10 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Point;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -42,6 +44,38 @@ public class MSplitPaneDivider extends BasicSplitPaneDivider
 	{
 		super(ui);
 		mui = (MSplitPaneUI) ui;
+//		setBorder(new LineBorder(((MSplitPane)splitPane).getDividerBorderColor()));
+	}
+	
+	@Override
+	public void paint(Graphics g)
+	{
+		super.paint(g);
+		
+		Graphics2D g2d = (Graphics2D) g;
+		g2d.setRenderingHint (RenderingHints.KEY_ANTIALIASING,   RenderingHints.VALUE_ANTIALIAS_ON);
+		
+		// Draw border
+		MSplitPane m = (MSplitPane) splitPane;
+		if(m.getDividerBorderColor() != null)
+		{
+			g2d.setPaint(m.getDividerBorderColor());
+			if(m.getOrientation() == JSplitPane.HORIZONTAL_SPLIT)
+				g2d.drawRect(0, -1, getWidth() - 2, getHeight() + 1);
+			else
+				g2d.drawRect(-1, 0, getWidth() + 1, getHeight() - 2);
+		}
+		
+		// Draw gripper/dragger
+		if(m.getGripperColor() != null)
+		{
+			g2d.setPaint(m.getGripperColor());
+			for(int i = 0; i < 3; ++i)
+				if(m.getOrientation() == JSplitPane.HORIZONTAL_SPLIT)
+					g2d.fillOval(getWidth() / 2 - getWidth() / 4, getHeight() / 2 - 15 + i * 10, getWidth() / 2, getWidth() / 2);
+				else
+					g2d.fillOval(getWidth() / 2 - 15 + i * 10, getHeight() / 2 - getHeight() / 4, getHeight() / 2, getHeight() / 2);
+		}
 	}
 
 	/**
@@ -51,6 +85,8 @@ public class MSplitPaneDivider extends BasicSplitPaneDivider
 	@Override
 	protected JButton createLeftOneTouchButton()
 	{
+		final MSplitPane m = (MSplitPane) splitPane;
+
 		JButton b = new JButton()
 		{
 			public void setBorder(Border b)
@@ -65,13 +101,8 @@ public class MSplitPaneDivider extends BasicSplitPaneDivider
 					int[] ys = new int[3];
 					int blockSize = ((MSplitPane)splitPane).getOneTouchButtonSize();
 
-					// Fill the background first ...
-					g.setColor(this.getBackground());
-					g.fillRect(0, 0, this.getWidth(),
-							   this.getHeight());
-
 					// ... then draw the arrow.
-					g.setColor(Color.black);
+					g.setColor(m.getOneTouchButtonColor());
 					if (orientation == JSplitPane.VERTICAL_SPLIT)
 					{
 						//blockSize = Math.min(getHeight(), oneTouchSize);
@@ -106,7 +137,6 @@ public class MSplitPaneDivider extends BasicSplitPaneDivider
 		b.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		b.setFocusPainted(false);
 		b.setBorderPainted(false);
-		b.setBackground(splitPane.getBackground());
 		b.setRequestFocusEnabled(false);
 		return b;
 	}
@@ -118,6 +148,8 @@ public class MSplitPaneDivider extends BasicSplitPaneDivider
 	@Override
 	protected JButton createRightOneTouchButton()
 	{
+		final MSplitPane m = (MSplitPane) splitPane;
+
 		JButton b = new JButton()
 		{
 			public void setBorder(Border border)
@@ -130,22 +162,20 @@ public class MSplitPaneDivider extends BasicSplitPaneDivider
 				{
 					int[] xs = new int[3];
 					int[] ys = new int[3];
-					int blockSize = ((MSplitPane)splitPane).getOneTouchButtonSize();
-
-					// Fill the background first ...
-					g.setColor(this.getBackground());
-					g.fillRect(0, 0, this.getWidth(),
-							   this.getHeight());
+					int blockSize = ((MSplitPane)splitPane).getOneTouchButtonSize() - 2;
 
 					// ... then draw the arrow.
+					g.setColor(m.getOneTouchButtonColor());
 					if (orientation == JSplitPane.VERTICAL_SPLIT)
 					{
 //                        blockSize = Math.min(getHeight(), oneTouchSize);
-						xs[0] = blockSize;
-						xs[1] = blockSize << 1;
-						xs[2] = 0;
-						ys[0] = blockSize;
-						ys[1] = ys[2] = 0;
+						xs[2] = blockSize;
+						xs[0] = blockSize << 1;
+						xs[1] = 0;
+						ys[2] = blockSize;
+						ys[0] = ys[1] = 0;
+//						g.drawPolygon(xs, ys, 3); // Little trick to make the
+						// arrows of equal size
 					}
 					else
 					{
@@ -156,7 +186,6 @@ public class MSplitPaneDivider extends BasicSplitPaneDivider
 						ys[1] = blockSize;
 						ys[2] = blockSize << 1;
 					}
-					g.setColor(Color.black);
 					g.fillPolygon(xs, ys, 3);
 				}
 			}
@@ -171,7 +200,6 @@ public class MSplitPaneDivider extends BasicSplitPaneDivider
 		b.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		b.setFocusPainted(false);
 		b.setBorderPainted(false);
-		b.setBackground(splitPane.getBackground());
 		b.setRequestFocusEnabled(false);
 		return b;
 	}
