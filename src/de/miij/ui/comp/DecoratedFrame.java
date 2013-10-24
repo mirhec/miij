@@ -11,11 +11,13 @@ import de.miij.layout.FlexLayout;
 import de.miij.ui.comp.flex.FlexRecalculateListener;
 import de.miij.util.M;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Window;
@@ -47,9 +49,12 @@ public class DecoratedFrame extends MFrame
 	protected MPanel contentPanel = new MPanel();
 	protected MPanel resizePanel = new MPanel();
 	protected MPanel toolbarPanel = new MPanel();
+	protected MPanel titlePanel = new MPanel();
 	private JLabel left, right, top, bottom, topleft, topright, bottomleft, bottomright;
 	private ArrayList<JButton> toolbarButtons = new ArrayList<JButton>();
+	private ArrayList<JLabel> titleLabels = new ArrayList<JLabel>();
 	private boolean helpVisible = true;
+	private int labelSpacing = 10;
 
 	public DecoratedFrame()
 	{
@@ -107,6 +112,8 @@ public class DecoratedFrame extends MFrame
 
 	public void addToolbarButton(int index, Icon i, Icon iHover, ActionListener l)
 	{
+		if(index < 0) return;
+		
 		JButton btn = makeButton(i, iHover, false, false, false);
 		btn.addActionListener(l);
 		while (index > toolbarButtons.size())
@@ -121,6 +128,75 @@ public class DecoratedFrame extends MFrame
 		if (toolbarButtons.size() > index && index >= 0)
 			return toolbarButtons.get(index);
 		return null;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////
+	
+	public void addTitleLabel(String text)
+	{
+		addTitleLabel(titleLabels.size(), text);
+	}
+	
+	public void addTitleLabel(int index, String text)
+	{
+		addTitleLabel(index, text, null);
+	}
+	
+	public void addTitleLabel(int index, String text, Color foreground)
+	{
+		JLabel lbl = new JLabel(text);
+		lbl.setForeground(foreground);
+		lbl.setFont(new Font("Tahoma", Font.BOLD, 13));
+		addTitleLabel(index, lbl);
+	}
+	
+	public void addTitleLabel(JLabel label)
+	{
+		addTitleLabel(titleLabels.size(), label);
+	}
+	
+	public void addTitleLabel(final int index, final JLabel label)
+	{
+		if(index < 0) return;
+		
+		while (index > titleLabels.size())
+			titleLabels.add(null);
+
+		titleLabels.add(index, label);
+		titlePanel.add(label, new FlexConstraint().left(new FlexRecalculateListener() {
+			@Override
+			public int recalculate()
+			{
+				int left = W + lblTitle.getWidth() + labelSpacing;
+				for(int i = 0; i < index; ++i) left += titleLabels.get(i).getWidth() + labelSpacing;
+				return left;
+			}
+		}).top(0).bottom(0).width(new FlexRecalculateListener()
+		{
+			@Override
+			public int recalculate()
+			{
+				return label.getFontMetrics(label.getFont()).stringWidth(label.getText()) + label.getIconTextGap() + (label.getIcon() != null ? label.getIcon().getIconWidth() : 0);
+			}
+		}));
+	}
+	
+	public JLabel getTitleLabel(int index)
+	{
+		if(index < 0 || index >= titleLabels.size()) return null;
+		else return titleLabels.get(index);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////
+	
+	public int getLabelSpacing()
+	{
+		return labelSpacing;
+	}
+	
+	public void setLabelSpacing(int spacing)
+	{
+		labelSpacing = spacing;
 	}
 
 	private JButton makeButton(final Icon i, final Icon iHover, final boolean close, final boolean minimize, final boolean maximize)
@@ -152,9 +228,17 @@ public class DecoratedFrame extends MFrame
 				if (close)
 					dispatchEvent(new WindowEvent(DecoratedFrame.this, WindowEvent.WINDOW_CLOSING));
 				if (minimize)
+				{
 					DecoratedFrame.this.setState(JFrame.ICONIFIED);
+					dispatchEvent(new WindowEvent(DecoratedFrame.this, WindowEvent.WINDOW_STATE_CHANGED));
+					revalidate();
+				}
 				if (maximize)
+				{
 					DecoratedFrame.this.setExtendedState(DecoratedFrame.this.getExtendedState() == JFrame.MAXIMIZED_BOTH ? JFrame.NORMAL : JFrame.MAXIMIZED_BOTH);
+					dispatchEvent(new WindowEvent(DecoratedFrame.this, WindowEvent.WINDOW_STATE_CHANGED));
+					revalidate();
+				}
 			}
 		});
 		return button;
@@ -185,28 +269,18 @@ public class DecoratedFrame extends MFrame
 	{
 		setUndecorated(true);
 
+		// Toolbar
 		JButton btnClose = makeCloseButton();
 		JButton btnMaximize = makeMaximizeButton();
 		JButton btnMinimize = makeMinimizeButton();
 
-		JPanel title = new JPanel(new FlexLayout());
-		DecoratedFrame.DragWindowListener dwl = new DecoratedFrame.DragWindowListener();
-		title.addMouseListener(dwl);
-		title.addMouseMotionListener(dwl);
-		title.setOpaque(false);
-		title.setBorder(BorderFactory.createEmptyBorder(0, W, W, 0));
-
-		lblTitle = new JLabel(Miij.getAppName(), JLabel.LEFT);
-		lblTitle.setFont(new Font("Tahoma", Font.BOLD, 13));
-		lblTitle.setIcon(new ImageIcon(DecoratedFrame.class.getResource("/gfx/icon.png")));
-		lblTitle.setVerticalAlignment(JLabel.TOP);
-		title.add(lblTitle, new FlexConstraint().left(0).right(toolbarPanel, M.LEFT, 0).height(TITLE_BAR_HEIGHT).top(0));
 		toolbarPanel.add(btnClose, new FlexConstraint().right(0).top(0).width(TITLE_BAR_HEIGHT).height(TITLE_BAR_HEIGHT));
 		toolbarPanel.add(btnMaximize, new FlexConstraint().right(TITLE_BAR_HEIGHT).top(0).width(TITLE_BAR_HEIGHT).height(TITLE_BAR_HEIGHT));
 		toolbarPanel.add(btnMinimize, new FlexConstraint().right(TITLE_BAR_HEIGHT * 2).top(0).width(TITLE_BAR_HEIGHT).height(TITLE_BAR_HEIGHT));
 		if (helpVisible)
 			addToolbarButton(WindowIcons.getQuestionIcon(false), WindowIcons.getQuestionIcon(true), new Connector(this, "help"));
 
+		// Resize elements
 		DecoratedFrame.ResizeWindowListener rwl = new DecoratedFrame.ResizeWindowListener(this);
 		for (JLabel l : java.util.Arrays.asList(
 				left = new JLabel(), right = new JLabel(),
@@ -242,10 +316,26 @@ public class DecoratedFrame extends MFrame
 
 		setResizeCurser(false);
 
-		JPanel titlePanel = new JPanel(new FlexLayout());
-		titlePanel.add(top, new FlexConstraint().left(0).top(0).right(toolbarPanel, M.LEFT, 0).height(W));
-		titlePanel.add(title, new FlexConstraint().left(0).top(W).right(toolbarPanel, M.LEFT, 0).height(TITLE_BAR_HEIGHT));
+		// Title
+		DecoratedFrame.DragWindowListener dwl = new DecoratedFrame.DragWindowListener();
+		titlePanel.addMouseListener(dwl);
+		titlePanel.addMouseMotionListener(dwl);
+		titlePanel.setOpaque(false);
+		titlePanel.setBorder(BorderFactory.createEmptyBorder(0, W, W, 0));
 
+		lblTitle = new JLabel(Miij.getAppName(), JLabel.LEFT);
+		lblTitle.setFont(new Font("Tahoma", Font.BOLD, 13));
+		titlePanel.add(lblTitle, new FlexConstraint().left(W).bottom(0).top(0).width(new FlexRecalculateListener()
+		{
+			@Override
+			public int recalculate()
+			{
+				return lblTitle.getFontMetrics(lblTitle.getFont()).stringWidth(lblTitle.getText()) + lblTitle.getIconTextGap() + (lblTitle.getIcon() != null ? lblTitle.getIcon().getIconWidth() : 0);
+			}
+		}));
+		titlePanel.add(top, new FlexConstraint().left(0).top(0).right(toolbarPanel, M.LEFT, 0).height(W));
+
+		// North Panel
 		JPanel northPanel = new JPanel(new FlexLayout());
 		northPanel.add(topleft, new FlexConstraint().left(0).top(0).height(W).width(W));
 		northPanel.add(titlePanel, new FlexConstraint().left(W).top(0).height(TITLE_BAR_HEIGHT).right(toolbarPanel, M.LEFT, 0));
@@ -260,11 +350,13 @@ public class DecoratedFrame extends MFrame
 			}
 		}));
 
+		// South Panel
 		JPanel southPanel = new JPanel(new BorderLayout());
 		southPanel.add(bottomleft, BorderLayout.WEST);
 		southPanel.add(bottom, BorderLayout.CENTER);
 		southPanel.add(bottomright, BorderLayout.EAST);
 
+		// Resize Panel (all together)
 		resizePanel.add(left, new FlexConstraint().left(0).top(TITLE_BAR_HEIGHT).bottom(10).width(W));
 		resizePanel.add(right, new FlexConstraint().right(0).top(TITLE_BAR_HEIGHT).bottom(W).width(W));
 		resizePanel.add(northPanel, new FlexConstraint().left(0).top(0).right(0).height(TITLE_BAR_HEIGHT));
@@ -326,10 +418,15 @@ public class DecoratedFrame extends MFrame
 		@Override
 		public void mousePressed(MouseEvent e)
 		{
-			startSide = frame.getBounds();
-
 			if (e.getSource() == top && e.getClickCount() > 1 && DecoratedFrame.this.getExtendedState() == JFrame.MAXIMIZED_BOTH)
+			{
 				DecoratedFrame.this.setExtendedState(JFrame.NORMAL);
+				dispatchEvent(new WindowEvent(DecoratedFrame.this, WindowEvent.WINDOW_STATE_CHANGED));
+				revalidate();
+				startSide = null;
+			}
+			else
+				startSide = frame.getBounds();
 		}
 
 		@Override
@@ -411,6 +508,8 @@ public class DecoratedFrame extends MFrame
 			{
 				doubleClicked = true;
 				DecoratedFrame.this.setExtendedState(DecoratedFrame.this.getExtendedState() == JFrame.MAXIMIZED_BOTH ? JFrame.NORMAL : JFrame.MAXIMIZED_BOTH);
+				dispatchEvent(new WindowEvent(DecoratedFrame.this, WindowEvent.WINDOW_STATE_CHANGED));
+				revalidate();
 				me.consume();
 			}
 			else
@@ -447,5 +546,12 @@ public class DecoratedFrame extends MFrame
 	public void setTitle(String title)
 	{
 		lblTitle.setText(title);
+	}
+
+	@Override
+	public void setIconImage(Image image)
+	{
+		super.setIconImage(image);
+		lblTitle.setIcon(new ImageIcon(image));
 	}
 }

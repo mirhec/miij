@@ -8,6 +8,7 @@ package de.miij.ui.comp;
 import de.miij.Miij;
 import de.miij.layout.FlexConstraint;
 import de.miij.layout.FlexLayout;
+import static de.miij.ui.comp.DecoratedFrame.W;
 import de.miij.ui.comp.flex.FlexRecalculateListener;
 import de.miij.util.M;
 import java.awt.BorderLayout;
@@ -17,6 +18,7 @@ import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Window;
@@ -49,8 +51,10 @@ public class DecoratedDialog extends MDialog
 	protected MPanel contentPanel = new MPanel();
 	protected MPanel resizePanel = new MPanel();
 	protected MPanel toolbarPanel = new MPanel();
+	protected MPanel titlePanel = new MPanel();
 	private JLabel left, right, top, bottom, topleft, topright, bottomleft, bottomright;
 	private ArrayList<JButton> toolbarButtons = new ArrayList<JButton>();
+	private ArrayList<JLabel> titleLabels = new ArrayList<JLabel>();
 	private boolean helpVisible = true;
 
 	public DecoratedDialog(Window owner)
@@ -170,33 +174,11 @@ public class DecoratedDialog extends MDialog
 
 		JButton btnClose = makeCloseButton();
 
-		JPanel title = new JPanel(new FlexLayout());
-		DecoratedDialog.DragWindowListener dwl = new DecoratedDialog.DragWindowListener();
-		title.addMouseListener(dwl);
-		title.addMouseMotionListener(dwl);
-		title.setOpaque(false);
-		//title.setBackground(Color.ORANGE);
-		title.setBorder(BorderFactory.createEmptyBorder(0, W, W, 0));
-
-		lblTitle = new JLabel(Miij.getAppName(), JLabel.LEFT);
-		lblTitle.setFont(new Font("Tahoma", Font.BOLD, 13));
-		lblTitle.setIcon(new ImageIcon(DecoratedDialog.class.getResource("/gfx/icon.png")));
-		lblTitle.setVerticalAlignment(JLabel.TOP);
-		title.add(lblTitle, new FlexConstraint().left(0).right(toolbarPanel, M.LEFT, 0).height(TITLE_BAR_HEIGHT).top(W));
 		toolbarPanel.add(btnClose, new FlexConstraint().right(0).top(0).width(TITLE_BAR_HEIGHT).height(TITLE_BAR_HEIGHT));
 		if (helpVisible)
 			addToolbarButton(WindowIcons.getQuestionIcon(false), WindowIcons.getQuestionIcon(true), new Connector(this, "help"));
-		title.add(toolbarPanel, new FlexConstraint().right(0).top(0).height(TITLE_BAR_HEIGHT).width(new FlexRecalculateListener()
-		{
 
-			@Override
-			public int recalculate()
-			{
-				return TITLE_BAR_HEIGHT + TITLE_BAR_HEIGHT * toolbarButtons.size();
-			}
-		}));
-		//title.add(iconify, BorderLayout.WEST);
-
+		// Resize elements
 		DecoratedDialog.ResizeWindowListener rwl = new DecoratedDialog.ResizeWindowListener(this);
 		for (JLabel l : java.util.Arrays.asList(
 				left = new JLabel(), right = new JLabel(),
@@ -204,11 +186,8 @@ public class DecoratedDialog extends MDialog
 				topleft = new JLabel(), topright = new JLabel(),
 				bottomleft = new JLabel(), bottomright = new JLabel()))
 		{
-//			l.addMouseListener(dcl);
 			l.addMouseListener(rwl);
 			l.addMouseMotionListener(rwl);
-            //l.setOpaque(true);
-			//l.setBackground(Color.RED);
 		}
 
 		Dimension d = new Dimension(W, 0);
@@ -235,31 +214,58 @@ public class DecoratedDialog extends MDialog
 
 		setResizeCurser(false);
 
-		JPanel titlePanel = new JPanel(new BorderLayout(0, 0));
-		titlePanel.add(top, BorderLayout.NORTH);
-		titlePanel.add(title, BorderLayout.CENTER);
+		// Title
+		DecoratedDialog.DragWindowListener dwl = new DecoratedDialog.DragWindowListener();
+		titlePanel.addMouseListener(dwl);
+		titlePanel.addMouseMotionListener(dwl);
+		titlePanel.setOpaque(false);
+		titlePanel.setBorder(BorderFactory.createEmptyBorder(0, W, W, 0));
 
-		JPanel northPanel = new JPanel(new BorderLayout(0, 0));
-		northPanel.add(topleft, BorderLayout.WEST);
-		northPanel.add(titlePanel, BorderLayout.CENTER);
-		northPanel.add(topright, BorderLayout.EAST);
+		lblTitle = new JLabel(Miij.getAppName(), JLabel.LEFT);
+		lblTitle.setFont(new Font("Tahoma", Font.BOLD, 13));
+		titlePanel.add(lblTitle, new FlexConstraint().left(W).bottom(0).top(0).width(new FlexRecalculateListener()
+		{
+			@Override
+			public int recalculate()
+			{
+				return lblTitle.getFontMetrics(lblTitle.getFont()).stringWidth(lblTitle.getText()) + lblTitle.getIconTextGap() + (lblTitle.getIcon() != null ? lblTitle.getIcon().getIconWidth() : 0);
+			}
+		}));
+		titlePanel.add(top, new FlexConstraint().left(0).top(0).right(toolbarPanel, M.LEFT, 0).height(W));
 
+		// North Panel
+		JPanel northPanel = new JPanel(new FlexLayout());
+		northPanel.add(topleft, new FlexConstraint().left(0).top(0).height(W).width(W));
+		northPanel.add(titlePanel, new FlexConstraint().left(W).top(0).height(TITLE_BAR_HEIGHT).right(toolbarPanel, M.LEFT, 0));
+		northPanel.add(topright, new FlexConstraint().right(0).top(0).height(W).width(W));
+		northPanel.add(toolbarPanel, new FlexConstraint().right(W).top(1).height(TITLE_BAR_HEIGHT).width(new FlexRecalculateListener()
+		{
+
+			@Override
+			public int recalculate()
+			{
+				return TITLE_BAR_HEIGHT * 3 + TITLE_BAR_HEIGHT * toolbarButtons.size();
+			}
+		}));
+
+		// South Panel
 		JPanel southPanel = new JPanel(new BorderLayout());
 		southPanel.add(bottomleft, BorderLayout.WEST);
 		southPanel.add(bottom, BorderLayout.CENTER);
 		southPanel.add(bottomright, BorderLayout.EAST);
 
+		// Resize Panel (all together)
 		resizePanel.add(left, new FlexConstraint().left(0).top(TITLE_BAR_HEIGHT).bottom(10).width(10));
-		resizePanel.add(right, new FlexConstraint().right(0).top(TITLE_BAR_HEIGHT).bottom(10).width(10));
+		resizePanel.add(right, new FlexConstraint().right(0).top(TITLE_BAR_HEIGHT).bottom(W).width(10));
 		resizePanel.add(northPanel, new FlexConstraint().left(0).top(0).right(0).height(TITLE_BAR_HEIGHT));
 		resizePanel.add(southPanel, new FlexConstraint().left(0).right(0).bottom(0).height(10));
 		resizePanel.add(contentPanel, new FlexConstraint().left(10).top(TITLE_BAR_HEIGHT).bottom(10).right(10));
+		resizePanel.setBorder(new LineBorder(Color.GRAY));
 
 		titlePanel.setOpaque(false);
 		northPanel.setOpaque(false);
 		southPanel.setOpaque(false);
 
-		resizePanel.setBorder(new LineBorder(Color.GRAY));
 		setContentPane(resizePanel);
 	}
 
@@ -412,5 +418,12 @@ public class DecoratedDialog extends MDialog
 	public void setTitle(String title)
 	{
 		lblTitle.setText(title);
+	}
+
+	@Override
+	public void setIconImage(Image image)
+	{
+		super.setIconImage(image);
+		lblTitle.setIcon(new ImageIcon(image));
 	}
 }

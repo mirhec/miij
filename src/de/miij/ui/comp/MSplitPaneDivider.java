@@ -5,7 +5,6 @@
  */
 package de.miij.ui.comp;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -39,12 +38,31 @@ public class MSplitPaneDivider extends BasicSplitPaneDivider
      */
     protected DragController2 dragger;
     protected MouseHandler2 mouseHandler;
+	private OneTouchState state;
 
 	public MSplitPaneDivider(BasicSplitPaneUI ui)
 	{
 		super(ui);
 		mui = (MSplitPaneUI) ui;
 //		setBorder(new LineBorder(((MSplitPane)splitPane).getDividerBorderColor()));
+	}
+	
+	/**
+	 * Returns the divider position for the normal state. To specify the
+	 * divider position for normal state you have to set the preferred size for
+	 * one of the components. If no preferred size is specified, the half width/
+	 * height is returned.
+	 * 
+	 * @return 
+	 */
+	public int getNormalStatePosition()
+	{
+		Dimension size = splitPane.getSize();
+		if(splitPane.getLeftComponent().getPreferredSize() != null)
+			size = splitPane.getLeftComponent().getPreferredSize();
+		else if(splitPane.getRightComponent().getPreferredSize() != null)
+			size = splitPane.getRightComponent().getPreferredSize();
+		return orientation == JSplitPane.HORIZONTAL_SPLIT ? size.width : size.height;
 	}
 	
 	@Override
@@ -250,8 +268,10 @@ public class MSplitPaneDivider extends BasicSplitPaneDivider
 
     /**
      * Sets the SplitPaneUI that is using the receiver.
+	 * @param newUI
      */
-    public void setBasicSplitPaneUI(MSplitPaneUI newUI) {
+	@Override
+    public void setBasicSplitPaneUI(BasicSplitPaneUI newUI) {
         if (splitPane != null) {
             splitPane.removePropertyChangeListener(this);
            if (mouseHandler != null) {
@@ -410,7 +430,14 @@ public class MSplitPaneDivider extends BasicSplitPaneDivider
          * @since 1.5
          */
         public void mouseEntered(MouseEvent e) {
-			if(!((MSplitPane)splitPane).isDraggable()) return;
+			if(!((MSplitPane)splitPane).isDraggable()) {
+				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+				return;
+			} else {
+				setCursor((orientation == JSplitPane.HORIZONTAL_SPLIT) ?
+                  Cursor.getPredefinedCursor(Cursor.E_RESIZE_CURSOR) :
+                  Cursor.getPredefinedCursor(Cursor.S_RESIZE_CURSOR));
+			}
 			
             if (e.getSource() == MSplitPaneDivider.this) {
                 setMouseOver(true);
@@ -674,78 +701,198 @@ public class MSplitPaneDivider extends BasicSplitPaneDivider
 			this.toMinimum = toMinimum;
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e)
 		{
 			Insets insets = splitPane.getInsets();
 			int lastLoc = splitPane.getLastDividerLocation();
 			int currentLoc = splitPaneUI.getDividerLocation(splitPane);
-			int newLoc;
-
-			// We use the location from the UI directly, as the location the
-			// JSplitPane itself maintains is not necessarly correct.
-			if (toMinimum)
+			int newLoc = currentLoc;
+			
+//			if(state == null)
+//				state = OneTouchState.NORMAL;
+//			
+//			// If the splitter is not draggable, then you can only switch between
+//			// 3 states ...
+//			if(!((MSplitPane)splitPane).isDraggable())
+//			{
+//				if(toMinimum)
+//				{
+//					switch(state)
+//					{
+//						case MAXIMIZED:
+//							newLoc = getNormalStatePosition();
+//							state = OneTouchState.NORMAL;
+//							break;
+//						case MINIMIZED:
+//							break;
+//						case NORMAL:
+//							if(orientation == JSplitPane.HORIZONTAL_SPLIT)
+//								newLoc = insets.left;
+//							else
+//								newLoc = insets.top;
+//							state = OneTouchState.MINIMIZED;
+//							break;
+//					}
+//				}
+//				else
+//				{
+//					switch(state)
+//					{
+//						case MAXIMIZED:
+//							break;
+//						case MINIMIZED:
+//							newLoc = getNormalStatePosition();
+//							state = OneTouchState.NORMAL;
+//							break;
+//						case NORMAL:
+//							if(orientation == JSplitPane.HORIZONTAL_SPLIT)
+//								newLoc = splitPane.getWidth() - getWidth() - insets.left;
+//							else
+//								newLoc = splitPane.getHeight() - getHeight() - insets.top;
+//							state = OneTouchState.MAXIMIZED;
+//							break;
+//					}
+//				}
+//			}
+//			else
 			{
-				if (orientation == JSplitPane.VERTICAL_SPLIT)
+				state = OneTouchState.NORMAL;
+
+				// We use the location from the UI directly, as the location the
+				// JSplitPane itself maintains is not necessarly correct.
+				if (toMinimum)	// from right to left or from bottom to top
 				{
-					if (currentLoc >= (splitPane.getHeight() - insets.bottom - getHeight()) ||
-						currentLoc >= (splitPane.getHeight() - insets.bottom - getHeight() - splitPane.getRightComponent().getMinimumSize().height))
+					if (orientation == JSplitPane.VERTICAL_SPLIT)
+					{
+						if (currentLoc >= (splitPane.getHeight() - insets.bottom - getHeight()) ||
+							(splitPane.getRightComponent().getMinimumSize() != null && currentLoc >= (splitPane.getHeight() - insets.bottom - getHeight() - splitPane.getRightComponent().getMinimumSize().height)) ||
+							(splitPane.getLeftComponent().getMaximumSize() != null && currentLoc >= splitPane.getLeftComponent().getMaximumSize().height))
+						{
+							int maxLoc = splitPane.getMaximumDividerLocation();
+							newLoc = Math.min(lastLoc, maxLoc);
+							if(newLoc == currentLoc && splitPane.getLeftComponent().getPreferredSize() != null)
+							{
+								int pref = splitPane.getLeftComponent().getPreferredSize().height;
+								newLoc = pref;
+							} else if(newLoc == currentLoc && splitPane.getRightComponent().getPreferredSize() != null)
+							{
+								int pref = splitPane.getRightComponent().getPreferredSize().height;
+								newLoc = splitPane.getHeight() - pref;
+							}
+							else if(newLoc == currentLoc)
+							{
+								newLoc = splitPane.getHeight() / 2;
+							}
+							mui.setKeepHidden(false);
+						}
+						else
+						{
+							newLoc = insets.top;
+							mui.setKeepHidden(true);
+							state = OneTouchState.MINIMIZED;
+						}
+					}
+					else if (currentLoc >= (splitPane.getWidth() - insets.right - getWidth()) ||
+							  (splitPane.getRightComponent().getMinimumSize() != null && currentLoc >= (splitPane.getWidth() - insets.right - getWidth() - splitPane.getRightComponent().getMinimumSize().width)) ||
+							  (splitPane.getLeftComponent().getMaximumSize() != null && currentLoc >= splitPane.getLeftComponent().getMaximumSize().width))
 					{
 						int maxLoc = splitPane.getMaximumDividerLocation();
 						newLoc = Math.min(lastLoc, maxLoc);
+						if(newLoc == currentLoc && splitPane.getLeftComponent().getPreferredSize() != null)
+						{
+							int pref = splitPane.getLeftComponent().getPreferredSize().width;
+							newLoc = pref;
+						} else if(newLoc == currentLoc && splitPane.getRightComponent().getPreferredSize() != null)
+						{
+							int pref = splitPane.getRightComponent().getPreferredSize().width;
+							newLoc = splitPane.getWidth() - pref;
+						}
+						else if(newLoc == currentLoc)
+						{
+							newLoc = splitPane.getWidth() / 2;
+						}
 						mui.setKeepHidden(false);
 					}
 					else
 					{
-						newLoc = insets.top;
+						newLoc = insets.left;
 						mui.setKeepHidden(true);
+						state = OneTouchState.MINIMIZED;
 					}
 				}
-				else if (currentLoc >= (splitPane.getWidth() - insets.right - getWidth()) ||
-						  currentLoc >= (splitPane.getWidth() - insets.right - getWidth() - splitPane.getRightComponent().getMinimumSize().width))
+				// from left to right or from top to bottom
+				else if (orientation == JSplitPane.VERTICAL_SPLIT)
+				{
+					if (currentLoc == insets.top ||
+						(splitPane.getLeftComponent().getMinimumSize() != null && currentLoc == splitPane.getLeftComponent().getMinimumSize().height) ||
+						(splitPane.getRightComponent().getMaximumSize() != null && currentLoc == splitPane.getHeight() - splitPane.getRightComponent().getMaximumSize().height - insets.bottom))
+					{
+						int maxLoc = splitPane.getMaximumDividerLocation();
+						newLoc = Math.min(lastLoc, maxLoc);
+						if(newLoc == currentLoc && splitPane.getRightComponent().getPreferredSize() != null)
+						{
+							int pref = splitPane.getRightComponent().getPreferredSize().height;
+							newLoc = splitPane.getHeight() - pref;
+						} else if(newLoc == currentLoc && splitPane.getLeftComponent().getPreferredSize() != null)
+						{
+							int pref = splitPane.getLeftComponent().getPreferredSize().height;
+							newLoc = pref;
+						}
+						else if(newLoc == currentLoc)
+						{
+							newLoc = splitPane.getHeight() / 2;
+						}
+						mui.setKeepHidden(false);
+					}
+					else
+					{
+						newLoc = splitPane.getHeight() - getHeight()
+								 - insets.top;
+						mui.setKeepHidden(true);
+						state = OneTouchState.MAXIMIZED;
+					}
+				}
+				else if (currentLoc == insets.left ||
+						 (splitPane.getLeftComponent().getMinimumSize() != null && currentLoc == splitPane.getLeftComponent().getMinimumSize().width) ||
+						 (splitPane.getRightComponent().getMaximumSize() != null && currentLoc == splitPane.getWidth() - splitPane.getRightComponent().getMaximumSize().width - insets.right))
 				{
 					int maxLoc = splitPane.getMaximumDividerLocation();
 					newLoc = Math.min(lastLoc, maxLoc);
+					if(newLoc == currentLoc && splitPane.getRightComponent().getPreferredSize() != null)
+					{
+						int pref = splitPane.getRightComponent().getPreferredSize().width;
+						newLoc = splitPane.getWidth() - pref;
+					} else if(newLoc == currentLoc && splitPane.getLeftComponent().getPreferredSize() != null)
+					{
+						int pref = splitPane.getLeftComponent().getPreferredSize().width;
+						newLoc = pref;
+					}
+					else if(newLoc == currentLoc)
+					{
+						newLoc = splitPane.getWidth() / 2;
+					}
 					mui.setKeepHidden(false);
 				}
 				else
 				{
-					newLoc = insets.left;
+					newLoc = splitPane.getWidth() - getWidth() - insets.left;
 					mui.setKeepHidden(true);
+					state = OneTouchState.MAXIMIZED;
 				}
 			}
-			else if (orientation == JSplitPane.VERTICAL_SPLIT)
-			{
-				if (currentLoc == insets.top || currentLoc == splitPane.getLeftComponent().getMinimumSize().height)
-				{
-					int maxLoc = splitPane.getMaximumDividerLocation();
-					newLoc = Math.min(lastLoc, maxLoc);
-					mui.setKeepHidden(false);
-				}
-				else
-				{
-					newLoc = splitPane.getHeight() - getHeight()
-							 - insets.top;
-					mui.setKeepHidden(true);
-				}
-			}
-			else if (currentLoc == insets.left || currentLoc == splitPane.getLeftComponent().getMinimumSize().width)
-			{
-				int maxLoc = splitPane.getMaximumDividerLocation();
-				newLoc = Math.min(lastLoc, maxLoc);
-				mui.setKeepHidden(false);
-			}
-			else
-			{
-				newLoc = splitPane.getWidth() - getWidth()
-						 - insets.left;
-				mui.setKeepHidden(true);
-			}
+			
 			if (currentLoc != newLoc)
 			{
 				splitPane.setDividerLocation(newLoc);
 				// We do this in case the dividers notion of the location
 				// differs from the real location.
 				splitPane.setLastDividerLocation(currentLoc);
+			}
+			
+			if(((MSplitPane)splitPane).getOneTouchListener() != null)
+			{
+				((MSplitPane)splitPane).getOneTouchListener().oneTouchButtonPressed(state);
 			}
 		}
 	} // End of class BasicSplitPaneDivider.LeftActionListener

@@ -1697,6 +1697,7 @@ public class MSplitPaneUI extends BasicSplitPaneUI
          * If the axis == 0, the width is returned, otherwise the height.
          */
         int getSizeForPrimaryAxis(Dimension size) {
+			if(size == null) return 0;
             if (axis == 0) {
                 return size.width;
             }

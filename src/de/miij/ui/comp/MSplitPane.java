@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Insets;
 import javax.swing.JSplitPane;
 import static javax.swing.JSplitPane.HORIZONTAL_SPLIT;
 import static javax.swing.JSplitPane.VERTICAL_SPLIT;
@@ -42,6 +43,7 @@ public class MSplitPane extends JSplitPane
 	private Color oneTouchButtonColor = Color.BLACK;
 	private Color dividerBorderColor = Color.BLACK;
 	private Color gripperColor = Color.BLACK;
+	private OneTouchListener oneTouchListener = null;
 
 	public MSplitPane()
 	{
@@ -116,15 +118,21 @@ public class MSplitPane extends JSplitPane
 	public void setDraggable(boolean b)
 	{
 		isDraggable = b;
-		if(!isDraggable)
-		{
-//			((MSplitPaneUI)getUI()).getDivider().removeMouseListener(null);
-		}
 	}
 	
 	public boolean isDraggable()
 	{
 		return isDraggable;
+	}
+	
+	public void setOneTouchListener(OneTouchListener l)
+	{
+		oneTouchListener = l;
+	}
+	
+	public OneTouchListener getOneTouchListener()
+	{
+		return oneTouchListener;
 	}
 
 	@Override
@@ -210,9 +218,9 @@ public class MSplitPane extends JSplitPane
 		{
 			int minCompSize = getSizeForPrimaryAxis(minDim);
 			
-			if((!growing && requested < minCompSize) || (growing && getSizeForPrimaryAxis(getSize()) - requested < minCompSize))
+			if((!growing && requested < minCompSize) || (growing && getSizeForPrimaryAxis(getSize()) - getDividerSize() - getSizeForPrimaryAxis(getInsets()) - requested < minCompSize))
 			{
-				super.setDividerLocation(!growing ? minCompSize : getSizeForPrimaryAxis(getSize()) - minCompSize);
+				super.setDividerLocation(!growing ? minCompSize : getSizeForPrimaryAxis(getSize()) - getDividerSize() - getSizeForPrimaryAxis(getInsets()) - minCompSize);
 				return;
 			}
 		}
@@ -228,6 +236,16 @@ public class MSplitPane extends JSplitPane
 	{
 		return (getOrientation() == HORIZONTAL_SPLIT) ? size.width
 			   : size.height;
+	}
+
+	/**
+	 * If the orientation is Horizontal, the width is returned, otherwise the
+	 * height.
+	 */
+	private int getSizeForPrimaryAxis(Insets insets)
+	{
+		return (getOrientation() == HORIZONTAL_SPLIT) ? insets.left
+			   : insets.top;
 	}
 
 	private void init()
