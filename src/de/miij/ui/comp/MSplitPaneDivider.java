@@ -6,11 +6,13 @@
 package de.miij.ui.comp;
 
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.LayoutManager;
 import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
@@ -44,7 +46,7 @@ public class MSplitPaneDivider extends BasicSplitPaneDivider
 	{
 		super(ui);
 		mui = (MSplitPaneUI) ui;
-//		setBorder(new LineBorder(((MSplitPane)splitPane).getDividerBorderColor()));
+		setLayout(new DividerLayout2());
 	}
 	
 	/**
@@ -88,11 +90,13 @@ public class MSplitPaneDivider extends BasicSplitPaneDivider
 		if(m.getGripperColor() != null)
 		{
 			g2d.setPaint(m.getGripperColor());
+			int r = orientation == JSplitPane.HORIZONTAL_SPLIT ? getWidth() / 2 : getHeight() / 2;
+			int h = r * 3 * 2;
 			for(int i = 0; i < 3; ++i)
 				if(m.getOrientation() == JSplitPane.HORIZONTAL_SPLIT)
-					g2d.fillOval(getWidth() / 2 - getWidth() / 4, getHeight() / 2 - 15 + i * 10, getWidth() / 2, getWidth() / 2);
+					g2d.fillOval(r - r/2, getHeight() / 2 - h/2 + i * r*2, r, r);
 				else
-					g2d.fillOval(getWidth() / 2 - 15 + i * 10, getHeight() / 2 - getHeight() / 4, getHeight() / 2, getHeight() / 2);
+					g2d.fillOval(getWidth() / 2 - h/2 + i * r*2, r - r / 2, r, r);
 		}
 	}
 
@@ -118,6 +122,7 @@ public class MSplitPaneDivider extends BasicSplitPaneDivider
 					int[] xs = new int[3];
 					int[] ys = new int[3];
 					int blockSize = ((MSplitPane)splitPane).getOneTouchButtonSize();
+					blockSize -= 3;
 
 					// ... then draw the arrow.
 					g.setColor(m.getOneTouchButtonColor());
@@ -180,7 +185,8 @@ public class MSplitPaneDivider extends BasicSplitPaneDivider
 				{
 					int[] xs = new int[3];
 					int[] ys = new int[3];
-					int blockSize = ((MSplitPane)splitPane).getOneTouchButtonSize() - 2;
+					int blockSize = ((MSplitPane)splitPane).getOneTouchButtonSize();
+					blockSize -= 3;
 
 					// ... then draw the arrow.
 					g.setColor(m.getOneTouchButtonColor());
@@ -316,7 +322,16 @@ public class MSplitPaneDivider extends BasicSplitPaneDivider
          * of DragController.
          */
         public void mousePressed(MouseEvent e) {
-			if(!((MSplitPane)splitPane).isDraggable()) return;
+			boolean overDraggableArea = true;
+			if(splitPane.isOneTouchExpandable())
+			{
+				if(orientation == JSplitPane.HORIZONTAL_SPLIT)
+					overDraggableArea = !(e.getY() < ((MSplitPane)splitPane).getOneTouchButtonSize() * 5);
+				else
+					overDraggableArea = !(e.getX() < ((MSplitPane)splitPane).getOneTouchButtonSize() * 5);
+			}
+			
+			if(!((MSplitPane)splitPane).isDraggable() || !overDraggableArea) return;
 			
             if ((e.getSource() == MSplitPaneDivider.this ||
                  e.getSource() == splitPane) &&
@@ -360,7 +375,16 @@ public class MSplitPaneDivider extends BasicSplitPaneDivider
          * If dragger is not null it is messaged with completeDrag.
          */
         public void mouseReleased(MouseEvent e) {
-			if(!((MSplitPane)splitPane).isDraggable()) return;
+			boolean overDraggableArea = true;
+			if(splitPane.isOneTouchExpandable())
+			{
+				if(orientation == JSplitPane.HORIZONTAL_SPLIT)
+					overDraggableArea = !(e.getY() < ((MSplitPane)splitPane).getOneTouchButtonSize() * 5);
+				else
+					overDraggableArea = !(e.getX() < ((MSplitPane)splitPane).getOneTouchButtonSize() * 5);
+			}
+			
+			if(!((MSplitPane)splitPane).isDraggable() || !overDraggableArea) return;
 			
             if (dragger != null) {
                 if (e.getSource() == splitPane) {
@@ -393,7 +417,16 @@ public class MSplitPaneDivider extends BasicSplitPaneDivider
          * If dragger is not null it is messaged with continueDrag.
          */
         public void mouseDragged(MouseEvent e) {
-			if(!((MSplitPane)splitPane).isDraggable()) return;
+			boolean overDraggableArea = true;
+			if(splitPane.isOneTouchExpandable())
+			{
+				if(orientation == JSplitPane.HORIZONTAL_SPLIT)
+					overDraggableArea = !(e.getY() < ((MSplitPane)splitPane).getOneTouchButtonSize() * 5);
+				else
+					overDraggableArea = !(e.getX() < ((MSplitPane)splitPane).getOneTouchButtonSize() * 5);
+			}
+			
+			if(!((MSplitPane)splitPane).isDraggable() || !overDraggableArea) return;
 			
             if (dragger != null) {
                 if (e.getSource() == splitPane) {
@@ -421,6 +454,7 @@ public class MSplitPaneDivider extends BasicSplitPaneDivider
          *  Resets the cursor based on the orientation.
          */
         public void mouseMoved(MouseEvent e) {
+			mouseEntered(e);	// Do the same handling
         }
 
         /**
@@ -430,7 +464,16 @@ public class MSplitPaneDivider extends BasicSplitPaneDivider
          * @since 1.5
          */
         public void mouseEntered(MouseEvent e) {
-			if(!((MSplitPane)splitPane).isDraggable()) {
+			boolean overDraggableArea = true;
+			if(splitPane.isOneTouchExpandable())
+			{
+				if(orientation == JSplitPane.HORIZONTAL_SPLIT)
+					overDraggableArea = !(e.getY() < ((MSplitPane)splitPane).getOneTouchButtonSize() * 5);
+				else
+					overDraggableArea = !(e.getX() < ((MSplitPane)splitPane).getOneTouchButtonSize() * 5);
+			}
+			
+			if(!((MSplitPane)splitPane).isDraggable() || !overDraggableArea) {
 				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				return;
 			} else {
@@ -451,7 +494,16 @@ public class MSplitPaneDivider extends BasicSplitPaneDivider
          * @since 1.5
          */
         public void mouseExited(MouseEvent e) {
-			if(!((MSplitPane)splitPane).isDraggable()) return;
+			boolean overDraggableArea = true;
+			if(splitPane.isOneTouchExpandable())
+			{
+				if(orientation == JSplitPane.HORIZONTAL_SPLIT)
+					overDraggableArea = !(e.getY() < ((MSplitPane)splitPane).getOneTouchButtonSize() * 5);
+				else
+					overDraggableArea = !(e.getX() < ((MSplitPane)splitPane).getOneTouchButtonSize() * 5);
+			}
+			
+			if(!((MSplitPane)splitPane).isDraggable() || !overDraggableArea) return;
 			
             if (e.getSource() == MSplitPaneDivider.this) {
                 setMouseOver(false);
@@ -780,7 +832,8 @@ public class MSplitPaneDivider extends BasicSplitPaneDivider
 								int pref = splitPane.getRightComponent().getPreferredSize().height;
 								newLoc = splitPane.getHeight() - pref;
 							}
-							else if(newLoc == currentLoc)
+							
+							if(newLoc == currentLoc)
 							{
 								newLoc = splitPane.getHeight() / 2;
 							}
@@ -808,7 +861,8 @@ public class MSplitPaneDivider extends BasicSplitPaneDivider
 							int pref = splitPane.getRightComponent().getPreferredSize().width;
 							newLoc = splitPane.getWidth() - pref;
 						}
-						else if(newLoc == currentLoc)
+						
+						if(newLoc == currentLoc)
 						{
 							newLoc = splitPane.getWidth() / 2;
 						}
@@ -839,7 +893,8 @@ public class MSplitPaneDivider extends BasicSplitPaneDivider
 							int pref = splitPane.getLeftComponent().getPreferredSize().height;
 							newLoc = pref;
 						}
-						else if(newLoc == currentLoc)
+						
+						if(newLoc == currentLoc)
 						{
 							newLoc = splitPane.getHeight() / 2;
 						}
@@ -868,7 +923,8 @@ public class MSplitPaneDivider extends BasicSplitPaneDivider
 						int pref = splitPane.getLeftComponent().getPreferredSize().width;
 						newLoc = pref;
 					}
-					else if(newLoc == currentLoc)
+					
+					if(newLoc == currentLoc)
 					{
 						newLoc = splitPane.getWidth() / 2;
 					}
@@ -896,5 +952,127 @@ public class MSplitPaneDivider extends BasicSplitPaneDivider
 			}
 		}
 	} // End of class BasicSplitPaneDivider.LeftActionListener
+
+
+    /**
+     * Used to layout a <code>BasicSplitPaneDivider</code>.
+     * Layout for the divider
+     * involves appropriately moving the left/right buttons around.
+     * <p>
+     */
+    protected class DividerLayout2 implements LayoutManager
+    {
+        public void layoutContainer(Container c) {
+			int oneTouchOffset = ((MSplitPane)splitPane).getOneTouchButtonSize() / 2;
+			
+            if (leftButton != null && rightButton != null &&
+                c == MSplitPaneDivider.this) {
+                if (splitPane.isOneTouchExpandable()) {
+                    Insets insets = getInsets();
+
+                    if (orientation == JSplitPane.VERTICAL_SPLIT) {
+                        int extraX = (insets != null) ? insets.left : 0;
+                        int blockSize = getHeight();
+
+                        if (insets != null) {
+                            blockSize -= (insets.top + insets.bottom);
+                            blockSize = Math.max(blockSize, 0);
+                        }
+                        blockSize = Math.min(blockSize, ((MSplitPane)splitPane).getOneTouchButtonSize());
+
+                        int y = (c.getSize().height - blockSize) / 2;
+
+//                        if (!centerOneTouchButtons) {
+                            y = (insets != null) ? insets.top : 0;
+                            extraX = 0;
+//                        }
+                        leftButton.setBounds(extraX + oneTouchOffset, y,
+                                             blockSize * 2, blockSize);
+                        rightButton.setBounds(extraX + oneTouchOffset +
+                                              ((MSplitPane)splitPane).getOneTouchButtonSize() * 2, y,
+                                              blockSize * 2, blockSize);
+                    }
+                    else {
+                        int extraY = (insets != null) ? insets.top : 0;
+                        int blockSize = getWidth();
+
+                        if (insets != null) {
+                            blockSize -= (insets.left + insets.right);
+                            blockSize = Math.max(blockSize, 0);
+                        }
+                        blockSize = Math.min(blockSize, ((MSplitPane)splitPane).getOneTouchButtonSize());
+
+                        int x = (c.getSize().width - blockSize) / 2;
+
+//                        if (!centerOneTouchButtons) {
+                            x = (insets != null) ? insets.left : 0;
+                            extraY = 0;
+//                        }
+
+                        leftButton.setBounds(x, extraY + oneTouchOffset,
+                                             blockSize, blockSize * 2);
+                        rightButton.setBounds(x, extraY + oneTouchOffset +
+                                              ((MSplitPane)splitPane).getOneTouchButtonSize() * 2, blockSize,
+                                              blockSize * 2);
+                    }
+                }
+                else {
+                    leftButton.setBounds(-5, -5, 1, 1);
+                    rightButton.setBounds(-5, -5, 1, 1);
+                }
+            }
+        }
+
+
+        public Dimension minimumLayoutSize(Container c) {
+            // NOTE: This isn't really used, refer to
+            // BasicSplitPaneDivider.getPreferredSize for the reason.
+            // I leave it in hopes of having this used at some point.
+            if (c != MSplitPaneDivider.this || splitPane == null) {
+                return new Dimension(0,0);
+            }
+            Dimension buttonMinSize = null;
+
+            if (splitPane.isOneTouchExpandable() && leftButton != null) {
+                buttonMinSize = leftButton.getMinimumSize();
+            }
+
+            Insets insets = getInsets();
+            int width = getDividerSize();
+            int height = width;
+
+            if (orientation == JSplitPane.VERTICAL_SPLIT) {
+                if (buttonMinSize != null) {
+                    int size = buttonMinSize.height;
+                    if (insets != null) {
+                        size += insets.top + insets.bottom;
+                    }
+                    height = Math.max(height, size);
+                }
+                width = 1;
+            }
+            else {
+                if (buttonMinSize != null) {
+                    int size = buttonMinSize.width;
+                    if (insets != null) {
+                        size += insets.left + insets.right;
+                    }
+                    width = Math.max(width, size);
+                }
+                height = 1;
+            }
+            return new Dimension(width, height);
+        }
+
+
+        public Dimension preferredLayoutSize(Container c) {
+            return minimumLayoutSize(c);
+        }
+
+
+        public void removeLayoutComponent(Component c) {}
+
+        public void addLayoutComponent(String string, Component c) {}
+    } // End of class BasicSplitPaneDivider.DividerLayout
 
 }

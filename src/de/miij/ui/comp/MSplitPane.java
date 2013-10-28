@@ -114,6 +114,13 @@ public class MSplitPane extends JSplitPane
 	{
 		return oneTouchButtonSize;
 	}
+
+	@Override
+	public void setDividerSize(int newSize)
+	{
+		super.setDividerSize(newSize);
+		setOneTouchButtonSize(newSize);
+	}
 	
 	public void setDraggable(boolean b)
 	{
