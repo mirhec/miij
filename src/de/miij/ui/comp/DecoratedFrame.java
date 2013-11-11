@@ -34,8 +34,14 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.plaf.UIResource;
 
 /**
  *
@@ -46,10 +52,12 @@ public class DecoratedFrame extends MFrame
 	protected JLabel lblTitle;
 	protected static final int W = 4;
 	protected static final int TITLE_BAR_HEIGHT = 25;
+	protected static final int MENU_BAR_HEIGHT = 25;
 	protected MPanel contentPanel = new MPanel();
-	protected MPanel resizePanel = new MPanel();
+	protected JLayeredPane resizePanel = new JLayeredPane();
 	protected MPanel toolbarPanel = new MPanel();
 	protected MPanel titlePanel = new MPanel();
+	protected MPanel northPanel = new MPanel();
 	private JLabel left, right, top, bottom, topleft, topright, bottomleft, bottomright;
 	private ArrayList<JButton> toolbarButtons = new ArrayList<JButton>();
 	private ArrayList<JLabel> titleLabels = new ArrayList<JLabel>();
@@ -199,6 +207,37 @@ public class DecoratedFrame extends MFrame
 		labelSpacing = spacing;
 	}
 
+	////////////////////////////////////////////////////////////////////////////
+
+	public void setTitleBarBackground(Color c)
+	{
+		northPanel.setBackground(c);
+		if(getJMenuBar() != null)
+		{
+			getJMenuBar().setOpaque(true);
+			getJMenuBar().setBackground(c);
+			for(int i = 0; i < getJMenuBar().getMenuCount(); ++i)
+			{
+				JMenu m = getJMenuBar().getMenu(i);
+				if(m == null) continue;
+				
+				for(int ii = 0; ii < m.getItemCount(); ++ii)
+				{
+					JMenuItem mi = m.getItem(ii);
+					if(mi == null) continue;
+					
+					mi.setOpaque(true);
+					mi.setBackground(c);
+				}
+				m.setOpaque(true);
+				m.setBackground(c);
+			}
+		}
+		
+	}
+	
+	////////////////////////////////////////////////////////////////////////////
+	
 	private JButton makeButton(final Icon i, final Icon iHover, final boolean close, final boolean minimize, final boolean maximize)
 	{
 		final JButton button = new JButton(i);
@@ -336,7 +375,7 @@ public class DecoratedFrame extends MFrame
 		titlePanel.add(top, new FlexConstraint().left(0).top(0).right(toolbarPanel, M.LEFT, 0).height(W));
 
 		// North Panel
-		JPanel northPanel = new JPanel(new FlexLayout());
+//		JPanel northPanel = new JPanel(new FlexLayout());
 		northPanel.add(topleft, new FlexConstraint().left(0).top(0).height(W).width(W));
 		northPanel.add(titlePanel, new FlexConstraint().left(W).top(0).height(TITLE_BAR_HEIGHT).right(toolbarPanel, M.LEFT, 0));
 		northPanel.add(topright, new FlexConstraint().right(0).top(0).height(W).width(W));
@@ -357,19 +396,42 @@ public class DecoratedFrame extends MFrame
 		southPanel.add(bottomright, BorderLayout.EAST);
 
 		// Resize Panel (all together)
-		resizePanel.add(left, new FlexConstraint().left(0).top(TITLE_BAR_HEIGHT).bottom(10).width(W));
-		resizePanel.add(right, new FlexConstraint().right(0).top(TITLE_BAR_HEIGHT).bottom(W).width(W));
-		resizePanel.add(northPanel, new FlexConstraint().left(0).top(0).right(0).height(TITLE_BAR_HEIGHT));
+		FlexRecalculateListener topRecalculateListener = new FlexRecalculateListener()
+		{
+			@Override
+			public int recalculate()
+			{
+				return getJMenuBar() == null ? TITLE_BAR_HEIGHT : TITLE_BAR_HEIGHT + MENU_BAR_HEIGHT;
+			}
+		};
+		resizePanel.setLayout(new FlexLayout());
+		resizePanel.add(left, new FlexConstraint().left(0).top(topRecalculateListener).bottom(10).width(W));
+		resizePanel.add(right, new FlexConstraint().right(0).top(topRecalculateListener).bottom(W).width(W));
+		resizePanel.add(northPanel, new FlexConstraint().left(0).top(0).right(0).height(topRecalculateListener));
 		resizePanel.add(southPanel, new FlexConstraint().left(0).right(0).bottom(0).height(W));
-		resizePanel.add(contentPanel, new FlexConstraint().left(W).top(TITLE_BAR_HEIGHT).bottom(W).right(W));
+		resizePanel.add(contentPanel, new FlexConstraint().left(W).top(topRecalculateListener).bottom(W).right(W));
 
+		northPanel.setOpaque(true);
 		titlePanel.setOpaque(false);
-		northPanel.setOpaque(false);
+		lblTitle.setOpaque(false);
+		toolbarPanel.setOpaque(false);
 		southPanel.setOpaque(false);
+		resizePanel.setOpaque(false);
 
-		setContentPane(resizePanel);
+		setLayeredPane(resizePanel);
 	}
 
+	@Override
+	public void setJMenuBar(JMenuBar menubar)
+	{
+		super.setJMenuBar(menubar);
+		
+		if(menubar != null)
+		{
+			northPanel.add(menubar, new FlexConstraint().left(W).right(W).top(W + TITLE_BAR_HEIGHT).height(MENU_BAR_HEIGHT));
+		}
+	}
+	
 	@Override
 	public Container getContentPane()
 	{

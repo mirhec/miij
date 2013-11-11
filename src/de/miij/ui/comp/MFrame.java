@@ -7,7 +7,6 @@ import java.util.Hashtable;
 import java.util.Stack;
 
 import javax.swing.JFileChooser;
-import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
@@ -70,7 +69,7 @@ public class MFrame extends FFrame
 	public MFrame menuTop(String text)
 	{
 		if (getJMenuBar() == null)
-			setJMenuBar(new JMenuBar());
+			setJMenuBar(new MMenuBar());
 
 		akt_menu = new MMenu(text);
 		getJMenuBar().add(akt_menu);
@@ -89,7 +88,7 @@ public class MFrame extends FFrame
 	public MFrame menu(String text)
 	{
 		if (getJMenuBar() == null)
-			setJMenuBar(new JMenuBar());
+			setJMenuBar(new MMenuBar());
 
 		MMenu m = new MMenu(text);
 
@@ -131,7 +130,7 @@ public class MFrame extends FFrame
 	public MFrame menuItem(String text, Object object, String method)
 	{
 		if (getJMenuBar() == null)
-			setJMenuBar(new JMenuBar());
+			setJMenuBar(new MMenuBar());
 
 		if (akt_menu == null)
 		{
@@ -162,7 +161,7 @@ public class MFrame extends FFrame
 		if (c.text != null)
 		{
 			if (getJMenuBar() == null)
-				setJMenuBar(new JMenuBar());
+				setJMenuBar(new MMenuBar());
 
 			if (akt_menu == null)
 			{
@@ -181,7 +180,7 @@ public class MFrame extends FFrame
 	public MFrame separator()
 	{
 		if (getJMenuBar() == null)
-			setJMenuBar(new JMenuBar());
+			setJMenuBar(new MMenuBar());
 
 		if (akt_menu != null)
 			akt_menu.addSeparator();

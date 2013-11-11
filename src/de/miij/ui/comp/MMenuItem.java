@@ -7,6 +7,9 @@ import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
 import de.miij.language.ILanguageSupport;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 public class MMenuItem extends JMenuItem implements ILanguageSupport
 {
@@ -27,7 +30,7 @@ public class MMenuItem extends JMenuItem implements ILanguageSupport
 	{
 		super(item.indexOf("@") > -1 ? item.replaceAll("&", "").substring(0,
 																		  item.replaceAll("&", "").indexOf("@")) : item.replaceAll("&", ""));
-
+		
 		int index = -1;
 
 		if ((index = item.indexOf("&")) > -1)
