@@ -8,6 +8,7 @@ import de.miij.ui.comp.flex.DockComponent;
 import de.miij.ui.comp.flex.FlexComponent;
 import de.miij.ui.comp.flex.FlexNotifyResizeListener;
 import de.miij.ui.comp.flex.FlexRecalculateListener;
+import de.miij.util.M;
 import java.awt.Component;
 
 /**
@@ -111,6 +112,17 @@ public class FlexConstraint
 		return this;
 	}
 
+	/**
+	 * Add component right next to component c with offset 0.
+	 * 
+	 * @param c
+	 * @return 
+	 */
+	public FlexConstraint left(Component c)
+	{
+		return left(c, M.RIGHT, 0);
+	}
+	
 	public FlexConstraint left(Component c, int direction, int offset)
 	{
 		FlexLeftComponent = new DockComponent(c, direction);
@@ -118,11 +130,15 @@ public class FlexConstraint
 		return this;
 	}
 
+	/**
+	 * Add component next to component c in direction with offset 0.
+	 * @param c
+	 * @param direction
+	 * @return 
+	 */
 	public FlexConstraint left(Component c, int direction)
 	{
-		FlexLeftComponent = new DockComponent(c, direction);
-		FlexLeftOffset = 0;
-		return this;
+		return left(c, direction, 0);
 	}
 
 	public FlexConstraint right(int offset)

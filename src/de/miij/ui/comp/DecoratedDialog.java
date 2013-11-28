@@ -171,20 +171,8 @@ public class DecoratedDialog extends MDialog
 		button.setFocusPainted(false);
 		button.setBorder(null);
 		button.setBorderPainted(false);
-		button.addMouseListener(new MouseAdapter()
-		{
-			@Override
-			public void mouseEntered(MouseEvent e)
-			{
-				button.setIcon(iHover);
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e)
-			{
-				button.setIcon(i);
-			}
-		});
+		button.setIcon(i);
+		button.setRolloverIcon(iHover);
 		button.addActionListener(new ActionListener()
 		{
 			@Override
@@ -473,13 +461,19 @@ public class DecoratedDialog extends MDialog
 	@Override
 	public void setTitle(String title)
 	{
+		super.setTitle(title);
 		lblTitle.setText(title);
+	}
+	
+	public void setTitleForeground(Color foreground)
+	{
+		lblTitle.setForeground(foreground);
 	}
 
 	@Override
 	public void setIconImage(Image image)
 	{
 		super.setIconImage(image);
-		lblTitle.setIcon(new ImageIcon(image));
+		if(image != null) lblTitle.setIcon(new ImageIcon(image));
 	}
 }

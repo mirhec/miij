@@ -39,9 +39,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.plaf.UIResource;
 
 /**
  *
@@ -53,11 +52,13 @@ public class DecoratedFrame extends MFrame
 	protected static final int W = 4;
 	protected static final int TITLE_BAR_HEIGHT = 25;
 	protected static final int MENU_BAR_HEIGHT = 25;
+	protected static final int TOOL_BAR_HEIGHT = 30;
 	protected MPanel contentPanel = new MPanel();
 	protected JLayeredPane resizePanel = new JLayeredPane();
 	protected MPanel toolbarPanel = new MPanel();
 	protected MPanel titlePanel = new MPanel();
 	protected MPanel northPanel = new MPanel();
+	protected JToolBar toolbar;
 	private JLabel left, right, top, bottom, topleft, topright, bottomleft, bottomright;
 	private ArrayList<JButton> toolbarButtons = new ArrayList<JButton>();
 	private ArrayList<JLabel> titleLabels = new ArrayList<JLabel>();
@@ -214,7 +215,7 @@ public class DecoratedFrame extends MFrame
 		northPanel.setBackground(c);
 		if(getJMenuBar() != null)
 		{
-			getJMenuBar().setOpaque(true);
+			getJMenuBar().setOpaque(false);
 			getJMenuBar().setBackground(c);
 			for(int i = 0; i < getJMenuBar().getMenuCount(); ++i)
 			{
@@ -234,31 +235,38 @@ public class DecoratedFrame extends MFrame
 			}
 		}
 		
+		if(toolbar != null)
+			toolbar.setOpaque(false);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////
 	
-	private JButton makeButton(final Icon i, final Icon iHover, final boolean close, final boolean minimize, final boolean maximize)
+	public void setJToolBar(JToolBar toolbar)
+	{
+		this.toolbar = toolbar;
+		
+		if(toolbar != null)
+		{
+			northPanel.add(toolbar, new FlexConstraint().left(W).right(W).top(W + TITLE_BAR_HEIGHT + (this.getJMenuBar() != null ? MENU_BAR_HEIGHT : 0)).height(TOOL_BAR_HEIGHT));
+		}
+	}
+	
+	public JToolBar getJToolBar()
+	{
+		return this.toolbar;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////
+	
+	protected JButton makeButton(final Icon i, final Icon iHover, final boolean close, final boolean minimize, final boolean maximize)
 	{
 		final JButton button = new JButton(i);
 		button.setContentAreaFilled(false);
 		button.setFocusPainted(false);
 		button.setBorder(null);
 		button.setBorderPainted(false);
-		button.addMouseListener(new MouseAdapter()
-		{
-			@Override
-			public void mouseEntered(MouseEvent e)
-			{
-				button.setIcon(iHover);
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e)
-			{
-				button.setIcon(i);
-			}
-		});
+		button.setIcon(i);
+		button.setRolloverIcon(iHover);
 		button.addActionListener(new ActionListener()
 		{
 			@Override
@@ -369,6 +377,7 @@ public class DecoratedFrame extends MFrame
 			@Override
 			public int recalculate()
 			{
+				if(lblTitle.getText() == null) return 0;
 				return lblTitle.getFontMetrics(lblTitle.getFont()).stringWidth(lblTitle.getText()) + lblTitle.getIconTextGap() + (lblTitle.getIcon() != null ? lblTitle.getIcon().getIconWidth() : 0);
 			}
 		}));
@@ -401,7 +410,8 @@ public class DecoratedFrame extends MFrame
 			@Override
 			public int recalculate()
 			{
-				return getJMenuBar() == null ? TITLE_BAR_HEIGHT : TITLE_BAR_HEIGHT + MENU_BAR_HEIGHT;
+				return (getJMenuBar() == null ? TITLE_BAR_HEIGHT : TITLE_BAR_HEIGHT + MENU_BAR_HEIGHT) + 
+						(toolbar == null ? 0 : TOOL_BAR_HEIGHT);
 			}
 		};
 		resizePanel.setLayout(new FlexLayout());
@@ -607,13 +617,19 @@ public class DecoratedFrame extends MFrame
 	@Override
 	public void setTitle(String title)
 	{
+		super.setTitle(title);
 		lblTitle.setText(title);
+	}
+	
+	public void setTitleForeground(Color foreground)
+	{
+		lblTitle.setForeground(foreground);
 	}
 
 	@Override
 	public void setIconImage(Image image)
 	{
 		super.setIconImage(image);
-		lblTitle.setIcon(new ImageIcon(image));
+		if(image != null) lblTitle.setIcon(new ImageIcon(image));
 	}
 }
