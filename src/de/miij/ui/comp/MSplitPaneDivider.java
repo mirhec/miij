@@ -820,9 +820,11 @@ public class MSplitPaneDivider extends BasicSplitPaneDivider
 						if (currentLoc >= (splitPane.getHeight() - insets.bottom - getHeight()) ||
 							(splitPane.getRightComponent().getMinimumSize() != null && currentLoc >= (splitPane.getHeight() - insets.bottom - getHeight() - splitPane.getRightComponent().getMinimumSize().height)) ||
 							(splitPane.getLeftComponent().getMaximumSize() != null && currentLoc >= splitPane.getLeftComponent().getMaximumSize().height))
-						{
+						{	// Actual position is as bottom as possible
 							int maxLoc = splitPane.getMaximumDividerLocation();
 							newLoc = Math.min(lastLoc, maxLoc);
+							if(newLoc > currentLoc)
+								newLoc = currentLoc;
 							if(newLoc == currentLoc && splitPane.getLeftComponent().getPreferredSize() != null)
 							{
 								int pref = splitPane.getLeftComponent().getPreferredSize().height;
@@ -849,9 +851,11 @@ public class MSplitPaneDivider extends BasicSplitPaneDivider
 					else if (currentLoc >= (splitPane.getWidth() - insets.right - getWidth()) ||
 							  (splitPane.getRightComponent().getMinimumSize() != null && currentLoc >= (splitPane.getWidth() - insets.right - getWidth() - splitPane.getRightComponent().getMinimumSize().width)) ||
 							  (splitPane.getLeftComponent().getMaximumSize() != null && currentLoc >= splitPane.getLeftComponent().getMaximumSize().width))
-					{
+					{	// Actual position is as right as possible
 						int maxLoc = splitPane.getMaximumDividerLocation();
 						newLoc = Math.min(lastLoc, maxLoc);
+						if(newLoc > currentLoc)
+							newLoc = currentLoc;
 						if(newLoc == currentLoc && splitPane.getLeftComponent().getPreferredSize() != null)
 						{
 							int pref = splitPane.getLeftComponent().getPreferredSize().width;
@@ -881,9 +885,11 @@ public class MSplitPaneDivider extends BasicSplitPaneDivider
 					if (currentLoc == insets.top ||
 						(splitPane.getLeftComponent().getMinimumSize() != null && currentLoc == splitPane.getLeftComponent().getMinimumSize().height) ||
 						(splitPane.getRightComponent().getMaximumSize() != null && currentLoc == splitPane.getHeight() - splitPane.getRightComponent().getMaximumSize().height - insets.bottom))
-					{
+					{	// actual position is as top as possible
 						int maxLoc = splitPane.getMaximumDividerLocation();
 						newLoc = Math.min(lastLoc, maxLoc);
+						if(newLoc < currentLoc)
+							newLoc = currentLoc;
 						if(newLoc == currentLoc && splitPane.getRightComponent().getPreferredSize() != null)
 						{
 							int pref = splitPane.getRightComponent().getPreferredSize().height;
@@ -911,9 +917,11 @@ public class MSplitPaneDivider extends BasicSplitPaneDivider
 				else if (currentLoc == insets.left ||
 						 (splitPane.getLeftComponent().getMinimumSize() != null && currentLoc == splitPane.getLeftComponent().getMinimumSize().width) ||
 						 (splitPane.getRightComponent().getMaximumSize() != null && currentLoc == splitPane.getWidth() - splitPane.getRightComponent().getMaximumSize().width - insets.right))
-				{
+				{	// actual position is as left as possible
 					int maxLoc = splitPane.getMaximumDividerLocation();
 					newLoc = Math.min(lastLoc, maxLoc);
+					if(newLoc < currentLoc)
+						newLoc = currentLoc;
 					if(newLoc == currentLoc && splitPane.getRightComponent().getPreferredSize() != null)
 					{
 						int pref = splitPane.getRightComponent().getPreferredSize().width;

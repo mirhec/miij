@@ -44,6 +44,8 @@ public class MSplitPane extends JSplitPane
 	private Color dividerBorderColor = Color.BLACK;
 	private Color gripperColor = Color.BLACK;
 	private OneTouchListener oneTouchListener = null;
+	private int initialDividerLocation = -1;
+	private boolean hasBeenPainted;
 
 	public MSplitPane()
 	{
@@ -73,6 +75,11 @@ public class MSplitPane extends JSplitPane
 	{
 		super(newOrientation, newLeftComponent, newRightComponent);
 		init();
+	}
+	
+	public void setInitialDividerLocation(int dividerLocation)
+	{
+		initialDividerLocation = dividerLocation;
 	}
 	
 	public Color getDividerBorderColor()
@@ -159,6 +166,10 @@ public class MSplitPane extends JSplitPane
 			else
 				setDividerLocation(getDividerLocation());
 		}
+		
+		if(!hasBeenPainted && initialDividerLocation > -1)
+			super.setDividerLocation(initialDividerLocation);
+		hasBeenPainted = true;
 	}
 
 	public void setDividerLocationFromRight(int requested)
