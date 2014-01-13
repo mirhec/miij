@@ -37,7 +37,12 @@ public class MFormattedTextField extends MTextField
 
 	public MFormattedTextField(String format, boolean highlight)
 	{
-		super(highlight);
+		this(format, highlight, true);
+	}
+
+	public MFormattedTextField(String format, boolean highlight, boolean selectAll)
+	{
+		super(highlight, selectAll);
 		Format = format;
 
 		setText(null);
@@ -51,15 +56,7 @@ public class MFormattedTextField extends MTextField
 
 	public MFormattedTextField(String format)
 	{
-		Format = format;
-
-		setText("");
-
-		keyTyped = new Connector(this, "handleKeyTyped");
-		//keyReleased = new Connector( this , "handleKeyReleased" );
-		keyPressed = new Connector(this, "handleKeyPressed");
-
-		setToolTipText(Format);
+		this(format, true);
 	}
 
 	public void handleKeyPressed()

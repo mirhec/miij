@@ -1,13 +1,15 @@
 package de.miij.ui.comp;
 
 import de.miij.exceptions.ArgumentException;
-import java.awt.Color;
-import java.awt.Font;
+
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 import javax.swing.JButton;
@@ -24,7 +26,7 @@ import javax.swing.border.LineBorder;
 import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
 import de.miij.Miij;
 
-public class MVisualCalendar extends JDialog
+public class MVisualCalendar extends DecoratedDialog
 {
 	private JPanel controlMonth = null;
 	private JButton controlMonthFirst = null;
@@ -47,6 +49,7 @@ public class MVisualCalendar extends JDialog
 	private JTextField txtWhereToSetDate = null;
 	private JFrame ParentWindow = null;
 	private JLabel aktLabel = new JLabel();
+	private ActionListener dateSelected;
 
 	/*
 	 * Es gibt mehrere JTextFields, welche diesen Kalender ben&ouml;tigen. F&uuml;r jedes
@@ -54,7 +57,7 @@ public class MVisualCalendar extends JDialog
 	 */
 	public MVisualCalendar(JTextField txtWhereToSetDate, JFrame parentWindow)
 	{
-		super(parentWindow);
+		super(parentWindow, false);
 		try
 		{
 			this.txtWhereToSetDate = txtWhereToSetDate;
@@ -72,6 +75,7 @@ public class MVisualCalendar extends JDialog
 
 	public MVisualCalendar(int year, int month)
 	{
+		super(null, false);
 		try
 		{
 			this.month = month;
@@ -87,11 +91,27 @@ public class MVisualCalendar extends JDialog
 		}
 	}
 
+	public MVisualCalendar(ActionListener dateSelected) {
+		super(null, false);
+		try
+		{
+			this.dateSelected = dateSelected;
+			this.initialize();
+			this.setActDate();
+			this.setDays();
+		}
+		catch (Exception ex)
+		{
+			JOptionPane.showMessageDialog(this.ParentWindow, ex.getMessage(),
+					"Fehler bei der Initialisierung", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
 	public void initialize()
 	{
 		/* F O R M A T I E R U N G : FENSTER */
 		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		this.setSize(300, 240);
+		this.setSize(235, 220);
 		this.setLocationRelativeTo(null);
 		this.getContentPane().setLayout(null);
 		this.setBackground(Color.decode("#EEEEEE"));
@@ -152,7 +172,7 @@ public class MVisualCalendar extends JDialog
 						.setYear((MVisualCalendar.this.year = MVisualCalendar.this.year - 10));
 			}
 		});
-		this.controlYearFirst.setBounds(0, 0, 50, 25);
+		this.controlYearFirst.setBounds(0, 0, 40, 25);
 		// this.controlYearFirst.setBackground( Color.decode( "#990000" ) );
 		// this.controlYearFirst.setForeground( Color.decode( "#F0F0F0" ) );
 		this.controlYear.add(this.controlYearFirst);
@@ -166,14 +186,14 @@ public class MVisualCalendar extends JDialog
 				MVisualCalendar.this.setYear(--MVisualCalendar.this.year);
 			}
 		});
-		this.controlYearPrevious.setBounds(60, 0, 50, 25);
+		this.controlYearPrevious.setBounds(40, 0, 40, 25);
 		// this.controlYearPrevious.setBackground( Color.decode( "#990000" ) );
 		// this.controlYearPrevious.setForeground( Color.decode( "#F0F0F0" ) );
 		this.controlYear.add(this.controlYearPrevious);
 
 		/* L A B E L : J A H R */
 		this.controlYearLabel = new JLabel("" + this.year);
-		this.controlYearLabel.setBounds(120, 0, 40, 25);
+		this.controlYearLabel.setBounds(85, 0, 40, 25);
 		this.controlYearLabel.setFont(new Font("Sans Serif", Font.BOLD, 16));
 		this.controlYear.add(this.controlYearLabel);
 
@@ -186,7 +206,7 @@ public class MVisualCalendar extends JDialog
 				MVisualCalendar.this.setYear(++MVisualCalendar.this.year);
 			}
 		});
-		this.controlYearNext.setBounds(165, 0, 50, 25);
+		this.controlYearNext.setBounds(125, 0, 40, 25);
 		// this.controlYearNext.setBackground( Color.decode( "#990000" ) );
 		// this.controlYearNext.setForeground( Color.decode( "#F0F0F0" ) );
 		this.controlYear.add(this.controlYearNext);
@@ -201,7 +221,7 @@ public class MVisualCalendar extends JDialog
 						.setYear((MVisualCalendar.this.year = MVisualCalendar.this.year + 10));
 			}
 		});
-		this.controlYearLast.setBounds(225, 0, 50, 25);
+		this.controlYearLast.setBounds(165, 0, 40, 25);
 		// this.controlYearLast.setBackground( Color.decode( "#990000" ) );
 		// this.controlYearLast.setForeground( Color.decode( "#F0F0F0" ) );
 		this.controlYear.add(this.controlYearLast);
@@ -229,7 +249,7 @@ public class MVisualCalendar extends JDialog
 				MVisualCalendar.this.setMonth((MVisualCalendar.this.month = 0));
 			}
 		});
-		this.controlMonthFirst.setBounds(0, 0, 50, 25);
+		this.controlMonthFirst.setBounds(0, 0, 40, 25);
 		// this.controlMonthFirst.setBackground( Color.decode( "#990000" ) );
 		// this.controlMonthFirst.setForeground( Color.decode( "#F0F0F0" ) );
 		this.controlMonth.add(this.controlMonthFirst);
@@ -243,14 +263,14 @@ public class MVisualCalendar extends JDialog
 				MVisualCalendar.this.setMonth(--MVisualCalendar.this.month);
 			}
 		});
-		this.controlMonthPrevious.setBounds(60, 0, 50, 25);
+		this.controlMonthPrevious.setBounds(40, 0, 40, 25);
 		// this.controlMonthPrevious.setBackground( Color.decode( "#990000" ) );
 		// this.controlMonthPrevious.setForeground( Color.decode( "#F0F0F0" ) );
 		this.controlMonth.add(this.controlMonthPrevious);
 
 		/* L A B E L : M O N T H */
 		this.controlMonthLabel = new JLabel("" + this.month);
-		this.controlMonthLabel.setBounds(128, 0, 40, 25);
+		this.controlMonthLabel.setBounds(95, 0, 40, 25);
 		this.controlMonthLabel.setFont(new Font("Sans Serif", Font.BOLD, 16));
 		this.controlMonth.add(this.controlMonthLabel);
 
@@ -263,7 +283,7 @@ public class MVisualCalendar extends JDialog
 				MVisualCalendar.this.setMonth(++MVisualCalendar.this.month);
 			}
 		});
-		this.controlMonthNext.setBounds(165, 0, 50, 25);
+		this.controlMonthNext.setBounds(125, 0, 40, 25);
 		// this.controlMonthNext.setBackground( Color.decode( "#990000" ) );
 		// this.controlMonthNext.setForeground( Color.decode( "#F0F0F0" ) );
 		this.controlMonth.add(this.controlMonthNext);
@@ -277,7 +297,7 @@ public class MVisualCalendar extends JDialog
 				MVisualCalendar.this.setMonth((MVisualCalendar.this.month = 11));
 			}
 		});
-		this.controlMonthLast.setBounds(225, 0, 50, 25);
+		this.controlMonthLast.setBounds(165, 0, 40, 25);
 		// this.controlMonthLast.setBackground( Color.decode( "#990000" ) );
 		// this.controlMonthLast.setForeground( Color.decode( "#F0F0F0" ) );
 		this.controlMonth.add(this.controlMonthLast);
@@ -330,7 +350,7 @@ public class MVisualCalendar extends JDialog
 					label.setText("Sa");
 					break;
 			}
-			label.setBounds(30 * (i + 1), 0, 20, 20);
+			label.setBounds(30 * (i + 1) - 10, 0, 20, 20);
 			this.controlDays.add(label);
 		}
 
@@ -348,7 +368,7 @@ public class MVisualCalendar extends JDialog
 			JLabel week = this.getLabel(false);
 			week.setForeground(Color.decode("#990000"));
 			week.setText("" + cal.get(Calendar.WEEK_OF_YEAR));
-			week.setBounds(10, 20 * (cal.get(Calendar.WEEK_OF_YEAR) - weekOfYear) + 20 + addY,
+			week.setBounds(0, 20 * (cal.get(Calendar.WEEK_OF_YEAR) - weekOfYear) + 20 + addY,
 						   20, 20);
 
 			if (cal.get(Calendar.WEEK_OF_YEAR) < weekOfYear) // Z.B. bei Monat
@@ -360,12 +380,12 @@ public class MVisualCalendar extends JDialog
 			// gerechnet
 			// werden muss
 			
-				week.setBounds(10, 10 + 20 * (cal.get(Calendar.WEEK_OF_YEAR) + 52 - weekOfYear)
+				week.setBounds(0, 10 + 20 * (cal.get(Calendar.WEEK_OF_YEAR) + 52 - weekOfYear)
 								   + 20 + addY, 20, 20);
 
 			if (this.month == 0 && cal.get(Calendar.WEEK_OF_YEAR) > 50)
 			{
-				week.setBounds(10, 20 * (cal.get(Calendar.WEEK_OF_YEAR) - weekOfYear2) + 20, 20,
+				week.setBounds(0, 20 * (cal.get(Calendar.WEEK_OF_YEAR) - weekOfYear2) + 20, 20,
 							   20);
 				addY = 20;
 			}
@@ -380,13 +400,14 @@ public class MVisualCalendar extends JDialog
 				// System.out.println( i + "|" + this.date + "\n" + cal.get(
 				// Calendar.MONTH ) + "|" + this.month + "\n" + cal.get(
 				// Calendar.YEAR ) + "|" + this.year + "\n" );
-				day.setForeground(Color.BLUE);
+//				day.setForeground(Color.BLUE);
+				day.setBorder(new LineBorder(Color.WHITE));
 			day.setText("" + cal.get(Calendar.DATE));
 			// System.out.println( day.getText() + "|" + ( ( cal.get(
 			// Calendar.DAY_OF_WEEK ) + 2 ) % 7 ) + "|" + cal.get(
 			// Calendar.WEEK_OF_YEAR ) );
 			day.setBounds(30 * ((cal.get(Calendar.DAY_OF_WEEK) - 1 == 0) ? 7 : cal
-								.get(Calendar.DAY_OF_WEEK) - 1), 20
+								.get(Calendar.DAY_OF_WEEK) - 1) - 10, 20
 																 * (cal.get(Calendar.WEEK_OF_YEAR) - weekOfYear) + 20 + addY, 20, 20);
 
 			if (cal.get(Calendar.WEEK_OF_YEAR) < weekOfYear) // Z.B. bei Monat
@@ -399,12 +420,12 @@ public class MVisualCalendar extends JDialog
 			// werden muss
 			
 				day.setBounds(30 * ((cal.get(Calendar.DAY_OF_WEEK) - 1 == 0) ? 7 : cal
-									.get(Calendar.DAY_OF_WEEK) - 1), 20
+									.get(Calendar.DAY_OF_WEEK) - 1) - 10, 20
 																	 * (cal.get(Calendar.WEEK_OF_YEAR) + 52 - weekOfYear) + 20 + addY, 20, 20);
 
 			if (this.month == 0 && cal.get(Calendar.WEEK_OF_YEAR) > 50)
 				day.setBounds(30 * ((cal.get(Calendar.DAY_OF_WEEK) - 1 == 0) ? 7 : cal
-									.get(Calendar.DAY_OF_WEEK) - 1),
+									.get(Calendar.DAY_OF_WEEK) - 1) - 10,
 							  20 * (cal.get(Calendar.WEEK_OF_YEAR) - weekOfYear2) + 20, 20, 20);
 
 			this.controlDays.add(day);
@@ -412,10 +433,14 @@ public class MVisualCalendar extends JDialog
 			cal.add(Calendar.DATE, 1);
 		}
 
-		this.controlDays.setBounds(20, 60, 300, 300);
+		this.controlDays.setBounds(0, 60, 300, 300);
 		this.getContentPane().add(this.controlDays);
 
 		this.repaint();
+	}
+
+	public void setActionListener(ActionListener dateSelected) {
+		this.dateSelected = dateSelected;
 	}
 
 	private JLabel getLabel(boolean isDay)
@@ -444,10 +469,19 @@ public class MVisualCalendar extends JDialog
 
 					String actDate = ((JLabel) e.getComponent()).getText() + "."
 									 + (MVisualCalendar.this.month + 1) + "." + MVisualCalendar.this.year;
-					MVisualCalendar.this.txtWhereToSetDate.setText(actDate);
+					if(txtWhereToSetDate != null)
+						MVisualCalendar.this.txtWhereToSetDate.setText(actDate);
+					else if(dateSelected != null) {
+						try {
+							Date act = new SimpleDateFormat("dd.MM.yyyy").parse(actDate);
+							dateSelected.actionPerformed(new ActionEvent(act, 0, ""));
+						} catch(Exception ex) {
+							// ...
+						}
+					}
 
 					// Doppelklick ==> Fenster schließen
-					if (e.getClickCount() >= 2)
+//					if (e.getClickCount() >= 2)
 						MVisualCalendar.this.setVisible(false);
 				}
 			});

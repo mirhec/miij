@@ -55,7 +55,7 @@ public class DecoratedDialog extends MDialog
 	protected static final int TITLE_BAR_HEIGHT = 25;
 	protected static final int MENU_BAR_HEIGHT = 25;
 	protected MPanel contentPanel = new MPanel();
-	protected MPanel resizePanel = new MPanel();
+	protected JLayeredPane resizePanel = new JLayeredPane();
 	protected MPanel toolbarPanel = new MPanel();
 	protected MPanel titlePanel = new MPanel();
 	protected MPanel northPanel = new MPanel();
@@ -252,7 +252,7 @@ public class DecoratedDialog extends MDialog
 			@Override
 			public int recalculate()
 			{
-				return lblTitle.getFontMetrics(lblTitle.getFont()).stringWidth(lblTitle.getText()) + lblTitle.getIconTextGap() + (lblTitle.getIcon() != null ? lblTitle.getIcon().getIconWidth() : 0);
+				return lblTitle.getText() == null || lblTitle.getText().isEmpty() ? 0 : lblTitle.getFontMetrics(lblTitle.getFont()).stringWidth(lblTitle.getText()) + lblTitle.getIconTextGap() + (lblTitle.getIcon() != null ? lblTitle.getIcon().getIconWidth() : 0);
 			}
 		}));
 		titlePanel.add(top, new FlexConstraint().left(0).top(0).right(toolbarPanel, M.LEFT, 0).height(W));
@@ -286,11 +286,12 @@ public class DecoratedDialog extends MDialog
 				return getJMenuBar() == null ? TITLE_BAR_HEIGHT : TITLE_BAR_HEIGHT + MENU_BAR_HEIGHT;
 			}
 		};
-		resizePanel.add(left, new FlexConstraint().left(0).top(topRecalculateListener).bottom(10).width(10));
-		resizePanel.add(right, new FlexConstraint().right(0).top(topRecalculateListener).bottom(W).width(10));
+		resizePanel.setLayout(new FlexLayout());
+		resizePanel.add(left, new FlexConstraint().left(0).top(topRecalculateListener).bottom(10).width(W));
+		resizePanel.add(right, new FlexConstraint().right(0).top(topRecalculateListener).bottom(W).width(W));
 		resizePanel.add(northPanel, new FlexConstraint().left(1).top(1).right(1).height(topRecalculateListener));
-		resizePanel.add(southPanel, new FlexConstraint().left(0).right(0).bottom(0).height(10));
-		resizePanel.add(contentPanel, new FlexConstraint().left(10).top(topRecalculateListener).bottom(10).right(10));
+		resizePanel.add(southPanel, new FlexConstraint().left(0).right(0).bottom(0).height(W));
+		resizePanel.add(contentPanel, new FlexConstraint().left(W).top(topRecalculateListener).bottom(W).right(W));
 		resizePanel.setBorder(new LineBorder(Color.GRAY));
 
 		northPanel.setOpaque(true);
@@ -298,8 +299,10 @@ public class DecoratedDialog extends MDialog
 		lblTitle.setOpaque(false);
 		toolbarPanel.setOpaque(false);
 		southPanel.setOpaque(false);
+		resizePanel.setOpaque(false);
 
-		setContentPane(resizePanel);
+//		setContentPane(resizePanel);
+		setLayeredPane(resizePanel);
 	}
 
 	@Override
