@@ -28,37 +28,63 @@
     <div id="content-wrapper">
       <div class="inner clearfix">
         <section id="main-content">
-          <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
+          <h1>
+<a name="miij-framework" class="anchor" href="#miij-framework"><span class="octicon octicon-link"></span></a>Miij-Framework</h1>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+<p>Miij is a Java framework with an intuitive and straight forward layout manager (FlexLayout)
+and some other utility classes.
+The layout manager FlexLayout is very easy to use. Just add the layout to the JPanel (or any other container):</p>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
+<div class="highlight highlight-java"><pre>   <span class="n">JPanel</span> <span class="n">pnl</span> <span class="o">=</span> <span class="k">new</span> <span class="n">JPanel</span><span class="o">();</span>
+   <span class="n">pnl</span><span class="o">.</span><span class="na">setLayout</span><span class="o">(</span><span class="k">new</span> <span class="n">FlexLayout</span><span class="o">());</span>
+</pre></div>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+<p>The FlexLayout works like you would naturally position your components. You start positioning the corner positions of
+a component. Maybe you want a JLabel to be 10px away from the left side of your panel as well as from the top side.
+It's width is 200px and it' height 25px. All this can be done in one simple self explaining line:</p>
 
-<h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
+<div class="highlight highlight-java"><pre>   <span class="n">JLabel</span> <span class="n">lbl</span> <span class="o">=</span> <span class="k">new</span> <span class="n">JLabel</span><span class="o">(</span><span class="s">"some text:"</span><span class="o">);</span>
+   <span class="c1">// ...</span>
+   <span class="n">pnl</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">lbl</span><span class="o">,</span> <span class="k">new</span> <span class="n">FlexConstraint</span><span class="o">().</span><span class="na">left</span><span class="o">(</span><span class="mi">10</span><span class="o">).</span><span class="na">top</span><span class="o">(</span><span class="mi">10</span><span class="o">).</span><span class="na">width</span><span class="o">(</span><span class="mi">100</span><span class="o">).</span><span class="na">height</span><span class="o">(</span><span class="mi">25</span><span class="o">));</span>
+</pre></div>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+<p>You can also specify dependencies on components. Let's say we want a text field to be next to the JLabel with a gap of 10px
+between them:</p>
 
-<h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
+<div class="highlight highlight-java"><pre>   <span class="n">JTextField</span> <span class="n">txt</span> <span class="o">=</span> <span class="k">new</span> <span class="n">JTextField</span><span class="o">();</span>
+   <span class="c1">// ...</span>
+   <span class="c1">// Position the component txt next to the right side of the component lbl with a gap of 10px between them.</span>
+   <span class="c1">// The right corner of the text field shall be 10 pixel beside the right side of the JPanel.</span>
+   <span class="n">pnl</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">txt</span><span class="o">,</span> <span class="k">new</span> <span class="n">FlexConstraint</span><span class="o">().</span><span class="na">left</span><span class="o">(</span><span class="n">lbl</span><span class="o">,</span> <span class="n">M</span><span class="o">.</span><span class="na">RIGHT</span><span class="o">,</span> <span class="mi">10</span><span class="o">).</span><span class="na">top</span><span class="o">(</span><span class="mi">10</span><span class="o">).</span><span class="na">right</span><span class="o">(</span><span class="mi">10</span><span class="o">).</span><span class="na">height</span><span class="o">(</span><span class="mi">25</span><span class="o">));</span>
+</pre></div>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+<p>The class <strong>M</strong> holds the constants for the Layout.</p>
 
-<h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+<p>You are able to recalculate the corners and width and height individually and define a listener for recalculation
+(in case of resizing the parent container):</p>
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+<div class="highlight highlight-java"><pre>   <span class="n">pnl</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">JTextArea</span><span class="o">(),</span> <span class="k">new</span> <span class="n">FlexConstraint</span><span class="o">().</span><span class="na">left</span><span class="o">(</span><span class="mi">10</span><span class="o">).</span><span class="na">top</span><span class="o">(</span><span class="n">txt</span><span class="o">,</span> <span class="n">M</span><span class="o">.</span><span class="na">BOTTOM</span><span class="o">,</span> <span class="mi">10</span><span class="o">).</span><span class="na">width</span><span class="o">(</span><span class="k">new</span> <span class="n">FlexRecalculateListener</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nd">@Override</span>
+            <span class="kd">public</span> <span class="kt">int</span> <span class="nf">recalculate</span><span class="o">()</span>
+            <span class="o">{</span>
+                <span class="k">return</span> <span class="n">lbl</span><span class="o">.</span><span class="na">getWidth</span><span class="o">()</span> <span class="o">+</span> <span class="mi">10</span> <span class="o">+</span> <span class="n">txt</span><span class="o">.</span><span class="na">getWidth</span><span class="o">();</span>
+            <span class="o">}</span>
+        <span class="o">}));</span>
+</pre></div>
 
-<h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
+<p>Now every time the parent container is resized, the width of the text area will be recalculated!</p>
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+<p>Another feature is the notification about a component resize. You can define a listener, that will be called, if your
+component is resizing:</p>
+
+<div class="highlight highlight-java"><pre>   <span class="n">pnl</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">JLabel</span><span class="o">(),</span> <span class="k">new</span> <span class="n">FlexConstraint</span><span class="o">().</span><span class="na">left</span><span class="o">(</span><span class="mi">10</span><span class="o">).</span><span class="na">right</span><span class="o">(</span><span class="mi">10</span><span class="o">).</span><span class="na">top</span><span class="o">(</span><span class="mi">10</span><span class="o">).</span><span class="na">bottom</span><span class="o">(</span><span class="mi">10</span><span class="o">).</span><span class="na">notifyResize</span><span class="o">(</span><span class="k">new</span> <span class="n">FlexNotifyResizeListener</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nd">@Override</span>
+            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">notifyResize</span><span class="o">(</span><span class="kt">int</span> <span class="n">newX</span><span class="o">,</span> <span class="kt">int</span> <span class="n">newY</span><span class="o">,</span> <span class="kt">int</span> <span class="n">newWidth</span><span class="o">,</span> <span class="kt">int</span> <span class="n">newHeight</span><span class="o">)</span>
+            <span class="o">{</span>
+                <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"my label has been resized!"</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}));</span>
+</pre></div>
         </section>
 
         <aside id="sidebar">
