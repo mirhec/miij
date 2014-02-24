@@ -10,49 +10,23 @@ import de.miij.layout.FlexConstraint;
 import de.miij.layout.FlexLayout;
 import de.miij.ui.comp.flex.FlexRecalculateListener;
 import de.miij.util.M;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Image;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.Window;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowEvent;
+
+import javax.swing.*;
+import javax.swing.border.LineBorder;
+import javax.swing.border.MatteBorder;
+import java.awt.*;
+import java.awt.event.*;
 import java.util.ArrayList;
-import javax.swing.BorderFactory;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JToolBar;
-import javax.swing.SwingUtilities;
 
 /**
- *
  * @author Mirko Hecky
  */
-public class DecoratedFrame extends MFrame
-{
-	protected JLabel lblTitle;
+public class DecoratedFrame extends MFrame {
 	protected static final int W = 4;
 	protected static final int TITLE_BAR_HEIGHT = 25;
 	protected static final int MENU_BAR_HEIGHT = 25;
-	protected static final int TOOL_BAR_HEIGHT = 30;
+	protected static int TOOL_BAR_HEIGHT = 30;
+	protected JLabel lblTitle;
 	protected MPanel contentPanel = new MPanel();
 	protected JLayeredPane resizePanel = new JLayeredPane();
 	protected MPanel toolbarPanel = new MPanel();
@@ -64,65 +38,61 @@ public class DecoratedFrame extends MFrame
 	private ArrayList<JLabel> titleLabels = new ArrayList<JLabel>();
 	private boolean helpVisible = true;
 	private int labelSpacing = 10;
+	private JLabel lblIcon = new JLabel();
+	private Color borderColor = Color.GRAY;
 
-	public DecoratedFrame()
-	{
+	public DecoratedFrame() {
 		initDecoratedFrame();
 	}
 
-	public DecoratedFrame(boolean helpVisible)
-	{
+	public DecoratedFrame(boolean helpVisible) {
 		this.helpVisible = helpVisible;
 		initDecoratedFrame();
 	}
 
-	public void addToolbarButton(Icon i, final Connector c)
-	{
+	public void setBorderColor(Color c) {
+		resizePanel.setBorder(new LineBorder(c));
+		northPanel.setBorder(new MatteBorder(1, 1, 0, 1, c));
+		borderColor = c;
+	}
+
+	public void addToolbarButton(Icon i, final Connector c) {
 		addToolbarButton(toolbarButtons.size(), i, c);
 	}
 
-	public void addToolbarButton(Icon i, Icon iHover, final Connector c)
-	{
+	public void addToolbarButton(Icon i, Icon iHover, final Connector c) {
 		addToolbarButton(toolbarButtons.size(), i, iHover, c);
 	}
 
-	public void addToolbarButton(int index, Icon i, final Connector c)
-	{
+	public void addToolbarButton(int index, Icon i, final Connector c) {
 		addToolbarButton(index, i, i, c);
 	}
 
-	public void addToolbarButton(int index, Icon i, Icon iHover, final Connector c)
-	{
-		addToolbarButton(index, i, iHover, new ActionListener()
-		{
+	public void addToolbarButton(int index, Icon i, Icon iHover, final Connector c) {
+		addToolbarButton(index, i, iHover, new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				if (c != null)
 					c.action(e);
 			}
 		});
 	}
 
-	public void addToolbarButton(Icon i, ActionListener l)
-	{
+	public void addToolbarButton(Icon i, ActionListener l) {
 		addToolbarButton(toolbarButtons.size(), i, l);
 	}
 
-	public void addToolbarButton(Icon i, Icon iHover, ActionListener l)
-	{
+	public void addToolbarButton(Icon i, Icon iHover, ActionListener l) {
 		addToolbarButton(toolbarButtons.size(), i, iHover, l);
 	}
 
-	public void addToolbarButton(int index, Icon i, ActionListener l)
-	{
+	public void addToolbarButton(int index, Icon i, ActionListener l) {
 		addToolbarButton(index, i, i, l);
 	}
 
-	public void addToolbarButton(int index, Icon i, Icon iHover, ActionListener l)
-	{
-		if(index < 0) return;
-		
+	public void addToolbarButton(int index, Icon i, Icon iHover, ActionListener l) {
+		if (index < 0) return;
+
 		JButton btn = makeButton(i, iHover, false, false, false);
 		btn.addActionListener(l);
 		while (index > toolbarButtons.size())
@@ -132,101 +102,85 @@ public class DecoratedFrame extends MFrame
 		toolbarPanel.add(btn, new FlexConstraint().right(TITLE_BAR_HEIGHT * 3 + TITLE_BAR_HEIGHT * index).top(0).bottom(0).width(TITLE_BAR_HEIGHT));
 	}
 
-	public JButton getToolbarButton(int index)
-	{
+	public JButton getToolbarButton(int index) {
 		if (toolbarButtons.size() > index && index >= 0)
 			return toolbarButtons.get(index);
 		return null;
 	}
-	
+
 	////////////////////////////////////////////////////////////////////////////
-	
-	public void addTitleLabel(String text)
-	{
+
+	public void addTitleLabel(String text) {
 		addTitleLabel(titleLabels.size(), text);
 	}
-	
-	public void addTitleLabel(int index, String text)
-	{
+
+	public void addTitleLabel(int index, String text) {
 		addTitleLabel(index, text, null);
 	}
-	
-	public void addTitleLabel(int index, String text, Color foreground)
-	{
+
+	public void addTitleLabel(int index, String text, Color foreground) {
 		JLabel lbl = new JLabel(text);
 		lbl.setForeground(foreground);
 		lbl.setFont(new Font("Tahoma", Font.BOLD, 13));
 		addTitleLabel(index, lbl);
 	}
-	
-	public void addTitleLabel(JLabel label)
-	{
+
+	public void addTitleLabel(JLabel label) {
 		addTitleLabel(titleLabels.size(), label);
 	}
-	
-	public void addTitleLabel(final int index, final JLabel label)
-	{
-		if(index < 0) return;
-		
+
+	public void addTitleLabel(final int index, final JLabel label) {
+		if (index < 0) return;
+
 		while (index > titleLabels.size())
 			titleLabels.add(null);
 
 		titleLabels.add(index, label);
 		titlePanel.add(label, new FlexConstraint().left(new FlexRecalculateListener() {
 			@Override
-			public int recalculate()
-			{
-				int left = W + lblTitle.getWidth() + labelSpacing;
-				for(int i = 0; i < index; ++i) left += titleLabels.get(i).getWidth() + labelSpacing;
+			public int recalculate() {
+				int left = W + lblTitle.getWidth() + labelSpacing + lblIcon.getWidth();
+				for (int i = 0; i < index; ++i) left += titleLabels.get(i).getWidth() + labelSpacing;
 				return left;
 			}
-		}).top(0).bottom(0).width(new FlexRecalculateListener()
-		{
+		}).top(0).bottom(0).width(new FlexRecalculateListener() {
 			@Override
-			public int recalculate()
-			{
+			public int recalculate() {
 				return label.getFontMetrics(label.getFont()).stringWidth(label.getText()) + label.getIconTextGap() + (label.getIcon() != null ? label.getIcon().getIconWidth() : 0);
 			}
 		}));
 	}
-	
-	public JLabel getTitleLabel(int index)
-	{
-		if(index < 0 || index >= titleLabels.size()) return null;
+
+	public JLabel getTitleLabel(int index) {
+		if (index < 0 || index >= titleLabels.size()) return null;
 		else return titleLabels.get(index);
 	}
-	
+
 	////////////////////////////////////////////////////////////////////////////
-	
-	public int getLabelSpacing()
-	{
+
+	public int getLabelSpacing() {
 		return labelSpacing;
 	}
-	
-	public void setLabelSpacing(int spacing)
-	{
+
+	public void setLabelSpacing(int spacing) {
 		labelSpacing = spacing;
 	}
 
 	////////////////////////////////////////////////////////////////////////////
 
-	public void setTitleBarBackground(Color c)
-	{
+	public void setTitleBarBackground(Color c) {
 		northPanel.setBackground(c);
-		if(getJMenuBar() != null)
-		{
+		if (getJMenuBar() != null) {
 			getJMenuBar().setOpaque(false);
 			getJMenuBar().setBackground(c);
-			for(int i = 0; i < getJMenuBar().getMenuCount(); ++i)
-			{
+			for (int i = 0; i < getJMenuBar().getMenuCount(); ++i) {
 				JMenu m = getJMenuBar().getMenu(i);
-				if(m == null) continue;
-				
-				for(int ii = 0; ii < m.getItemCount(); ++ii)
-				{
+				if (m == null) continue;
+
+				for (int ii = 0; ii < m.getItemCount(); ++ii) {
 					JMenuItem mi = m.getItem(ii);
-					if(mi == null) continue;
-					
+					if (mi == null) continue;
+
 					mi.setOpaque(true);
 					mi.setBackground(c);
 				}
@@ -234,32 +188,29 @@ public class DecoratedFrame extends MFrame
 				m.setBackground(c);
 			}
 		}
-		
-		if(toolbar != null)
+
+		if (toolbar != null)
 			toolbar.setOpaque(false);
 	}
-	
+
 	////////////////////////////////////////////////////////////////////////////
-	
-	public void setJToolBar(JToolBar toolbar)
-	{
+
+	public JToolBar getJToolBar() {
+		return this.toolbar;
+	}
+
+	public void setJToolBar(JToolBar toolbar) {
 		this.toolbar = toolbar;
-		
-		if(toolbar != null)
-		{
+
+		if (toolbar != null) {
+			TOOL_BAR_HEIGHT = toolbar.getHeight();
 			northPanel.add(toolbar, new FlexConstraint().left(W).right(W).top(W + TITLE_BAR_HEIGHT + (this.getJMenuBar() != null ? MENU_BAR_HEIGHT : 0)).height(TOOL_BAR_HEIGHT));
 		}
 	}
-	
-	public JToolBar getJToolBar()
-	{
-		return this.toolbar;
-	}
-	
+
 	////////////////////////////////////////////////////////////////////////////
-	
-	protected JButton makeButton(final Icon i, final Icon iHover, final boolean close, final boolean minimize, final boolean maximize)
-	{
+
+	protected JButton makeButton(final Icon i, final Icon iHover, final boolean close, final boolean minimize, final boolean maximize) {
 		final JButton button = new JButton(i);
 		button.setContentAreaFilled(false);
 		button.setFocusPainted(false);
@@ -267,21 +218,17 @@ public class DecoratedFrame extends MFrame
 		button.setBorderPainted(false);
 		button.setIcon(i);
 		button.setRolloverIcon(iHover);
-		button.addActionListener(new ActionListener()
-		{
+		button.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				if (close)
 					dispatchEvent(new WindowEvent(DecoratedFrame.this, WindowEvent.WINDOW_CLOSING));
-				if (minimize)
-				{
+				if (minimize) {
 					DecoratedFrame.this.setState(JFrame.ICONIFIED);
 					dispatchEvent(new WindowEvent(DecoratedFrame.this, WindowEvent.WINDOW_STATE_CHANGED));
 					revalidate();
 				}
-				if (maximize)
-				{
+				if (maximize) {
 					DecoratedFrame.this.setExtendedState(DecoratedFrame.this.getExtendedState() == JFrame.MAXIMIZED_BOTH ? JFrame.NORMAL : JFrame.MAXIMIZED_BOTH);
 					dispatchEvent(new WindowEvent(DecoratedFrame.this, WindowEvent.WINDOW_STATE_CHANGED));
 					revalidate();
@@ -291,29 +238,25 @@ public class DecoratedFrame extends MFrame
 		return button;
 	}
 
-	private JButton makeCloseButton()
-	{
+	private JButton makeCloseButton() {
 		final Icon i1 = WindowIcons.getCloseIcon(false);
 		final Icon i2 = WindowIcons.getCloseIcon(true);
 		return makeButton(i1, i2, true, false, false);
 	}
 
-	private JButton makeMaximizeButton()
-	{
+	private JButton makeMaximizeButton() {
 		final Icon i1 = WindowIcons.getMaximizeIcon(false);
 		final Icon i2 = WindowIcons.getMaximizeIcon(true);
 		return makeButton(i1, i2, false, false, true);
 	}
 
-	private JButton makeMinimizeButton()
-	{
+	private JButton makeMinimizeButton() {
 		final Icon i1 = WindowIcons.getMinimizeIcon(false);
 		final Icon i2 = WindowIcons.getMinimizeIcon(true);
 		return makeButton(i1, i2, false, true, false);
 	}
 
-	private void initDecoratedFrame()
-	{
+	private void initDecoratedFrame() {
 		setUndecorated(true);
 
 		// Toolbar
@@ -333,8 +276,7 @@ public class DecoratedFrame extends MFrame
 				left = new JLabel(), right = new JLabel(),
 				top = new JLabel(), bottom = new JLabel(),
 				topleft = new JLabel(), topright = new JLabel(),
-				bottomleft = new JLabel(), bottomright = new JLabel()))
-		{
+				bottomleft = new JLabel(), bottomright = new JLabel())) {
 			l.addMouseListener(rwl);
 			l.addMouseMotionListener(rwl);
 		}
@@ -370,14 +312,21 @@ public class DecoratedFrame extends MFrame
 		titlePanel.setOpaque(false);
 		titlePanel.setBorder(BorderFactory.createEmptyBorder(0, W, W, 0));
 
+		lblIcon.addMouseListener(dwl);
+		lblIcon.addMouseMotionListener(dwl);
+
 		lblTitle = new JLabel(Miij.getAppName(), JLabel.LEFT);
 		lblTitle.setFont(new Font("Tahoma", Font.BOLD, 13));
-		titlePanel.add(lblTitle, new FlexConstraint().left(W).bottom(0).top(0).width(new FlexRecalculateListener()
-		{
+		lblTitle.setVerticalTextPosition(JLabel.TOP);
+		titlePanel.add(lblTitle, new FlexConstraint().left(new FlexRecalculateListener() {
 			@Override
-			public int recalculate()
-			{
-				if(lblTitle.getText() == null) return 0;
+			public int recalculate() {
+				return W + lblIcon.getWidth();
+			}
+		}).bottom(0).top(0).width(new FlexRecalculateListener() {
+			@Override
+			public int recalculate() {
+				if (lblTitle.getText() == null) return 0;
 				return lblTitle.getFontMetrics(lblTitle.getFont()).stringWidth(lblTitle.getText()) + lblTitle.getIconTextGap() + (lblTitle.getIcon() != null ? lblTitle.getIcon().getIconWidth() : 0);
 			}
 		}));
@@ -388,15 +337,14 @@ public class DecoratedFrame extends MFrame
 		northPanel.add(topleft, new FlexConstraint().left(0).top(0).height(W).width(W));
 		northPanel.add(titlePanel, new FlexConstraint().left(W).top(0).height(TITLE_BAR_HEIGHT).right(toolbarPanel, M.LEFT, 0));
 		northPanel.add(topright, new FlexConstraint().right(0).top(0).height(W).width(W));
-		northPanel.add(toolbarPanel, new FlexConstraint().right(W).top(0).height(TITLE_BAR_HEIGHT).width(new FlexRecalculateListener()
-		{
+		northPanel.add(toolbarPanel, new FlexConstraint().right(W).top(0).height(TITLE_BAR_HEIGHT).width(new FlexRecalculateListener() {
 
 			@Override
-			public int recalculate()
-			{
+			public int recalculate() {
 				return TITLE_BAR_HEIGHT * 3 + TITLE_BAR_HEIGHT * toolbarButtons.size();
 			}
 		}));
+		northPanel.setBorder(new LineBorder(Color.GRAY));
 
 		// South Panel
 		JPanel southPanel = new JPanel(new BorderLayout());
@@ -405,12 +353,10 @@ public class DecoratedFrame extends MFrame
 		southPanel.add(bottomright, BorderLayout.EAST);
 
 		// Resize Panel (all together)
-		FlexRecalculateListener topRecalculateListener = new FlexRecalculateListener()
-		{
+		FlexRecalculateListener topRecalculateListener = new FlexRecalculateListener() {
 			@Override
-			public int recalculate()
-			{
-				return (getJMenuBar() == null ? TITLE_BAR_HEIGHT : TITLE_BAR_HEIGHT + MENU_BAR_HEIGHT) + 
+			public int recalculate() {
+				return (getJMenuBar() == null ? TITLE_BAR_HEIGHT : TITLE_BAR_HEIGHT + MENU_BAR_HEIGHT) +
 						(toolbar == null ? 0 : TOOL_BAR_HEIGHT);
 			}
 		};
@@ -420,6 +366,7 @@ public class DecoratedFrame extends MFrame
 		resizePanel.add(northPanel, new FlexConstraint().left(0).top(0).right(0).height(topRecalculateListener));
 		resizePanel.add(southPanel, new FlexConstraint().left(0).right(0).bottom(0).height(W));
 		resizePanel.add(contentPanel, new FlexConstraint().left(W).top(topRecalculateListener).bottom(W).right(W));
+		resizePanel.setBorder(new LineBorder(borderColor));
 
 		northPanel.setOpaque(true);
 		titlePanel.setOpaque(false);
@@ -428,33 +375,42 @@ public class DecoratedFrame extends MFrame
 		southPanel.setOpaque(false);
 		resizePanel.setOpaque(false);
 
+		northPanel.add(lblIcon, new FlexConstraint().left(0).height(new FlexRecalculateListener() {
+			@Override
+			public int recalculate() {
+				if (lblIcon.getIcon() == null) return 0;
+				return lblIcon.getIcon().getIconHeight();
+			}
+		}).top(0).width(new FlexRecalculateListener() {
+			@Override
+			public int recalculate() {
+				if (lblIcon.getIcon() == null) return 0;
+				return lblIcon.getIcon().getIconWidth();
+			}
+		}));
+
 		setLayeredPane(resizePanel);
 	}
 
 	@Override
-	public void setJMenuBar(JMenuBar menubar)
-	{
+	public void setJMenuBar(JMenuBar menubar) {
 		super.setJMenuBar(menubar);
-		
-		if(menubar != null)
-		{
+
+		if (menubar != null) {
 			northPanel.add(menubar, new FlexConstraint().left(W).right(W).top(W + TITLE_BAR_HEIGHT).height(MENU_BAR_HEIGHT));
 		}
 	}
-	
+
 	@Override
-	public Container getContentPane()
-	{
+	public Container getContentPane() {
 		if (contentPanel == null)
 			return super.getContentPane();
 		else
 			return contentPanel;
 	}
 
-	private void setResizeCurser(boolean b)
-	{
-		if (b)
-		{
+	private void setResizeCurser(boolean b) {
+		if (b) {
 			left.setCursor(Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR));
 			right.setCursor(Cursor.getPredefinedCursor(Cursor.E_RESIZE_CURSOR));
 			top.setCursor(Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR));
@@ -463,9 +419,7 @@ public class DecoratedFrame extends MFrame
 			topright.setCursor(Cursor.getPredefinedCursor(Cursor.NE_RESIZE_CURSOR));
 			bottomleft.setCursor(Cursor.getPredefinedCursor(Cursor.SW_RESIZE_CURSOR));
 			bottomright.setCursor(Cursor.getPredefinedCursor(Cursor.SE_RESIZE_CURSOR));
-		}
-		else
-		{
+		} else {
 			left.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 			right.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 			top.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
@@ -477,33 +431,46 @@ public class DecoratedFrame extends MFrame
 		}
 	}
 
-	class ResizeWindowListener extends MouseAdapter
-	{
-		private Rectangle startSide = null;
-		private final JFrame frame;
+	@Override
+	public void setTitle(String title) {
+		super.setTitle(title);
+		lblTitle.setText(title);
+	}
 
-		public ResizeWindowListener(JFrame frame)
-		{
+	public void setTitleForeground(Color foreground) {
+		lblTitle.setForeground(foreground);
+	}
+
+	@Override
+	public void setIconImage(Image image) {
+		super.setIconImage(image);
+	}
+
+	public void setTitleImage(Image image) {
+		if (image != null) lblIcon.setIcon(new ImageIcon(image));
+	}
+
+	class ResizeWindowListener extends MouseAdapter {
+		private final JFrame frame;
+		private Rectangle startSide = null;
+
+		public ResizeWindowListener(JFrame frame) {
 			this.frame = frame;
 		}
 
 		@Override
-		public void mousePressed(MouseEvent e)
-		{
-			if (e.getSource() == top && e.getClickCount() > 1 && DecoratedFrame.this.getExtendedState() == JFrame.MAXIMIZED_BOTH)
-			{
+		public void mousePressed(MouseEvent e) {
+			if (e.getSource() == top && e.getClickCount() > 1 && DecoratedFrame.this.getExtendedState() == JFrame.MAXIMIZED_BOTH) {
 				DecoratedFrame.this.setExtendedState(JFrame.NORMAL);
 				dispatchEvent(new WindowEvent(DecoratedFrame.this, WindowEvent.WINDOW_STATE_CHANGED));
 				revalidate();
 				startSide = null;
-			}
-			else
+			} else
 				startSide = frame.getBounds();
 		}
 
 		@Override
-		public void mouseEntered(MouseEvent e)
-		{
+		public void mouseEntered(MouseEvent e) {
 			if (DecoratedFrame.this.getExtendedState() == JFrame.MAXIMIZED_BOTH)
 				DecoratedFrame.this.setResizeCurser(false);
 			else
@@ -511,8 +478,12 @@ public class DecoratedFrame extends MFrame
 		}
 
 		@Override
-		public void mouseDragged(MouseEvent e)
-		{
+		public void mouseExited(MouseEvent e) {
+			DecoratedFrame.this.setResizeCurser(false);
+		}
+
+		@Override
+		public void mouseDragged(MouseEvent e) {
 			if (startSide == null)
 				return;
 			if (DecoratedFrame.this.getExtendedState() == JFrame.MAXIMIZED_BOTH)
@@ -520,74 +491,56 @@ public class DecoratedFrame extends MFrame
 
 			Rectangle tmp = (Rectangle) startSide.clone();
 			Component c = e.getComponent();
-			if (c == topleft)
-			{
+			if (c == topleft) {
 				tmp.y += e.getY();
 				tmp.height -= e.getY();
 				tmp.x += e.getX();
 				tmp.width -= e.getX();
-			}
-			else if (c == top)
-			{
+			} else if (c == top) {
 				tmp.y += e.getY();
 				tmp.height -= e.getY();
-			}
-			else if (c == topright)
-			{
+			} else if (c == topright) {
 				tmp.y += e.getY();
 				tmp.height -= e.getY();
 				tmp.width += e.getX();
-			}
-			else if (c == left)
-			{
+			} else if (c == left) {
 				tmp.x += e.getX();
 				tmp.width -= e.getX();
-			}
-			else if (c == right)
+			} else if (c == right)
 				tmp.width += e.getX();
-			else if (c == bottomleft)
-			{
+			else if (c == bottomleft) {
 				tmp.height += e.getY();
 				tmp.x += e.getX();
 				tmp.width -= e.getX();
-			}
-			else if (c == bottom)
+			} else if (c == bottom)
 				tmp.height += e.getY();
-			else if (c == bottomright)
-			{
+			else if (c == bottomright) {
 				tmp.height += e.getY();
 				tmp.width += e.getX();
 			}
 
-			if (frame.getMinimumSize().width < tmp.width && frame.getMinimumSize().height < tmp.height)
-			{
+			if (frame.getMinimumSize().width < tmp.width && frame.getMinimumSize().height < tmp.height) {
 				frame.setBounds(tmp);
 				startSide = tmp;
 			}
 		}
 	}
 
-	class DragWindowListener extends MouseAdapter
-	{
+	class DragWindowListener extends MouseAdapter {
 		private MouseEvent start;
 		private Window window;
 		private boolean doubleClicked = false;
 
 		@Override
-		public void mousePressed(MouseEvent me)
-		{
-			if (me.getClickCount() > 1)
-			{
+		public void mousePressed(MouseEvent me) {
+			if (me.getClickCount() > 1) {
 				doubleClicked = true;
 				DecoratedFrame.this.setExtendedState(DecoratedFrame.this.getExtendedState() == JFrame.MAXIMIZED_BOTH ? JFrame.NORMAL : JFrame.MAXIMIZED_BOTH);
 				dispatchEvent(new WindowEvent(DecoratedFrame.this, WindowEvent.WINDOW_STATE_CHANGED));
 				revalidate();
 				me.consume();
-			}
-			else
-			{
-				if (window == null)
-				{
+			} else {
+				if (window == null) {
 					Object o = me.getSource();
 					if (o instanceof Window)
 						window = (Window) o;
@@ -599,37 +552,16 @@ public class DecoratedFrame extends MFrame
 		}
 
 		@Override
-		public void mouseDragged(MouseEvent me)
-		{
-			if (!doubleClicked)
-			{
+		public void mouseDragged(MouseEvent me) {
+			if (!doubleClicked) {
 				if (DecoratedFrame.this.getExtendedState() == JFrame.MAXIMIZED_BOTH)
 					return;
 				Point eventLocationOnScreen = me.getLocationOnScreen();
 				if (window != null && (eventLocationOnScreen.x != start.getX() || eventLocationOnScreen.y != start.getY()))
 					window.setLocation(eventLocationOnScreen.x - start.getX(),
-									   eventLocationOnScreen.y - start.getY());
+							eventLocationOnScreen.y - start.getY());
 			}
 			doubleClicked = false;
 		}
-	}
-
-	@Override
-	public void setTitle(String title)
-	{
-		super.setTitle(title);
-		lblTitle.setText(title);
-	}
-	
-	public void setTitleForeground(Color foreground)
-	{
-		lblTitle.setForeground(foreground);
-	}
-
-	@Override
-	public void setIconImage(Image image)
-	{
-		super.setIconImage(image);
-		if(image != null) lblTitle.setIcon(new ImageIcon(image));
 	}
 }

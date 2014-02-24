@@ -43,6 +43,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
+import javax.swing.border.MatteBorder;
 
 /**
  *
@@ -63,6 +64,7 @@ public class DecoratedDialog extends MDialog
 	private ArrayList<JButton> toolbarButtons = new ArrayList<JButton>();
 	private ArrayList<JLabel> titleLabels = new ArrayList<JLabel>();
 	private boolean helpVisible = true;
+	private Color borderColor = Color.GRAY;
 
 	public DecoratedDialog(Window owner)
 	{
@@ -75,6 +77,12 @@ public class DecoratedDialog extends MDialog
 		super(owner);
 		this.helpVisible = helpVisible;
 		initDecoratedFrame();
+	}
+
+	public void setBorderColor(Color c) {
+		resizePanel.setBorder(new LineBorder(c));
+		northPanel.setBorder(new MatteBorder(1, 1, 0, 1, c));
+		borderColor = c;
 	}
 
 	public void addToolbarButton(Icon i, final Connector c)
@@ -292,7 +300,7 @@ public class DecoratedDialog extends MDialog
 		resizePanel.add(northPanel, new FlexConstraint().left(1).top(1).right(1).height(topRecalculateListener));
 		resizePanel.add(southPanel, new FlexConstraint().left(0).right(0).bottom(0).height(W));
 		resizePanel.add(contentPanel, new FlexConstraint().left(W).top(topRecalculateListener).bottom(W).right(W));
-		resizePanel.setBorder(new LineBorder(Color.GRAY));
+		resizePanel.setBorder(new LineBorder(borderColor));
 
 		northPanel.setOpaque(true);
 		titlePanel.setOpaque(false);

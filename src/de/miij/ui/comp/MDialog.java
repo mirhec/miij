@@ -4,6 +4,7 @@
  */
 package de.miij.ui.comp;
 
+import de.miij.layout.Adder;
 import de.miij.layout.FlexConstraint;
 import de.miij.layout.FlexLayout;
 import de.miij.ui.comp.flex.FPanel;
@@ -58,11 +59,6 @@ public class MDialog extends JDialog implements Flexable
 	 * Diese Methode f&uuml;gt der ContentPane des MFrames eine neue flexible
 	 * Komponente hinzu.
 	 * <p/>
-	 * @param comp
-	 * @param left
-	 * @param top
-	 * @param right
-	 * @param bottom
 	 */
 	public void addFlexibleComponent(FlexComponent flexComp)
 	{
@@ -74,5 +70,9 @@ public class MDialog extends JDialog implements Flexable
 	public FlexComponent flex(Component c)
 	{
 		return new FlexComponent(c);
+	}
+
+	public Adder add(Component... c) {
+		return new Adder(this, c);
 	}
 }

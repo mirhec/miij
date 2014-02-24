@@ -1,5 +1,6 @@
 package de.miij.ui.comp.flex;
 
+import de.miij.layout.Adder;
 import de.miij.layout.FlexConstraint;
 import de.miij.layout.FlexLayout;
 import java.awt.Component;
@@ -96,4 +97,8 @@ public class FPanel extends JPanel implements Flexable
 //	{
 //		return FlexComponents;
 //	}
+
+	public Adder add(Component... c) {
+		return new Adder(this, c);
+	}
 }

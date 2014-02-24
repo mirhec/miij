@@ -10,6 +10,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
+import de.miij.layout.Adder;
 import de.miij.ui.comp.flex.FFrame;
 import de.miij.ui.comp.flex.FlexComponent;
 
@@ -372,6 +373,10 @@ public class MFrame extends FFrame
 	{
 		c.setName(name);
 		return new FlexComponent(c);
+	}
+
+	public Adder add(Component... c) {
+		return new Adder(this, c);
 	}
 }
 
