@@ -7,26 +7,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6fe54522-4417-4985-97a6-97446158441e" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/de/miij/layout/Adder.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/de/miij/ui/folderchooser/DemoJFolderChooser.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/de/miij/ui/folderchooser/DirectoryFileFilter.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/de/miij/ui/comp/iptextfield/DocumentsFactory.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/de/miij/ui/folderchooser/FolderJTree.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/de/miij/ui/folderchooser/FolderTreeCellEditor.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/de/miij/ui/folderchooser/FolderTreeCellRenderer.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/de/miij/ui/folderchooser/FolderTreeModel.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/de/miij/ui/comp/iptextfield/GridBagPanel.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/de/miij/ui/comp/iptextfield/IPTextField.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/de/miij/ui/comp/iptextfield/IntDocument.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/de/miij/ui/folderchooser/JFolderChooser.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/de/miij/ui/folderchooser/LookAndFeelFileView.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/de/miij/ui/folderchooser/SystemFileView.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/de/miij/ui/comp/DecoratedDialog.java" afterPath="$PROJECT_DIR$/src/de/miij/ui/comp/DecoratedDialog.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/de/miij/ui/comp/DecoratedFrame.java" afterPath="$PROJECT_DIR$/src/de/miij/ui/comp/DecoratedFrame.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/de/miij/ui/comp/flex/FPanel.java" afterPath="$PROJECT_DIR$/src/de/miij/ui/comp/flex/FPanel.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/de/miij/ui/comp/MDialog.java" afterPath="$PROJECT_DIR$/src/de/miij/ui/comp/MDialog.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/de/miij/ui/comp/MFrame.java" afterPath="$PROJECT_DIR$/src/de/miij/ui/comp/MFrame.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/Miij.iml" afterPath="$PROJECT_DIR$/Miij.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/de/miij/util/M.java" afterPath="$PROJECT_DIR$/src/de/miij/util/M.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Miij.iws" afterPath="$PROJECT_DIR$/Miij.iws" />
     </list>
     <ignored path="Miij.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -93,7 +77,7 @@
       <file leaf-file-name="DecoratedDialog.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/de/miij/ui/comp/DecoratedDialog.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="302" column="59" selection-start="9429" selection-end="9429" vertical-scroll-proportion="4.4222975" vertical-offset="0" max-vertical-offset="7225">
+            <state line="150" column="33" selection-start="4272" selection-end="4272" vertical-scroll-proportion="0.3063063" vertical-offset="1428" max-vertical-offset="7344">
               <folding>
                 <element signature="e#2066#2075#0" expanded="true" />
               </folding>
@@ -104,7 +88,7 @@
       <file leaf-file-name="DecoratedFrame.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/de/miij/ui/comp/DecoratedFrame.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="41" column="29" selection-start="1455" selection-end="1466" vertical-scroll-proportion="0.0" vertical-offset="107" max-vertical-offset="8823">
+            <state line="41" column="29" selection-start="1455" selection-end="1466" vertical-scroll-proportion="0.0" vertical-offset="697" max-vertical-offset="9741">
               <folding />
             </state>
           </provider>
@@ -159,20 +143,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="PackagesPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Miij" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Miij" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -194,6 +164,20 @@
         </subPane>
       </pane>
       <pane id="Scope" />
+      <pane id="PackagesPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Miij" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Miij" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -366,6 +350,38 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/de/miij/ui/comp/DecoratedDialog.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="84" column="24" selection-start="2620" selection-end="2620" vertical-scroll-proportion="0.0" vertical-offset="1428" max-vertical-offset="7344">
+          <folding>
+            <element signature="e#2066#2075#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/de/miij/ui/comp/DecoratedFrame.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="41" column="29" selection-start="1455" selection-end="1466" vertical-scroll-proportion="0.0" vertical-offset="697" max-vertical-offset="9741">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/de/miij/ui/comp/DecoratedDialog.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="302" column="59" selection-start="9429" selection-end="9429" vertical-scroll-proportion="0.0" vertical-offset="5134" max-vertical-offset="7225">
+          <folding>
+            <element signature="e#2066#2075#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/de/miij/ui/comp/DecoratedFrame.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="41" column="29" selection-start="1455" selection-end="1466" vertical-scroll-proportion="0.0" vertical-offset="697" max-vertical-offset="9741">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/de/miij/ui/comp/DecoratedFrame.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="41" column="29" selection-start="1455" selection-end="1466" vertical-scroll-proportion="0.0" vertical-offset="107" max-vertical-offset="8823">
@@ -375,7 +391,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/de/miij/ui/comp/DecoratedDialog.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="302" column="59" selection-start="9429" selection-end="9429" vertical-scroll-proportion="4.4222975" vertical-offset="0" max-vertical-offset="7225">
+        <state line="150" column="33" selection-start="4272" selection-end="4272" vertical-scroll-proportion="0.3063063" vertical-offset="1428" max-vertical-offset="7344">
           <folding>
             <element signature="e#2066#2075#0" expanded="true" />
           </folding>

@@ -39,7 +39,7 @@ public class DecoratedFrame extends MFrame {
 	private boolean helpVisible = true;
 	private int labelSpacing = 10;
 	private JLabel lblIcon = new JLabel();
-	private Color borderColor = Color.GRAY;
+	private Color borderColor = M.DECORATED_BORDER_COLOR;
 
 	public DecoratedFrame() {
 		initDecoratedFrame();
@@ -344,7 +344,7 @@ public class DecoratedFrame extends MFrame {
 				return TITLE_BAR_HEIGHT * 3 + TITLE_BAR_HEIGHT * toolbarButtons.size();
 			}
 		}));
-		northPanel.setBorder(new LineBorder(Color.GRAY));
+		northPanel.setBorder(new MatteBorder(1, 1, 0, 1, borderColor));
 
 		// South Panel
 		JPanel southPanel = new JPanel(new BorderLayout());

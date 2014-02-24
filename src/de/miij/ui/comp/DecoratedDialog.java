@@ -64,7 +64,7 @@ public class DecoratedDialog extends MDialog
 	private ArrayList<JButton> toolbarButtons = new ArrayList<JButton>();
 	private ArrayList<JLabel> titleLabels = new ArrayList<JLabel>();
 	private boolean helpVisible = true;
-	private Color borderColor = Color.GRAY;
+	private Color borderColor = M.DECORATED_BORDER_COLOR;
 
 	public DecoratedDialog(Window owner)
 	{
@@ -295,12 +295,16 @@ public class DecoratedDialog extends MDialog
 			}
 		};
 		resizePanel.setLayout(new FlexLayout());
-		resizePanel.add(left, new FlexConstraint().left(0).top(topRecalculateListener).bottom(10).width(W));
-		resizePanel.add(right, new FlexConstraint().right(0).top(topRecalculateListener).bottom(W).width(W));
-		resizePanel.add(northPanel, new FlexConstraint().left(1).top(1).right(1).height(topRecalculateListener));
-		resizePanel.add(southPanel, new FlexConstraint().left(0).right(0).bottom(0).height(W));
-		resizePanel.add(contentPanel, new FlexConstraint().left(W).top(topRecalculateListener).bottom(W).right(W));
+		resizePanel.add(left, new FlexConstraint().left(0).top(topRecalculateListener).bottom(10).width(10));
+		resizePanel.add(right, new FlexConstraint().right(0).top(topRecalculateListener).bottom(10).width(10));
+		resizePanel.add(northPanel, new FlexConstraint().left(0).top(0).right(0).height(topRecalculateListener));
+		resizePanel.add(southPanel, new FlexConstraint().left(0).right(0).bottom(0).height(10));
+		resizePanel.add(contentPanel, new FlexConstraint().left(10).top(topRecalculateListener).bottom(10).right(10));
 		resizePanel.setBorder(new LineBorder(borderColor));
+		northPanel.setBorder(new MatteBorder(1, 1, 0, 1, borderColor));
+		left.setBorder(new MatteBorder(0, 1, 0, 0, borderColor));
+		right.setBorder(new MatteBorder(0, 0, 0, 1, borderColor));
+		southPanel.setBorder(new MatteBorder(0, 1, 1, 1, borderColor));
 
 		northPanel.setOpaque(true);
 		titlePanel.setOpaque(false);
@@ -308,6 +312,9 @@ public class DecoratedDialog extends MDialog
 		toolbarPanel.setOpaque(false);
 		southPanel.setOpaque(false);
 		resizePanel.setOpaque(false);
+		left.setOpaque(true);
+		right.setOpaque(true);
+		southPanel.setOpaque(true);
 
 //		setContentPane(resizePanel);
 		setLayeredPane(resizePanel);
