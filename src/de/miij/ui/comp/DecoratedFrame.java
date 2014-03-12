@@ -12,6 +12,7 @@ import de.miij.ui.comp.flex.FlexRecalculateListener;
 import de.miij.util.M;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 import java.awt.*;
@@ -40,6 +41,8 @@ public class DecoratedFrame extends MFrame {
 	private int labelSpacing = 10;
 	private JLabel lblIcon = new JLabel();
 	private Color borderColor = M.DECORATED_BORDER_COLOR;
+	private Color background = new Color(89, 89, 89);
+	private Color titleBarBackground = new Color(59, 59, 59);
 
 	public DecoratedFrame() {
 		initDecoratedFrame();
@@ -169,28 +172,67 @@ public class DecoratedFrame extends MFrame {
 	////////////////////////////////////////////////////////////////////////////
 
 	public void setTitleBarBackground(Color c) {
+		titleBarBackground = c;
 		northPanel.setBackground(c);
 		if (getJMenuBar() != null) {
 			getJMenuBar().setOpaque(false);
 			getJMenuBar().setBackground(c);
 			for (int i = 0; i < getJMenuBar().getMenuCount(); ++i) {
 				JMenu m = getJMenuBar().getMenu(i);
-				if (m == null) continue;
-
-				for (int ii = 0; ii < m.getItemCount(); ++ii) {
-					JMenuItem mi = m.getItem(ii);
-					if (mi == null) continue;
-
-					mi.setOpaque(true);
-					mi.setBackground(c);
-				}
-				m.setOpaque(true);
-				m.setBackground(c);
+				setJMenuBackground(m, c);
 			}
 		}
 
 		if (toolbar != null)
 			toolbar.setOpaque(false);
+	}
+
+	public void setJMenuBackground(JMenu m, Color c) {
+		if (m == null) return;
+
+		for (int ii = 0; ii < m.getItemCount(); ++ii) {
+			Component mi = m.getMenuComponent(ii);
+			if (mi == null) continue;
+
+			mi.setBackground(c);
+
+			if(mi instanceof JMenu)
+				setJMenuBackground((JMenu) mi, c);
+			if(mi instanceof JMenuItem) {   // For JMenu and JMenuItem, cause JMenu inherits from JMenuItem
+				((JMenuItem)mi).setOpaque(true);
+				((JMenuItem)mi).setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+			}
+		}
+		m.setOpaque(true);
+		m.setBackground(c);
+		m.getPopupMenu().setBorder(new LineBorder(borderColor, 2));
+	}
+
+	public void setJPopupMenuBackground(JPopupMenu m, Color c) {
+		if (m == null) return;
+
+		for (int ii = 0; ii < m.getSubElements().length; ++ii) {
+			MenuElement mi = m.getSubElements()[ii];
+			if (mi == null) continue;
+
+			if(mi instanceof JMenu)
+				setJMenuBackground((JMenu) mi, c);
+			if(mi instanceof JMenuItem) {   // For JMenu and JMenuItem, cause JMenu inherits from JMenuItem
+				((JMenuItem)mi).setBackground(c);
+				((JMenuItem)mi).setOpaque(true);
+				((JMenuItem)mi).setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+			}
+		}
+		m.setOpaque(true);
+		m.setBackground(c);
+		m.setBorder(new LineBorder(borderColor, 2));
+	}
+
+	@Override
+	public void setBackground(Color back) {
+		super.setBackground(back);
+		background = back;
+		getContentPane().setBackground(back);
 	}
 
 	////////////////////////////////////////////////////////////////////////////
@@ -330,10 +372,11 @@ public class DecoratedFrame extends MFrame {
 				return lblTitle.getFontMetrics(lblTitle.getFont()).stringWidth(lblTitle.getText()) + lblTitle.getIconTextGap() + (lblTitle.getIcon() != null ? lblTitle.getIcon().getIconWidth() : 0);
 			}
 		}));
-		titlePanel.add(top, new FlexConstraint().left(0).top(0).right(toolbarPanel, M.LEFT, 0).height(W));
+//		titlePanel.add(top, new FlexConstraint().left(0).top(0).right(toolbarPanel, M.LEFT, 0).height(W));
 
 		// North Panel
 //		JPanel northPanel = new JPanel(new FlexLayout());
+		northPanel.add(top, new FlexConstraint().left(W).top(0).right(W).height(W));
 		northPanel.add(topleft, new FlexConstraint().left(0).top(0).height(W).width(W));
 		northPanel.add(titlePanel, new FlexConstraint().left(W).top(0).height(TITLE_BAR_HEIGHT).right(toolbarPanel, M.LEFT, 0));
 		northPanel.add(topright, new FlexConstraint().right(0).top(0).height(W).width(W));
@@ -361,8 +404,8 @@ public class DecoratedFrame extends MFrame {
 			}
 		};
 		resizePanel.setLayout(new FlexLayout());
-		resizePanel.add(left, new FlexConstraint().left(0).top(topRecalculateListener).bottom(10).width(W));
-		resizePanel.add(right, new FlexConstraint().right(0).top(topRecalculateListener).bottom(W).width(W));
+		resizePanel.add(left, new FlexConstraint().left(0).top(W).bottom(W).width(W));
+		resizePanel.add(right, new FlexConstraint().right(0).top(W).bottom(W).width(W));
 		resizePanel.add(northPanel, new FlexConstraint().left(0).top(0).right(0).height(topRecalculateListener));
 		resizePanel.add(southPanel, new FlexConstraint().left(0).right(0).bottom(0).height(W));
 		resizePanel.add(contentPanel, new FlexConstraint().left(W).top(topRecalculateListener).bottom(W).right(W));
@@ -390,6 +433,9 @@ public class DecoratedFrame extends MFrame {
 		}));
 
 		setLayeredPane(resizePanel);
+		setTitleBarBackground(titleBarBackground);
+		setBackground(background);
+		setBorderColor(borderColor);
 	}
 
 	@Override
@@ -398,6 +444,7 @@ public class DecoratedFrame extends MFrame {
 
 		if (menubar != null) {
 			northPanel.add(menubar, new FlexConstraint().left(W).right(W).top(W + TITLE_BAR_HEIGHT).height(MENU_BAR_HEIGHT));
+			setTitleBarBackground(titleBarBackground);
 		}
 	}
 

@@ -8,49 +8,20 @@ package de.miij.ui.comp;
 import de.miij.Miij;
 import de.miij.layout.FlexConstraint;
 import de.miij.layout.FlexLayout;
-import static de.miij.ui.comp.DecoratedFrame.TITLE_BAR_HEIGHT;
-import static de.miij.ui.comp.DecoratedFrame.W;
 import de.miij.ui.comp.flex.FlexRecalculateListener;
 import de.miij.util.M;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Image;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.Window;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowEvent;
-import java.util.ArrayList;
-import javax.swing.BorderFactory;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
+
+import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.ArrayList;
 
 /**
- *
  * @author Mirko Hecky
  */
-public class DecoratedDialog extends MDialog
-{
+public class DecoratedDialog extends MDialog {
 	protected JLabel lblTitle;
 	protected static final int W = 4;
 	protected static final int TITLE_BAR_HEIGHT = 25;
@@ -60,84 +31,87 @@ public class DecoratedDialog extends MDialog
 	protected MPanel toolbarPanel = new MPanel();
 	protected MPanel titlePanel = new MPanel();
 	protected MPanel northPanel = new MPanel();
+	protected JPanel southPanel = new JPanel(new BorderLayout());
 	private JLabel left, right, top, bottom, topleft, topright, bottomleft, bottomright;
 	private ArrayList<JButton> toolbarButtons = new ArrayList<JButton>();
 	private ArrayList<JLabel> titleLabels = new ArrayList<JLabel>();
 	private boolean helpVisible = true;
 	private Color borderColor = M.DECORATED_BORDER_COLOR;
+	private Color background = new Color(89, 89, 89);
 
-	public DecoratedDialog(Window owner)
-	{
+	public DecoratedDialog(Window owner) {
 		super(owner);
 		initDecoratedFrame();
 	}
 
-	public DecoratedDialog(Window owner, boolean helpVisible)
-	{
+	public DecoratedDialog(Window owner, boolean helpVisible) {
 		super(owner);
 		this.helpVisible = helpVisible;
 		initDecoratedFrame();
 	}
 
 	public void setBorderColor(Color c) {
-		resizePanel.setBorder(new LineBorder(c));
-		northPanel.setBorder(new MatteBorder(1, 1, 0, 1, c));
 		borderColor = c;
+		resizePanel.setBorder(new LineBorder(borderColor));
+		northPanel.setBorder(new MatteBorder(1, 1, 0, 1, borderColor));
+		topleft.setBorder(new MatteBorder(1, 1, 0, 0, borderColor));
+		topright.setBorder(new MatteBorder(1, 0, 0, 1, borderColor));
+		top.setBorder(new MatteBorder(1, 0, 0, 0, borderColor));
+		left.setBorder(new MatteBorder(0, 1, 0, 0, borderColor));
+		right.setBorder(new MatteBorder(0, 0, 0, 1, borderColor));
+		southPanel.setBorder(new MatteBorder(0, 1, 1, 1, borderColor));
 	}
 
-	public void addToolbarButton(Icon i, final Connector c)
-	{
+	@Override
+	public void setBackground(Color back) {
+		super.setBackground(back);
+		background = back;
+		getContentPane().setBackground(back);
+		northPanel.setBackground(back);
+	}
+
+	public void addToolbarButton(Icon i, final Connector c) {
 		addToolbarButton(toolbarButtons.size(), i, c);
 	}
 
-	public void addToolbarButton(Icon i, Icon iHover, final Connector c)
-	{
+	public void addToolbarButton(Icon i, Icon iHover, final Connector c) {
 		addToolbarButton(toolbarButtons.size(), i, iHover, c);
 	}
 
-	public void addToolbarButton(int index, Icon i, final Connector c)
-	{
+	public void addToolbarButton(int index, Icon i, final Connector c) {
 		addToolbarButton(index, i, i, c);
 	}
 
-	public void addToolbarButton(int index, Icon i, Icon iHover, final Connector c)
-	{
-		addToolbarButton(index, i, iHover, new ActionListener()
-		{
+	public void addToolbarButton(int index, Icon i, Icon iHover, final Connector c) {
+		addToolbarButton(index, i, iHover, new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				if (c != null)
 					c.action(e);
 			}
 		});
 	}
 
-	public void addToolbarButton(Icon i, ActionListener l)
-	{
+	public void addToolbarButton(Icon i, ActionListener l) {
 		addToolbarButton(toolbarButtons.size(), i, l);
 	}
 
-	public void addToolbarButton(Icon i, Icon iHover, ActionListener l)
-	{
+	public void addToolbarButton(Icon i, Icon iHover, ActionListener l) {
 		addToolbarButton(toolbarButtons.size(), i, iHover, l);
 	}
 
-	public void addToolbarButton(int index, Icon i, ActionListener l)
-	{
+	public void addToolbarButton(int index, Icon i, ActionListener l) {
 		addToolbarButton(index, i, i, l);
 	}
 
-	public void addToolbarButton(int index, Icon i, Icon iHover, ActionListener l)
-	{
+	public void addToolbarButton(int index, Icon i, Icon iHover, ActionListener l) {
 		JButton btn = makeButton(i, iHover, false);
 		btn.addActionListener(l);
 		toolbarButtons.add(index, btn);
 		toolbarPanel.add(btn, new FlexConstraint().right(TITLE_BAR_HEIGHT + TITLE_BAR_HEIGHT * index).top(0).bottom(0).width(TITLE_BAR_HEIGHT));
 	}
 
-	public JButton getToolbarButton(int index)
-	{
+	public JButton getToolbarButton(int index) {
 		if (toolbarButtons.size() > index && index >= 0)
 			return toolbarButtons.get(index);
 		return null;
@@ -145,23 +119,19 @@ public class DecoratedDialog extends MDialog
 
 	////////////////////////////////////////////////////////////////////////////
 
-	public void setTitleBarBackground(Color c)
-	{
+	public void setTitleBarBackground(Color c) {
 		northPanel.setBackground(c);
-		if(getJMenuBar() != null)
-		{
+		if (getJMenuBar() != null) {
 			getJMenuBar().setOpaque(true);
 			getJMenuBar().setBackground(c);
-			for(int i = 0; i < getJMenuBar().getMenuCount(); ++i)
-			{
+			for (int i = 0; i < getJMenuBar().getMenuCount(); ++i) {
 				JMenu m = getJMenuBar().getMenu(i);
-				if(m == null) continue;
-				
-				for(int ii = 0; ii < m.getItemCount(); ++ii)
-				{
+				if (m == null) continue;
+
+				for (int ii = 0; ii < m.getItemCount(); ++ii) {
 					JMenuItem mi = m.getItem(ii);
-					if(mi == null) continue;
-					
+					if (mi == null) continue;
+
 					mi.setOpaque(true);
 					mi.setBackground(c);
 				}
@@ -169,11 +139,10 @@ public class DecoratedDialog extends MDialog
 				m.setBackground(c);
 			}
 		}
-		
+
 	}
 
-	private JButton makeButton(final Icon i, final Icon iHover, final boolean close)
-	{
+	private JButton makeButton(final Icon i, final Icon iHover, final boolean close) {
 		final JButton button = new JButton(i);
 		button.setContentAreaFilled(false);
 		button.setFocusPainted(false);
@@ -181,11 +150,9 @@ public class DecoratedDialog extends MDialog
 		button.setBorderPainted(false);
 		button.setIcon(i);
 		button.setRolloverIcon(iHover);
-		button.addActionListener(new ActionListener()
-		{
+		button.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				if (close)
 					dispatchEvent(new WindowEvent(DecoratedDialog.this, WindowEvent.WINDOW_CLOSING));
 			}
@@ -193,15 +160,13 @@ public class DecoratedDialog extends MDialog
 		return button;
 	}
 
-	private JButton makeCloseButton()
-	{
+	private JButton makeCloseButton() {
 		final Icon i1 = WindowIcons.getCloseIcon(false);
 		final Icon i2 = WindowIcons.getCloseIcon(true);
 		return makeButton(i1, i2, true);
 	}
 
-	private void initDecoratedFrame()
-	{
+	private void initDecoratedFrame() {
 		setUndecorated(true);
 
 		JButton btnClose = makeCloseButton();
@@ -216,8 +181,7 @@ public class DecoratedDialog extends MDialog
 				left = new JLabel(), right = new JLabel(),
 				top = new JLabel(), bottom = new JLabel(),
 				topleft = new JLabel(), topright = new JLabel(),
-				bottomleft = new JLabel(), bottomright = new JLabel()))
-		{
+				bottomleft = new JLabel(), bottomright = new JLabel())) {
 			l.addMouseListener(rwl);
 			l.addMouseMotionListener(rwl);
 		}
@@ -255,53 +219,50 @@ public class DecoratedDialog extends MDialog
 
 		lblTitle = new JLabel(Miij.getAppName(), JLabel.LEFT);
 		lblTitle.setFont(new Font("Tahoma", Font.BOLD, 13));
-		titlePanel.add(lblTitle, new FlexConstraint().left(W).bottom(0).top(0).width(new FlexRecalculateListener()
-		{
+		titlePanel.add(lblTitle, new FlexConstraint().left(W).bottom(0).top(W).width(new FlexRecalculateListener() {
 			@Override
-			public int recalculate()
-			{
+			public int recalculate() {
 				return lblTitle.getText() == null || lblTitle.getText().isEmpty() ? 0 : lblTitle.getFontMetrics(lblTitle.getFont()).stringWidth(lblTitle.getText()) + lblTitle.getIconTextGap() + (lblTitle.getIcon() != null ? lblTitle.getIcon().getIconWidth() : 0);
 			}
 		}));
-		titlePanel.add(top, new FlexConstraint().left(0).top(0).right(toolbarPanel, M.LEFT, 0).height(W));
+//		titlePanel.add(top, new FlexConstraint().left(0).top(0).right(toolbarPanel, M.LEFT, 0).height(W));
 
 		// North Panel
+		northPanel.add(top, new FlexConstraint().left(W).top(0).right(W).height(W));
 		northPanel.add(topleft, new FlexConstraint().left(0).top(0).height(W).width(W));
 		northPanel.add(titlePanel, new FlexConstraint().left(W).top(0).height(TITLE_BAR_HEIGHT).right(toolbarPanel, M.LEFT, 0));
 		northPanel.add(topright, new FlexConstraint().right(0).top(0).height(W).width(W));
-		northPanel.add(toolbarPanel, new FlexConstraint().right(W).top(1).height(TITLE_BAR_HEIGHT).width(new FlexRecalculateListener()
-		{
+		northPanel.add(toolbarPanel, new FlexConstraint().right(W).top(W).height(TITLE_BAR_HEIGHT).width(new FlexRecalculateListener() {
 
 			@Override
-			public int recalculate()
-			{
+			public int recalculate() {
 				return TITLE_BAR_HEIGHT * 3 + TITLE_BAR_HEIGHT * toolbarButtons.size();
 			}
 		}));
 
 		// South Panel
-		JPanel southPanel = new JPanel(new BorderLayout());
 		southPanel.add(bottomleft, BorderLayout.WEST);
 		southPanel.add(bottom, BorderLayout.CENTER);
 		southPanel.add(bottomright, BorderLayout.EAST);
 
 		// Resize Panel (all together)
-		FlexRecalculateListener topRecalculateListener = new FlexRecalculateListener()
-		{
+		FlexRecalculateListener topRecalculateListener = new FlexRecalculateListener() {
 			@Override
-			public int recalculate()
-			{
+			public int recalculate() {
 				return getJMenuBar() == null ? TITLE_BAR_HEIGHT : TITLE_BAR_HEIGHT + MENU_BAR_HEIGHT;
 			}
 		};
 		resizePanel.setLayout(new FlexLayout());
-		resizePanel.add(left, new FlexConstraint().left(0).top(topRecalculateListener).bottom(10).width(10));
-		resizePanel.add(right, new FlexConstraint().right(0).top(topRecalculateListener).bottom(10).width(10));
+		resizePanel.add(left, new FlexConstraint().left(0).top(W).bottom(10).width(10));
+		resizePanel.add(right, new FlexConstraint().right(0).top(W).bottom(10).width(10));
 		resizePanel.add(northPanel, new FlexConstraint().left(0).top(0).right(0).height(topRecalculateListener));
 		resizePanel.add(southPanel, new FlexConstraint().left(0).right(0).bottom(0).height(10));
 		resizePanel.add(contentPanel, new FlexConstraint().left(10).top(topRecalculateListener).bottom(10).right(10));
 		resizePanel.setBorder(new LineBorder(borderColor));
 		northPanel.setBorder(new MatteBorder(1, 1, 0, 1, borderColor));
+		topleft.setBorder(new MatteBorder(1, 1, 0, 0, borderColor));
+		topright.setBorder(new MatteBorder(1, 0, 0, 1, borderColor));
+		top.setBorder(new MatteBorder(1, 0, 0, 0, borderColor));
 		left.setBorder(new MatteBorder(0, 1, 0, 0, borderColor));
 		right.setBorder(new MatteBorder(0, 0, 0, 1, borderColor));
 		southPanel.setBorder(new MatteBorder(0, 1, 1, 1, borderColor));
@@ -312,29 +273,27 @@ public class DecoratedDialog extends MDialog
 		toolbarPanel.setOpaque(false);
 		southPanel.setOpaque(false);
 		resizePanel.setOpaque(false);
-		left.setOpaque(true);
-		right.setOpaque(true);
-		southPanel.setOpaque(true);
+//		left.setOpaque(true);
+//		right.setOpaque(true);
+//		southPanel.setOpaque(false);
 
 //		setContentPane(resizePanel);
 		setLayeredPane(resizePanel);
+		setBackground(background);
+		setBorderColor(borderColor);
 	}
 
 	@Override
-	public void setJMenuBar(JMenuBar menubar)
-	{
+	public void setJMenuBar(JMenuBar menubar) {
 		super.setJMenuBar(menubar);
-		
-		if(menubar != null)
-		{
+
+		if (menubar != null) {
 			northPanel.add(menubar, new FlexConstraint().left(W).right(W).top(W + TITLE_BAR_HEIGHT).height(MENU_BAR_HEIGHT));
 		}
 	}
 
-	private void setResizeCurser(boolean b)
-	{
-		if (b)
-		{
+	private void setResizeCurser(boolean b) {
+		if (b) {
 			left.setCursor(Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR));
 			right.setCursor(Cursor.getPredefinedCursor(Cursor.E_RESIZE_CURSOR));
 			top.setCursor(Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR));
@@ -343,9 +302,7 @@ public class DecoratedDialog extends MDialog
 			topright.setCursor(Cursor.getPredefinedCursor(Cursor.NE_RESIZE_CURSOR));
 			bottomleft.setCursor(Cursor.getPredefinedCursor(Cursor.SW_RESIZE_CURSOR));
 			bottomright.setCursor(Cursor.getPredefinedCursor(Cursor.SE_RESIZE_CURSOR));
-		}
-		else
-		{
+		} else {
 			left.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 			right.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 			top.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
@@ -358,33 +315,28 @@ public class DecoratedDialog extends MDialog
 	}
 
 	@Override
-	public Container getContentPane()
-	{
+	public Container getContentPane() {
 		if (contentPanel == null)
 			return super.getContentPane();
 		else
 			return contentPanel;
 	}
 
-	class ResizeWindowListener extends MouseAdapter
-	{
+	class ResizeWindowListener extends MouseAdapter {
 		private Rectangle startSide = null;
 		private final JDialog frame;
 
-		public ResizeWindowListener(JDialog frame)
-		{
+		public ResizeWindowListener(JDialog frame) {
 			this.frame = frame;
 		}
 
 		@Override
-		public void mousePressed(MouseEvent e)
-		{
+		public void mousePressed(MouseEvent e) {
 			startSide = frame.getBounds();
 		}
 
 		@Override
-		public void mouseEntered(MouseEvent e)
-		{
+		public void mouseEntered(MouseEvent e) {
 			if (!DecoratedDialog.this.isResizable())
 				DecoratedDialog.this.setResizeCurser(false);
 			else
@@ -392,71 +344,55 @@ public class DecoratedDialog extends MDialog
 		}
 
 		@Override
-		public void mouseDragged(MouseEvent e)
-		{
+		public void mouseDragged(MouseEvent e) {
 			if (startSide == null)
 				return;
 			if (!DecoratedDialog.this.isResizable())
 				return;
 			Rectangle tmp = (Rectangle) startSide.clone();
 			Component c = e.getComponent();
-			if (c == topleft)
-			{
+			if (c == topleft) {
 				tmp.y += e.getY();
 				tmp.height -= e.getY();
 				tmp.x += e.getX();
 				tmp.width -= e.getX();
-			}
-			else if (c == top)
-			{
+			} else if (c == top) {
 				tmp.y += e.getY();
 				tmp.height -= e.getY();
-			}
-			else if (c == topright)
-			{
+			} else if (c == topright) {
 				tmp.y += e.getY();
 				tmp.height -= e.getY();
 				tmp.width += e.getX();
-			}
-			else if (c == left)
-			{
+			} else if (c == left) {
 				tmp.x += e.getX();
 				tmp.width -= e.getX();
-			}
-			else if (c == right)
+			} else if (c == right)
 				tmp.width += e.getX();
-			else if (c == bottomleft)
-			{
+			else if (c == bottomleft) {
 				tmp.height += e.getY();
 				tmp.x += e.getX();
 				tmp.width -= e.getX();
-			}
-			else if (c == bottom)
+			} else if (c == bottom)
 				tmp.height += e.getY();
-			else if (c == bottomright)
-			{
+			else if (c == bottomright) {
 				tmp.height += e.getY();
 				tmp.width += e.getX();
 			}
 
-			if (frame.getMinimumSize().width < tmp.width && frame.getMinimumSize().height < tmp.height)
-			{
+			if (frame.getMinimumSize().width < tmp.width && frame.getMinimumSize().height < tmp.height) {
 				frame.setBounds(tmp);
 				startSide = tmp;
 			}
 		}
 	}
 
-	class DragWindowListener extends MouseAdapter
-	{
+	class DragWindowListener extends MouseAdapter {
 		private MouseEvent start;
 		private Window window;
 
 		@Override
-		public void mousePressed(MouseEvent me)
-		{
-			if (window == null)
-			{
+		public void mousePressed(MouseEvent me) {
+			if (window == null) {
 				Object o = me.getSource();
 				if (o instanceof Window)
 					window = (Window) o;
@@ -467,31 +403,27 @@ public class DecoratedDialog extends MDialog
 		}
 
 		@Override
-		public void mouseDragged(MouseEvent me)
-		{
+		public void mouseDragged(MouseEvent me) {
 			Point eventLocationOnScreen = me.getLocationOnScreen();
 			if (window != null && (eventLocationOnScreen.x != start.getX() || eventLocationOnScreen.y != start.getY()))
 				window.setLocation(eventLocationOnScreen.x - start.getX(),
-								   eventLocationOnScreen.y - start.getY());
+						eventLocationOnScreen.y - start.getY());
 		}
 	}
 
 	@Override
-	public void setTitle(String title)
-	{
+	public void setTitle(String title) {
 		super.setTitle(title);
 		lblTitle.setText(title);
 	}
-	
-	public void setTitleForeground(Color foreground)
-	{
+
+	public void setTitleForeground(Color foreground) {
 		lblTitle.setForeground(foreground);
 	}
 
 	@Override
-	public void setIconImage(Image image)
-	{
+	public void setIconImage(Image image) {
 		super.setIconImage(image);
-		if(image != null) lblTitle.setIcon(new ImageIcon(image));
+		if (image != null) lblTitle.setIcon(new ImageIcon(image));
 	}
 }
