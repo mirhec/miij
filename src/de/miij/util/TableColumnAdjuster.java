@@ -89,18 +89,18 @@ public class TableColumnAdjuster implements PropertyChangeListener, TableModelLi
 	private int getColumnHeaderWidth(int column)
 	{
 		if (! isColumnHeaderIncluded) return 0;
-
-		TableColumn tableColumn = table.getColumnModel().getColumn(column);
-		Object value = tableColumn.getHeaderValue();
-		TableCellRenderer renderer = tableColumn.getHeaderRenderer();
-
-		if (renderer == null)
-		{
-			renderer = table.getTableHeader().getDefaultRenderer();
-		}
-
-		Component c = renderer.getTableCellRendererComponent(table, value, false, false, -1, column);
-		return c.getPreferredSize().width;
+//
+//		TableColumn tableColumn = table.getColumnModel().getColumn(column);
+//		Object value = tableColumn.getHeaderValue();
+//		TableCellRenderer renderer = tableColumn.getHeaderRenderer();
+//
+//		if (renderer == null)
+//		{
+//			renderer = table.getTableHeader().getDefaultRenderer();
+//		}
+//
+//		Component c = renderer.getTableCellRendererComponent(table, value, false, false, -1, column);
+		return table.getTableHeader().getColumnModel().getColumn(column).getWidth();
 	}
 
 	/*
