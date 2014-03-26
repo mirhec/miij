@@ -100,7 +100,10 @@ public class TableColumnAdjuster implements PropertyChangeListener, TableModelLi
 //		}
 //
 //		Component c = renderer.getTableCellRendererComponent(table, value, false, false, -1, column);
-		return table.getTableHeader().getColumnModel().getColumn(column).getWidth();
+//		return c.getPreferredSize().width;
+//		return table.getTableHeader().getColumnModel().getColumn(column).getWidth();
+//		return tableColumn.getPreferredWidth();
+		return table.getTableHeader().getMinimumSize().width / table.getColumnCount();
 	}
 
 	/*
