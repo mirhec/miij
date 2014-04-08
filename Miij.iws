@@ -7,9 +7,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6fe54522-4417-4985-97a6-97446158441e" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/de/miij/ui/comp/DecoratedDialog.java" afterPath="$PROJECT_DIR$/src/de/miij/ui/comp/DecoratedDialog.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/de/miij/ui/comp/DecoratedFrame.java" afterPath="$PROJECT_DIR$/src/de/miij/ui/comp/DecoratedFrame.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/de/miij/util/M.java" afterPath="$PROJECT_DIR$/src/de/miij/util/M.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/de/miij/util/LangString.java" afterPath="$PROJECT_DIR$/src/de/miij/util/LangString.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Miij.ipr" afterPath="$PROJECT_DIR$/Miij.ipr" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Miij.iws" afterPath="$PROJECT_DIR$/Miij.iws" />
     </list>
     <ignored path="Miij.iws" />
@@ -28,7 +27,7 @@
     <disable_hints />
   </component>
   <component name="DebuggerManager">
-    <breakpoint_any default_suspend_policy="SuspendAll" default_condition_enabled="true">
+    <breakpoint_any default_suspend_policy="SuspendAll" default_condition_enabled="true" converted="true">
       <breakpoint>
         <option name="NOTIFY_CAUGHT" value="true" />
         <option name="NOTIFY_UNCAUGHT" value="true" />
@@ -64,9 +63,9 @@
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
     </breakpoint_any>
-    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
-    <breakpoint_rules />
-    <ui_properties />
+    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" converted="true" />
+    <breakpoint_rules converted="true" />
+    <ui_properties converted="true" />
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FavoritesManager">
@@ -74,13 +73,12 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="DecoratedDialog.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="DecoratedDialog.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/de/miij/ui/comp/DecoratedDialog.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="150" column="33" selection-start="4272" selection-end="4272" vertical-scroll-proportion="0.3063063" vertical-offset="1428" max-vertical-offset="7344">
-              <folding>
-                <element signature="e#2066#2075#0" expanded="true" />
-              </folding>
+            <state vertical-scroll-proportion="0.0" vertical-offset="2550" max-vertical-offset="7395">
+              <caret line="150" column="26" selection-start-line="150" selection-start-column="26" selection-end-line="150" selection-end-column="26" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -88,7 +86,18 @@
       <file leaf-file-name="DecoratedFrame.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/de/miij/ui/comp/DecoratedFrame.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="41" column="29" selection-start="1455" selection-end="1466" vertical-scroll-proportion="0.0" vertical-offset="697" max-vertical-offset="9741">
+            <state vertical-scroll-proportion="0.0" vertical-offset="697" max-vertical-offset="10540">
+              <caret line="41" column="29" selection-start-line="41" selection-start-column="29" selection-end-line="41" selection-end-column="29" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="LangString.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/de/miij/util/LangString.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.20847268" vertical-offset="0" max-vertical-offset="897">
+              <caret line="19" column="68" selection-start-line="19" selection-start-column="68" selection-end-line="19" selection-end-column="68" />
               <folding />
             </state>
           </provider>
@@ -108,6 +117,7 @@
     <option name="changedFiles">
       <list>
         <option value="$PROJECT_DIR$/src/de/miij/ui/comp/DecoratedDialog.java" />
+        <option value="$PROJECT_DIR$/src/de/miij/util/LangString.java" />
       </list>
     </option>
   </component>
@@ -128,10 +138,10 @@
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
   <component name="ProjectReloadState">
-    <option name="STATE" value="0" />
+    <option name="STATE" value="2" />
   </component>
   <component name="ProjectView">
-    <navigator currentView="PackagesPane" proportions="" version="1" splitterProportion="0.5">
+    <navigator currentView="PackagesPane" proportions="" version="1">
       <flattenPackages />
       <showMembers />
       <showModules />
@@ -143,6 +153,21 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="PackagesPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Miij" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Miij" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -163,21 +188,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="PackagesPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Miij" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Miij" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -192,12 +202,12 @@
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/lib/jdom.jar!/" />
-    <property name="project.structure.last.edited" value="Artifacts" />
+    <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
   </component>
   <component name="RunManager">
-    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin" singleton="true">
+    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
       <module name="" />
       <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m" />
       <option name="PROGRAM_PARAMETERS" />
@@ -292,6 +302,9 @@
     </configuration>
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="6fe54522-4417-4985-97a6-97446158441e" name="Default" comment="" />
@@ -314,23 +327,26 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.32901832" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.32901832" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2550586" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="true" weight="0.24973376" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" x="-344" y="676" width="344" height="733" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="true" weight="0.24973376" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" x="1291" y="307" width="344" height="733" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="true" weight="0.15228967" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" x="-343" y="-273" width="343" height="947" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="true" weight="0.15228967" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" x="1293" y="0" width="343" height="947" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="SLIDING" type="FLOATING" visible="false" weight="0.32901832" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" x="1921" y="771" width="1680" height="308" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="true" weight="0.2140575" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" x="1922" y="30" width="705" height="741" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.32901832" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
     <option name="RECENTLY_FILTERED_USER_GROUPS">
+      <collection />
+    </option>
+    <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
       <collection />
     </option>
   </component>
@@ -352,49 +368,97 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/de/miij/ui/comp/DecoratedDialog.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="84" column="24" selection-start="2620" selection-end="2620" vertical-scroll-proportion="0.0" vertical-offset="1428" max-vertical-offset="7344">
-          <folding>
-            <element signature="e#2066#2075#0" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="7395">
+          <caret line="150" column="26" selection-start-line="150" selection-start-column="26" selection-end-line="150" selection-end-column="26" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/de/miij/ui/comp/DecoratedFrame.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="41" column="29" selection-start="1455" selection-end="1466" vertical-scroll-proportion="0.0" vertical-offset="697" max-vertical-offset="9741">
+        <state vertical-scroll-proportion="0.0" vertical-offset="697" max-vertical-offset="10540">
+          <caret line="41" column="29" selection-start-line="41" selection-start-column="29" selection-end-line="41" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/de/miij/util/LangString.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="561" max-vertical-offset="697">
+          <caret line="41" column="5" selection-start-line="41" selection-start-column="5" selection-end-line="41" selection-end-column="5" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/de/miij/ui/comp/DecoratedDialog.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="302" column="59" selection-start="9429" selection-end="9429" vertical-scroll-proportion="0.0" vertical-offset="5134" max-vertical-offset="7225">
-          <folding>
-            <element signature="e#2066#2075#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/de/miij/ui/comp/DecoratedFrame.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="41" column="29" selection-start="1455" selection-end="1466" vertical-scroll-proportion="0.0" vertical-offset="697" max-vertical-offset="9741">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2074" max-vertical-offset="6596">
+          <caret line="150" column="26" selection-start-line="150" selection-start-column="26" selection-end-line="150" selection-end-column="26" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/de/miij/ui/comp/DecoratedFrame.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="41" column="29" selection-start="1455" selection-end="1466" vertical-scroll-proportion="0.0" vertical-offset="107" max-vertical-offset="8823">
+        <state vertical-scroll-proportion="0.0" vertical-offset="697" max-vertical-offset="10540">
+          <caret line="41" column="29" selection-start-line="41" selection-start-column="29" selection-end-line="41" selection-end-column="29" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/de/miij/ui/comp/DecoratedDialog.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="150" column="33" selection-start="4272" selection-end="4272" vertical-scroll-proportion="0.3063063" vertical-offset="1428" max-vertical-offset="7344">
-          <folding>
-            <element signature="e#2066#2075#0" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.0" vertical-offset="1428" max-vertical-offset="7344">
+          <caret line="84" column="24" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/de/miij/ui/comp/DecoratedFrame.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="697" max-vertical-offset="9741">
+          <caret line="41" column="29" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/de/miij/ui/comp/DecoratedDialog.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="5134" max-vertical-offset="7225">
+          <caret line="302" column="59" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/de/miij/ui/comp/DecoratedFrame.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="697" max-vertical-offset="9741">
+          <caret line="41" column="29" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/de/miij/ui/comp/DecoratedFrame.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="697" max-vertical-offset="10540">
+          <caret line="41" column="29" selection-start-line="41" selection-start-column="29" selection-end-line="41" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/de/miij/ui/comp/DecoratedDialog.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2074" max-vertical-offset="6596">
+          <caret line="150" column="26" selection-start-line="150" selection-start-column="26" selection-end-line="150" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/de/miij/util/LangString.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.20847268" vertical-offset="0" max-vertical-offset="897">
+          <caret line="19" column="68" selection-start-line="19" selection-start-column="68" selection-end-line="19" selection-end-column="68" />
+          <folding />
         </state>
       </provider>
     </entry>

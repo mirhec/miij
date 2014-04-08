@@ -17,7 +17,7 @@ public class LangString {
 	 * @return
 	 */
 	public static String L(String en) {
-		String lang = Locale.getDefault().getCountry();
+		String lang = Locale.getDefault().getCountry().toLowerCase();
 		if(langs == null) init();
 		if(langs.get(lang) == null) langs.put(lang, new Hashtable<String, String>());
 
