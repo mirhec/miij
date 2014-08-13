@@ -43,6 +43,7 @@ public class DecoratedFrame extends MFrame {
 	private Color borderColor = M.DECORATED_BORDER_COLOR;
 	private Color background = new Color(89, 89, 89);
 	private Color titleBarBackground = new Color(59, 59, 59);
+	private boolean canDoubleClickTitleBar = true;
 
 	public DecoratedFrame() {
 		initDecoratedFrame();
@@ -51,6 +52,14 @@ public class DecoratedFrame extends MFrame {
 	public DecoratedFrame(boolean helpVisible) {
 		this.helpVisible = helpVisible;
 		initDecoratedFrame();
+	}
+
+	public boolean canDoubleClickTitleBar() {
+		return canDoubleClickTitleBar;
+	}
+
+	public void setCanDoubleClickTitleBar(boolean allow) {
+		canDoubleClickTitleBar = allow;
 	}
 
 	public void setBorderColor(Color c) {
@@ -98,11 +107,26 @@ public class DecoratedFrame extends MFrame {
 
 		JButton btn = makeButton(i, iHover, false, false, false);
 		btn.addActionListener(l);
+		addToolbarButton(index, btn);
+	}
+
+	public void addToolbarButton(JButton btn) {
+		addToolbarButton(toolbarButtons.size(), btn);
+	}
+
+	public void addToolbarButton(int index, JButton btn) {
 		while (index > toolbarButtons.size())
 			toolbarButtons.add(null);
 
 		toolbarButtons.add(index, btn);
-		toolbarPanel.add(btn, new FlexConstraint().right(TITLE_BAR_HEIGHT * 3 + TITLE_BAR_HEIGHT * index).top(0).bottom(0).width(TITLE_BAR_HEIGHT));
+		updateToolbarButtons();
+	}
+
+	public void updateToolbarButtons() {
+		toolbarPanel.removeAll();
+		int index = 0;
+		for(JButton btn : toolbarButtons)
+			toolbarPanel.add(btn, new FlexConstraint().right(TITLE_BAR_HEIGHT * index++).top(0).bottom(0).width(TITLE_BAR_HEIGHT));
 	}
 
 	public JButton getToolbarButton(int index) {
@@ -306,9 +330,12 @@ public class DecoratedFrame extends MFrame {
 		JButton btnMaximize = makeMaximizeButton();
 		JButton btnMinimize = makeMinimizeButton();
 
-		toolbarPanel.add(btnClose, new FlexConstraint().right(0).top(0).width(TITLE_BAR_HEIGHT).height(TITLE_BAR_HEIGHT));
-		toolbarPanel.add(btnMaximize, new FlexConstraint().right(TITLE_BAR_HEIGHT).top(0).width(TITLE_BAR_HEIGHT).height(TITLE_BAR_HEIGHT));
-		toolbarPanel.add(btnMinimize, new FlexConstraint().right(TITLE_BAR_HEIGHT * 2).top(0).width(TITLE_BAR_HEIGHT).height(TITLE_BAR_HEIGHT));
+//		toolbarPanel.add(btnClose, new FlexConstraint().right(0).top(0).width(TITLE_BAR_HEIGHT).height(TITLE_BAR_HEIGHT));
+//		toolbarPanel.add(btnMaximize, new FlexConstraint().right(TITLE_BAR_HEIGHT).top(0).width(TITLE_BAR_HEIGHT).height(TITLE_BAR_HEIGHT));
+//		toolbarPanel.add(btnMinimize, new FlexConstraint().right(TITLE_BAR_HEIGHT * 2).top(0).width(TITLE_BAR_HEIGHT).height(TITLE_BAR_HEIGHT));
+		addToolbarButton(btnClose);
+		addToolbarButton(btnMaximize);
+		addToolbarButton(btnMinimize);
 		if (helpVisible)
 			addToolbarButton(WindowIcons.getQuestionIcon(false), WindowIcons.getQuestionIcon(true), new Connector(this, "help"));
 
@@ -580,7 +607,7 @@ public class DecoratedFrame extends MFrame {
 
 		@Override
 		public void mousePressed(MouseEvent me) {
-			if (me.getClickCount() > 1) {
+			if (me.getClickCount() > 1 && canDoubleClickTitleBar) {
 				doubleClicked = true;
 				DecoratedFrame.this.setExtendedState(DecoratedFrame.this.getExtendedState() == JFrame.MAXIMIZED_BOTH ? JFrame.NORMAL : JFrame.MAXIMIZED_BOTH);
 				dispatchEvent(new WindowEvent(DecoratedFrame.this, WindowEvent.WINDOW_STATE_CHANGED));
