@@ -411,7 +411,7 @@ public class DecoratedFrame extends MFrame {
 
 			@Override
 			public int recalculate() {
-				return TITLE_BAR_HEIGHT * 3 + TITLE_BAR_HEIGHT * toolbarButtons.size();
+				return TITLE_BAR_HEIGHT * toolbarButtons.size();
 			}
 		}));
 		northPanel.setBorder(new MatteBorder(1, 1, 0, 1, borderColor));
