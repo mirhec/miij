@@ -67,7 +67,8 @@ public class DecoratedDialog extends MDialog {
 		super.setBackground(back);
 		background = back;
 		getContentPane().setBackground(back);
-		northPanel.setBackground(back);
+        if(northPanel != null)
+		    northPanel.setBackground(back);
 	}
 
 	public void addToolbarButton(Icon i, final Connector c) {
